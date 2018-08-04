@@ -26,12 +26,33 @@
 ;; packages
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
+;; package-name list to be installed
+(defvar my-favorite-package-list
+  '(
+    ;; helm
+    helm
 
-;; hide startup-screen
-(setq inhibit-startup-screen t)
+    ;; for display
+    atom-one-dark-theme powerline dashboard hiwin
+
+    ;; auto complete
+    auto-complete
+    ))
+
+;; install packages
+(dolist (package-name my-favorite-package-list)
+  (unless (package-installed-p package-name)
+    (package-refresh-contents)
+    (package-install package-name)))
+
+;; startup-screen
+;; (setq inhibit-startup-screen t)
+(require 'dashboard)
+(dashboard-setup-startup-hook)
+(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
 ;; hide tool-bar
 (tool-bar-mode 0)
@@ -40,10 +61,10 @@
 (scroll-bar-mode 0)
 
 ;; display column number
-(column-number-mode t)
+(column-number-mode 1)
 
 ;; display file size
-(size-indication-mode t)
+(size-indication-mode 1)
 
 ;; display full-path of the file
 (setq frame-title-format "%f")
@@ -52,7 +73,7 @@
 (defface my-hl-line-face
   ;; if backgroud is dark, use gray
   '((((class color) (background dark))
-     (:background "gray16" t))
+     (:background "Gray16" t))
     ;; if background is light, use green
     (((class color) (background light))
      (:background "LightGoldenYellow" t))
@@ -68,18 +89,40 @@
 
 ;; show spaces and tabs
 (require 'whitespace)
-(setq whitespace-style '(face
+(setq whitespace-style '(
+                         ;; face
                          ;; trailing
                          tabs
                          spaces
-                         empty
+                         ;; empty
                          space-mark
                          tab-mark
                          ))
-(global-whitespace-mode t)
+(global-whitespace-mode 1)
 
 ;; don't use TAB for indent
 (setq-default indent-tabs-mode nil)
+
+;; hide non-active windows
+(require 'hiwin)
+(hiwin-activate)
+(set-face-background 'hiwin-face "Gray80")
+
+
+;; helm
+(require 'helm)
+(require 'helm-config)
+(helm-mode 1)
+
+
+;; auto complete
+(require 'auto-complete)
+(require 'auto-complete-config)
+(ac-config-default)
+(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+(ac-set-trigger-key "TAB")
+
+
 
 ;; my key bind
 (define-key global-map (kbd "C-2") 'set-mark-command)
@@ -91,7 +134,12 @@
 
 
 ;; set color thema
+;; (load-theme 'atom-one-dark t)
 (load-theme 'misterioso t)
+
+;; powerline
+(require 'powerline)
+(powerline-default-theme)
 
 ;; font setting
 (when (eq system-type 'darwin)
@@ -114,3 +162,17 @@
 ;; Macaulay 2 start
 (load "~/.emacs-Macaulay2" t)
 ;; Macaulay 2 end
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (hiwin dashboard auto-complete powerline atom-one-dark-theme helm))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
