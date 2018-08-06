@@ -12,9 +12,13 @@
 (add-to-load-path "elisp" "conf" "public_repos")
 
 
-;; set character code
-(set-language-environment "Japanese")
+;; characters and input-method
 (prefer-coding-system 'utf-8)
+(set-language-environment "Japanese")
+(when (eq system-type 'gnu/linux)
+  (require 'mozc)
+  (setq default-input-method "japanese-mozc")
+  (define-key global-map (kbd "C-j") 'toggle-input-method))
 
 ;; for macOS, settings about file names
 (when (eq system-type 'darwin)
