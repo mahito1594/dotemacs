@@ -57,10 +57,10 @@
 (setq ring-bell-function 'ignore)
 
 ;; startup-screen
-;; (setq inhibit-startup-screen t)
+(setq inhibit-startup-screen t)
 (require 'dashboard)
 (dashboard-setup-startup-hook)
-(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))) ; show dashboard when call emacsclient
 
 ;; hide tool-bar
 (tool-bar-mode 0)
@@ -101,6 +101,7 @@
 ;; rainbow delimeters
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode 'rainbow-delimiters-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (require 'cl-lib)
 (require 'color)
 (defun rainbow-delimiters-using-stronger-colors ()
@@ -131,7 +132,7 @@
 ;; hide non-active windows
 (require 'hiwin)
 (hiwin-activate)
-(set-face-background 'hiwin-face "Gray80")
+(set-face-background 'hiwin-face "Gray50")
 
 
 ;; helm
