@@ -185,7 +185,9 @@
 
 ;; Macaulay 2 start
 (load "~/.emacs-Macaulay2" t)
-;; add following keybind to /usr/share/emacs/site-lisp/M2.el
+;; add following keybind to
+;;   gnu/linux: /usr/share/emacs/site-lisp/M2.el
+;;   macOS:     /Applications/Macaulay2-x.xx/share/emacs/site-lisp/M2.el
 ;; C-RET: newline without evaluate M2
 ;; (define-key M2-comint-mode-map (kbd "<C-return>") 'M2-newline-indent)
 ;; Macaulay 2 end
