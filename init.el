@@ -185,11 +185,9 @@
 
 ;; Macaulay 2 start
 (load "~/.emacs-Macaulay2" t)
-;; add following keybind to
-;;   gnu/linux: /usr/share/emacs/site-lisp/M2.el
-;;   macOS:     /Applications/Macaulay2-x.xx/share/emacs/site-lisp/M2.el
-;; C-RET: newline without evaluate M2
-;; (define-key M2-comint-mode-map (kbd "<C-return>") 'M2-newline-indent)
+(with-eval-after-load "M2"
+  ; key binds
+  (define-key M2-comint-mode-map (kbd "<C-return>") 'M2-newline-and-indent))
 ;; Macaulay 2 end
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
