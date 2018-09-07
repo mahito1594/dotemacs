@@ -13,6 +13,9 @@
     ;; helm
     helm
 
+    ;; PATH
+    exec-path-from-shell
+
     ;; for display
     powerline dashboard hiwin rainbow-delimiters
 
