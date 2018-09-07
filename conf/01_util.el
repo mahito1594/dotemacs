@@ -1,4 +1,4 @@
-;; utilities
+;;; utilities
 
 ;; characters and input-method
 (prefer-coding-system 'utf-8)
@@ -40,3 +40,6 @@
 
 ;; don't use TAB for indent
 (setq-default indent-tabs-mode nil)
+
+(provide '01_util)
+;;; 01_util.el ends here

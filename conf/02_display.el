@@ -1,4 +1,4 @@
-;; settings for display
+;;; settings for display
 
 ;; startup-screen
 (setq inhibit-startup-screen t)
@@ -85,3 +85,6 @@
   (progn
     (hiwin-activate)
     (set-face-background 'hiwin-face "Gray50")))
+
+(provide '02_display)
+;;; 02_display.el ends here

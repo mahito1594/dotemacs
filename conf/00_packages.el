@@ -1,4 +1,4 @@
-;; package install
+;;; package install
 ;; (require 'package)
 ;; (add-to-list 'package-archives '("malpa" . "https://melpa.org/packages/") t)
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
@@ -19,8 +19,14 @@
     ;; for display
     powerline dashboard hiwin rainbow-delimiters
 
+    ;; spell check
+    flycheck
+
     ;; auto complete
     auto-complete
+
+    ;; python
+    python-mode jedi py-autopep8
     ))
 
 ;; install-packages
