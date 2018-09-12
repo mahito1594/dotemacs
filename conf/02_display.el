@@ -2,15 +2,15 @@
 
 ;; startup-screen
 (setq inhibit-startup-screen t)
-(use-package dashboard
-  :config
-  (dashboard-setup-startup-hook))
+;; (use-package dashboard
+  ;; :config
+  ;; (dashboard-setup-startup-hook))
 
 ;; hide tool-bar
-(tool-bar-mode 0)
+(tool-bar-mode -1)
 
 ;; hide scroll-bar
-(scroll-bar-mode 0)
+(scroll-bar-mode -1)
 
 ;; display column number
 (column-number-mode 1)
@@ -22,7 +22,9 @@
 (setq frame-title-format "%f")
 
 ;; set color-thema
-(load-theme 'misterioso t)
+;; (load-theme 'misterioso t)
+(use-package dracula-theme
+  :config (load-theme 'dracula t))
 
 ;; powerline
 (use-package powerline
@@ -33,7 +35,7 @@
 (defface my-hl-line-face
   ;; if backgroud is dark, use gray
   '((((class color) (background dark))
-     (:background "Gray16" t))
+     (:background "Gray20" t))
     ;; if background is light, use green
     (((class color) (background light))
      (:background "LightGoldenYellow" t))
@@ -75,7 +77,7 @@
                            space-mark
                            tab-mark
                            ))
-  (global-whitespace-mode 1))
+  (global-whitespace-mode -1))
 
 ;; hide non-active windows
 (use-package hiwin
