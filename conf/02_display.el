@@ -1,10 +1,11 @@
-;;; settings for display
+;;; display.el --- settings for graphical part
+;;; Commentary:
+;; Settings for graphical user interface
 
+
+;;; Code:
 ;; startup-screen
 (setq inhibit-startup-screen t)
-;; (use-package dashboard
-  ;; :config
-  ;; (dashboard-setup-startup-hook))
 
 ;; hide tool-bar
 (tool-bar-mode -1)
@@ -26,33 +27,24 @@
 (use-package dracula-theme
   :config (load-theme 'dracula t))
 
-;; powerline
+;powerline
 (use-package powerline
   :config
   (powerline-default-theme))
 
-;; hilight current line
-(defface my-hl-line-face
-  ;; if backgroud is dark, use gray
-  '((((class color) (background dark))
-     (:background "Gray20" t))
-    ;; if background is light, use green
-    (((class color) (background light))
-     (:background "LightGoldenYellow" t))
-    (t (:bold t)))
-  "hl-line's my face")
-(setq hl-line-face 'my-hl-line-face)
-(global-hl-line-mode 1)
-
 ;; hilight for corresponding parens
-(setq show-paren-deley 0)
 (show-paren-mode 1)
-(setq show-paren-style 'parenthesis)
+(setq show-paren-deley 0)
+;; (setq show-paren-style 'parenthesis)
+(setq show-paren-style 'mixed)
+
+;; highlight for region
+(transient-mark-mode 1)
 
 ;; rainbow delimeters
 (use-package rainbow-delimiters
   :hook
-  (prog-mode-hook . rainbow-delimiters-mode)
+  (prog-mode . rainbow-delimiters-mode)
   :config
   (use-package cl-lib)
   (use-package color)
@@ -69,11 +61,11 @@
 (use-package whitespace
   :config
   (setq whitespace-style '(
-                           ;; face
-                           ;; trailing
+                           face
+                           trailing
                            tabs
                            spaces
-                           ;; empty
+                           empty
                            space-mark
                            tab-mark
                            ))
@@ -83,4 +75,4 @@
 (use-package hiwin
   :config
   (hiwin-activate)
-  (set-face-background 'hiwin-face "Gray50"))
+  (set-face-background 'hiwin-face "DarkSlateGray"))

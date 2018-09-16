@@ -1,8 +1,9 @@
 ;;; utilities
 
 ;; characters and input-method
-(prefer-coding-system 'utf-8)
 (set-language-environment "Japanese")
+(prefer-coding-system 'utf-8)
+
 
 ;; use mozc for GNU/Linux
 (use-package mozc

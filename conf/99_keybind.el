@@ -10,4 +10,5 @@
 (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 (define-key global-map (kbd "C-x ?") 'help-for-help)
 
-(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+(provide '99_keybind)
+;;; 99_keybind.el ends here

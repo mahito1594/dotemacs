@@ -12,11 +12,8 @@
 
 (use-package python-mode
   :commands python-mode
-  :mode
-  (("\\.py\\'" . python-mode)
-   ("\\.sage\\'" . python-mode))
-  :interpreter
-  ("python" . python-mode)
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
   :init
   (add-hook 'python-mode-hook 'jedi:setup)
   (setq jedi:complete-on-dot t)
