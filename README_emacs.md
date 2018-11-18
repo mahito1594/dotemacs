@@ -26,7 +26,8 @@ conf/
 ├── 91_singular.el
 ├── 92_sage.el
 └── 99_keybind.el
-``` 
+```
+
 ## [NeoTree](https://github.com/jaypei/emacs-neotree)
 tree の表示に all-the-icons を利用している．
 `M-x all-the-icons-install-fonts` とした後，ターミナルで `fc-cache -fv` を実行する．
