@@ -7,7 +7,7 @@
 ;; After type, run `fc-cache -fv' in terminal.
 
 (use-package neotree
-  :bind (("C-q" . neotree-toggle))
+  :bind (("C-c q" . neotree-toggle))
   :config
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 

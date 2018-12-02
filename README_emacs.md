@@ -74,7 +74,7 @@ SINGULAR を Emacs で動かすための設定．
 
 詳細は [Running SINGULAR under Emacs](https://www.singular.uni-kl.de/Manual/latest/sing_23.htm#SEC30) を参照のこと．
 
-#### 92_sage.el
+### 92_sage.el
 SageMath を Emacs で動かすための設定．
 使い方は [sage-shell-mode](https://github.com/sagemath/sage-shell-mode) を参照．
 `path/to/sage/root_directory` は Sage terminal 上で `import os; print os.environ["SAGE_ROOT"]` と打つことで調べることができる．
