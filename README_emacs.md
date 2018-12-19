@@ -32,6 +32,48 @@ conf/
 tree の表示に all-the-icons を利用している．
 `M-x all-the-icons-install-fonts` とした後，ターミナルで `fc-cache -fv` を実行する．
 
+ `C-c q` で tree の表示，`q` で非表示．
+
+
+
+## TeX / LaTex
+TeX / LaTeX の編集には [YaTeX](https://www.yatex.org/) を利用する．
+イメージ数式補完のため，ユーザ変数の `YaTeX-math-sign-alist-private` によく使う記号をまとめておく：
+
+```elisp
+(setq YaTeX-math-sign-alist-private
+      '(("KEY1" "COMMAND1" "DESCRIPTION1")
+        ("KEY2" "COMMAND2" "DESCRIPTION2")))
+```
+
+BibTeX データベースの編集には bibtex-mode と [Ebib](http://joostkremers.github.io/ebib/) を利用する．
+
+`M-x ebib` で起動する．
+
+index buffer での基本的な操作は次の通り：
+
+| key   | 操作                                          |
+| ----- | --------------------------------------------- |
+| o     | `.bib` ファイルを開く                         |
+| s     | 編集を保存                                    |
+| q / z | 終了 / 休止(`M-x ebib` で再開)                |
+| a     | entry の追加                                  |
+| e / E | entry の編集 / entry key の編集               |
+| m / M | 現在の entry をマーク / 全ての entry をマーク |
+| x     | マークした entry をエクスポート               |
+
+
+
+entry buffer での基本的な操作は以下の通り：
+
+| key  | 操作                            |
+| ---- | ------------------------------- |
+| e    | field の編集                    |
+| a    | field の追加                    |
+| d    | field の削除                    |
+| q    | 編集の終了(index buffer へ戻る) |
+
+
 ## Python
 Python の記述には python-mode.el を使う．
 補完には auto-complete.el と [jedi](https://pypi.org/project/jedi/) を利用する．
