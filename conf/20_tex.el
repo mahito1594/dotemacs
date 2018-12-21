@@ -35,6 +35,15 @@
           ("AA" "setA" "AA")))
   )
 
+;; RefTeX
+(use-package reftex
+  :ensure nil
+  :config
+  (setq reftex-bibpath-environment-variables
+        '("!kpsewhich -show-path=.bib"))
+  (setq reftex-bibliography-commands
+        '("bibliograpy" "nobibliography" "addbibresource")))
+
 ;; BibTeX
 (use-package bibtex
   :ensure nil
@@ -56,11 +65,28 @@
 
 (use-package ebib
   :init
-  (setq ebib-bibtex-dialect 'BibTeX)
-  ;; (setq ebib-bibtex-dialect 'biblatex)
+  (setq ebib-bibtex-dialect 'BibTeX) ; use BibTeX as default
+  ;; (setq ebib-bibtex-dialect 'biblatex) ; use biblatex as default
+  ;; extra fields
   (setq ebib-extra-fields
-        '((BibTeX "crossref" "annote" "keywords" "doi" "archivePrefix" "eprint" "primaryClass" "MRCLASS" "MRNUMBER")
-          (biblatex "crossref" "annotation" "keywords" "archivePrefix" "eprint" "primaryClass" "MRCLASS" "MRNUMBER")))
+        '((BibTeX "crossref" "annote" "keywords" "doi" "archivePrefix" "eprint" "primaryClass" "MRCLASS" "MRNUMBER" "file")
+          ;; in biblatex, the following fields are treated as alias:
+          ;; journal => journaltitle
+          ;; annote => annotation
+          ;; archivePrefix => eprinttype
+          ;; primaryclass => epritclass
+          (biblatex "crossref" "annotation" "keywords" "archivePrefix" "primaryClass" "MRCLASS" "MRNUMBER" "file")))
+  ;; open PDF with Skim
+  (when (eq system-type 'darwin)
+    (setq ebib-file-associations
+          '(("pdf" . "/Applications/Skim.app/Contents/MacOS/Skim")
+            ("ps" . "open"))))
+  ;; keywords
+  (setq ebib-keywords-field-keep-sorted t)
+  (when (eq system-type 'darwin)
+    (setq ebib-keywords-file "~/ebib-keywords.txt"))
+  (setq ebib-keywords-use-only-file t)
+  (setq ebib-keywords-file-save-on-exit 'always)
   :config
   (when (eq system-type 'darwin)
     (setq ebib-bib-search-dirs
@@ -68,7 +94,7 @@
     (setq ebib-preload-bib-files
           '("~/Library/texmf/bibtex/bib/articles.bib"
             "~/Library/texmf/bibtex/bib/books.bib"
-            "~/Library/texmf/bibtex/bib/miscs.bib"))))
+            "~/Library/texmf/bibtex/bib/others.bib"))))
 
 (provide '20_tex)
 ;;; 20_tex.el Ends here
