@@ -21,7 +21,14 @@
   (setq YaTeX-inhibit-prefix-letter t)  ; prefix: C-c => C-c C-
   (setq YaTeX-kanji-code 4) ; use UTF-8
   (setq YaTeX-use-AMS-LaTeX t)
-  (setq tex-command "latexmk -lualatex")
+  (setq tex-command "latexmk")
+  (add-hook 'align-load-hook
+            '(lambda ()
+               (add-to-list 'align-rules-list
+                            '(yatex-table
+                              (regexp . "\\(\\s-*\\)&")
+                              (repeat . t)
+                              (mode . '(yatex-mode))))))
   ;; my symbols
   (setq YaTeX-math-sign-alist-private
         '(("NN" "setN" "N")
