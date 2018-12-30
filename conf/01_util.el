@@ -46,3 +46,12 @@
 
 ;; don't use TAB for indent
 (setq-default indent-tabs-mode nil)
+
+;; path
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :config
+  (exec-path-from-shell-initialize))
+
+(provide '01_util)
+;;; 01_util.el ends here
