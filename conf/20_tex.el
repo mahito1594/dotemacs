@@ -14,11 +14,12 @@
   (add-hook 'yatex-mode-hook
             '(lambda ()
                (reftex-mode 1)
-               (define-key reftex-mode-map (concat YaTeX-prefix ">") 'YaTeX-comment-region)
-               (define-key reftex-mode-map (concat YaTeX-prefix "<") 'YaTeX-uncomment-reigion)
+               ;; (define-key reftex-mode-map (concat YaTeX-prefix ">") 'YaTeX-comment-region)
+               ;; (define-key reftex-mode-map (concat YaTeX-prefix "<") 'YaTeX-uncomment-reigion)
                (define-key reftex-mode-map (concat YaTeX-prefix ")") 'YaTeX-insert-parens-region)))
   :config
-  (setq YaTeX-inhibit-prefix-letter t)  ; prefix: C-c => C-c C-
+  ;; settings:
+  (setq YaTeX-inhibit-prefix-letter t)
   (setq YaTeX-kanji-code 4) ; use UTF-8
   (setq YaTeX-use-AMS-LaTeX t)
   (setq tex-command "latexmk")
@@ -45,11 +46,15 @@
 ;; RefTeX
 (use-package reftex
   :ensure nil
+  :bind (:map reftex-mode-map
+         ("C-c (" . reftex-reference))
   :config
+  (setq reftex-ref-style-default-list
+        '("Cleveref"))
   (setq reftex-bibpath-environment-variables
         '("!kpsewhich -show-path=.bib"))
   (setq reftex-bibliography-commands
-        '("bibliograpy" "nobibliography" "addbibresource")))
+        '("bibliography" "nobibliography" "addbibresource")))
 
 ;; BibTeX
 (use-package bibtex
@@ -60,33 +65,46 @@
           ("MRNUMBER" "Math. Rev. number")
           ("archivePrefix" "name of preprint server" "arXiv")
           ("eprint" "Electric preprint")
-          ("primaryClass" "Primary class used by arXiv")))
+          ("primaryClass" "Primary class used by arXiv")
+          ("shortjournal" "Journal Abbreviations")))
   (setq bibtex-autokey-name-case-convert 'capitalize)
   (setq bibtex-autokey-titleword-case-convert 'capitalize)
   (setq bibtex-autokey-titleword-separator "")
   (setq bibtex-autokey-titleword-length nil)
   (setq bibtex-autokey-titlewords 1)
+  (setq bibtex-autokey-year-length 4)
   (setq bibtex-autokey-year-title-separator ":")
   (setq bibtex-autokey-titleword-ignore
         '("A" "An" "On" "The" "a" "an" "on" "the")))
 
 (use-package ebib
+  :bind (:map ebib-multiline-mode-map
+         ("C-c C-c" . ebib-quit-multiline-buffer-and-save))
   :init
   (setq ebib-bibtex-dialect 'BibTeX) ; use BibTeX as default
   ;; (setq ebib-bibtex-dialect 'biblatex) ; use biblatex as default
   ;; extra fields
   (setq ebib-extra-fields
-        '((BibTeX "crossref" "annote" "keywords" "doi" "archivePrefix" "eprint" "primaryClass" "MRCLASS" "MRNUMBER" "file")
+        '((BibTeX "crossref" "annote" "keywords" "doi" "shortjournal" "archivePrefix" "eprint" "primaryClass" "MRCLASS" "MRNUMBER" "file")
           ;; in biblatex, the following fields are treated as alias:
           ;; journal => journaltitle
           ;; annote => annotation
           ;; archivePrefix => eprinttype
           ;; primaryclass => epritclass
-          (biblatex "crossref" "annotation" "keywords" "archivePrefix" "primaryClass" "MRCLASS" "MRNUMBER" "file")))
-  ;; open PDF with Skim
+          (biblatex "crossref" "annotation" "keywords" "shortjournal" "archivePrefix" "primaryClass" "MRCLASS" "MRNUMBER" "file")))
+  ;; browse file
+  (setq ebib-file-search-dirs '("~/BibFile/Papers" "~/BibFile/Books" "~/BibFile/Proceedings"))
+  (defun my/ebib-name-transform-function (key)
+    "Serach file of the form
+       SEARCH-DIRS/FIRST-AUTHOR/ENTRY-KEY"
+    (format "%s/%s"
+            (substring key (string-match "[A-Za-z]+" key) (match-end 0))
+            (replace-regexp-in-string ":" "" key)))
+  (setq ebib-name-transform-function #'my/ebib-name-transform-function)
+  ;; open PDF/PS with `open' command
   (when (eq system-type 'darwin)
     (setq ebib-file-associations
-          '(("pdf" . "/Applications/Skim.app/Contents/MacOS/Skim")
+          '(("pdf" . "open")
             ("ps" . "open"))))
   ;; keywords
   (setq ebib-keywords-field-keep-sorted t)
