@@ -14,8 +14,6 @@
   (add-hook 'yatex-mode-hook
             '(lambda ()
                (reftex-mode 1)
-               ;; (define-key reftex-mode-map (concat YaTeX-prefix ">") 'YaTeX-comment-region)
-               ;; (define-key reftex-mode-map (concat YaTeX-prefix "<") 'YaTeX-uncomment-reigion)
                (define-key reftex-mode-map (concat YaTeX-prefix ")") 'YaTeX-insert-parens-region)))
   :config
   ;; settings:
@@ -47,10 +45,28 @@
 (use-package reftex
   :ensure nil
   :bind (:map reftex-mode-map
-         ("C-c (" . reftex-reference))
+              ("C-c (" . reftex-cleveref-cref))
   :config
-  (setq reftex-ref-style-default-list
-        '("Cleveref"))
+  ;; Theorem environments
+  (setq reftex-label-alist
+        '(("definition"  ?d "def:"  "~\\ref{%s}" nil ("definiton")   nil)
+          ("proposition" ?p "prop:" "~\\ref{%s}" nil ("proposition") nil)
+          ("theorem"     ?p "thm:"  "~\\ref{%s}" nil ("theorem")     nil)
+          ("lemma"       ?p "lem:"  "~\\ref{%s}" nil ("lemma")       nil)
+          ("corollary"   ?p "cor:"  "~\\ref{%s}" nil ("corollary")   nil)
+          ("remark"      ?r "rem:"  "~\\ref{%s}" nil ("remark")      nil)
+          ("example"     ?x "ex:"   "~\\ref{%s}" nil ("example")     nil)
+          ("conjecture"  ?c "conj:" "~\\ref{%s}" nil ("conjecture")  nil)))
+  ;; automatic insert non-breaking whitespace (~) before citation. See
+  ;; https://www.emacswiki.org/emacs/RefTeX
+  (setq reftex-format-cite-function
+        '(lambda (key fmt)
+	   (let ((cite (replace-regexp-in-string "%l" key fmt)))
+	     (if (or (= ?~ (string-to-char fmt))
+		     (member (preceding-char) '(?\ ?\t ?\n ?~)))
+	         cite
+	       (concat "~" cite)))))
+  ;; source files
   (setq reftex-bibpath-environment-variables
         '("!kpsewhich -show-path=.bib"))
   (setq reftex-bibliography-commands
@@ -87,10 +103,10 @@
   (setq ebib-extra-fields
         '((BibTeX "crossref" "annote" "keywords" "doi" "shortjournal" "archivePrefix" "eprint" "primaryClass" "MRCLASS" "MRNUMBER" "file")
           ;; in biblatex, the following fields are treated as alias:
-          ;; journal => journaltitle
-          ;; annote => annotation
+          ;; journal       => journaltitle
+          ;; annote        => annotation
           ;; archivePrefix => eprinttype
-          ;; primaryclass => epritclass
+          ;; primaryclass  => epritclass
           (biblatex "crossref" "annotation" "keywords" "shortjournal" "archivePrefix" "primaryClass" "MRCLASS" "MRNUMBER" "file")))
   ;; browse file
   (setq ebib-file-search-dirs '("~/BibFile/Papers" "~/BibFile/Books" "~/BibFile/Proceedings"))
