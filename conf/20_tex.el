@@ -9,12 +9,33 @@
          ("\\.sty\\'" . yatex-mode)
          ("\\.ltx\\'" . yatex-mode))
   :init
-  ;; YaTeX with RefTeX
-  ;; see https://texwiki.texjp.org/?YaTeX#iabc8ab6
-  (add-hook 'yatex-mode-hook
-            '(lambda ()
-               (reftex-mode 1)
-               (define-key reftex-mode-map (concat YaTeX-prefix ")") 'YaTeX-insert-parens-region)))
+  ;; outline for yatex
+  (setq my/latex-outline-regexp
+        (concat "[ \t]*" (regexp-quote "\\")
+                "\\(documentclass\\|"
+                "part\\|chapter\\|section\\|subsection\\|subsubsection\\)"
+                "\\*?[ \t]*[[{]"))
+  (defun my/latex-outline-level ()
+    "Find the level of current outline heading"
+    (save-excursion
+      (looking-at my/latex-outline-regexp)
+      (let ((title (buffer-substring (match-beginning 1) (match-end 1))))
+        (cond ((string-match "part" title) 1)
+              ((string-match "chapter" title) 2)
+              ((string-match "section" title) 3)
+              ((string-match "subsection" title) 4)
+              ((string-match "subsubsection" title) 5)
+              (t 1000)))))
+  (setq my/outline-promotion-headings
+        '("\\chapter" "\\section" "\\subsection" "\\subsubsectoin"))
+  (defun my/yatex-mode-hook ()
+    (setq-local outline-regexp my/latex-outline-regexp)
+    (setq-local outline-level #'my/latex-outline-level)
+    (outline-minor-mode t))
+  (add-hook 'yatex-mode-hook #'my/yatex-mode-hook)
+  (add-hook 'outline-minor-mode-hook
+            (lambda ()
+              (setq-local outline-promotion-headings my/outline-promotion-headings)))
   :config
   ;; settings:
   (setq YaTeX-inhibit-prefix-letter t)
@@ -44,8 +65,10 @@
 ;; RefTeX
 (use-package reftex
   :ensure nil
+  :hook (yatex-mode . reftex-mode)
   :bind (:map reftex-mode-map
-              ("C-c (" . reftex-cleveref-cref))
+              ("C-c )" . nil)
+              ("C-c {" . reftex-cleveref-cref))
   :config
   ;; Theorem environments
   (setq reftex-label-alist
@@ -61,11 +84,11 @@
   ;; https://www.emacswiki.org/emacs/RefTeX
   (setq reftex-format-cite-function
         '(lambda (key fmt)
-	   (let ((cite (replace-regexp-in-string "%l" key fmt)))
-	     (if (or (= ?~ (string-to-char fmt))
-		     (member (preceding-char) '(?\ ?\t ?\n ?~)))
-	         cite
-	       (concat "~" cite)))))
+           (let ((cite (replace-regexp-in-string "%l" key fmt)))
+             (if (or (= ?~ (string-to-char fmt))
+                     (member (preceding-char) '(?\ ?\t ?\n ?~)))
+                 cite
+               (concat "~" cite)))))
   ;; source files
   (setq reftex-bibpath-environment-variables
         '("!kpsewhich -show-path=.bib"))
