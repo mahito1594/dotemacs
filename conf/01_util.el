@@ -35,11 +35,6 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(expand-file-name "~/.emacs.d/backups/") t)))
 
-;; custom file
-(setq custom-file "~/.emacs.d/custom-file.el")
-(if (file-exists-p (expand-file-name "~/.emacs.d/custom-file.el"))
-    (load (expand-file-name custom-file) t nil nil))
-
 ;; mute beep sounds
 (setq ring-bell-function 'ignore)
 
@@ -54,6 +49,9 @@
   :if (memq window-system '(mac ns))
   :config
   (exec-path-from-shell-initialize))
+
+;;; dired
+(put 'dired-find-alternate-file 'disabled nil)
 
 ;;; outline
 ;; change prefix of outline-minor-mode commands;

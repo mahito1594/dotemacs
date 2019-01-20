@@ -68,11 +68,18 @@
   :hook (yatex-mode . reftex-mode)
   :bind (:map reftex-mode-map
               ("C-c )" . nil)
+              ("C-c (" . reftex-reference)
               ("C-c {" . reftex-cleveref-cref))
   :config
+  ;; use cleveref in RefTeX, there are two following ways:
+  ;; 1. use reftex-cleveref-cref function, OR
+  ;; 2. use reftex-reference function
+  ;;    with setting the variable reftex-ref-style-default-list to Cleveref
+  (setq reftex-ref-style-default-list '("Cleveref"))
   ;; Theorem environments
   (setq reftex-label-alist
-        '(("definition"  ?d "def:"  "~\\ref{%s}" nil ("definiton")   nil)
+        '((nil ?e nil "~\\ref{%s}" nil nil) ; omit parens surrounding eq-like reference
+          ("definition"  ?d "def:"  "~\\ref{%s}" nil ("definiton")   nil)
           ("proposition" ?p "prop:" "~\\ref{%s}" nil ("proposition") nil)
           ("theorem"     ?p "thm:"  "~\\ref{%s}" nil ("theorem")     nil)
           ("lemma"       ?p "lem:"  "~\\ref{%s}" nil ("lemma")       nil)
