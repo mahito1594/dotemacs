@@ -121,7 +121,9 @@
   (setq bibtex-autokey-year-length 4)
   (setq bibtex-autokey-year-title-separator ":")
   (setq bibtex-autokey-titleword-ignore
-        '("A" "An" "On" "The" "a" "an" "on" "the")))
+        '("A" "An" "On" "The" "a" "an" "on" "the"
+          "Le" "La" "Les" "le" "la" "les"
+          "Zur" "zur")))
 
 (use-package ebib
   :bind (:map ebib-multiline-mode-map
