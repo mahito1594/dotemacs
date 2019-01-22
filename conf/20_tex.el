@@ -8,34 +8,6 @@
   :mode (("\\.tex\\'" . yatex-mode)
          ("\\.sty\\'" . yatex-mode)
          ("\\.ltx\\'" . yatex-mode))
-  :init
-  ;; outline for yatex
-  (setq my/latex-outline-regexp
-        (concat "[ \t]*" (regexp-quote "\\")
-                "\\(documentclass\\|"
-                "part\\|chapter\\|section\\|subsection\\|subsubsection\\)"
-                "\\*?[ \t]*[[{]"))
-  (defun my/latex-outline-level ()
-    "Find the level of current outline heading"
-    (save-excursion
-      (looking-at my/latex-outline-regexp)
-      (let ((title (buffer-substring (match-beginning 1) (match-end 1))))
-        (cond ((string-match "part" title) 1)
-              ((string-match "chapter" title) 2)
-              ((string-match "section" title) 3)
-              ((string-match "subsection" title) 4)
-              ((string-match "subsubsection" title) 5)
-              (t 1000)))))
-  (setq my/outline-promotion-headings
-        '("\\chapter" "\\section" "\\subsection" "\\subsubsectoin"))
-  (defun my/yatex-mode-hook ()
-    (setq-local outline-regexp my/latex-outline-regexp)
-    (setq-local outline-level #'my/latex-outline-level)
-    (outline-minor-mode t))
-  (add-hook 'yatex-mode-hook #'my/yatex-mode-hook)
-  (add-hook 'outline-minor-mode-hook
-            (lambda ()
-              (setq-local outline-promotion-headings my/outline-promotion-headings)))
   :config
   ;; settings:
   (setq YaTeX-inhibit-prefix-letter t)

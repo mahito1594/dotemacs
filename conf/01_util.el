@@ -53,21 +53,5 @@
 ;;; dired
 (put 'dired-find-alternate-file 'disabled nil)
 
-;;; outline
-;; change prefix of outline-minor-mode commands;
-;; C-c @ => C-c C-o
-;; see, www.emacswiki.org/emacs/OutlineMinorMode#toc2
-(add-hook 'outline-minor-mode-hook
-          (lambda ()
-            (local-set-key "\C-c\C-o" outline-mode-prefix-map)))
-(use-package outline-magic
-  ;; when press C-TAB, cycle
-  ;; OVERVIEW => CONTENTS => SHOW ALL => OVERVIEW
-  ;; or
-  ;; FOLDED => CHILDREN => SUBTREE => FOLDED
-  :config
-  (with-eval-after-load 'outline
-    (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle)))
-
 (provide '01_util)
 ;;; 01_util.el ends here
