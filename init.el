@@ -3,45 +3,6 @@
 ;; My init file for Emacs ver 24 or later.
 ;; Use use-pacakage.el as pacakge installer.
 ;;
-;; The following files are NOT tracked by git:
-;;
-;; * 09_font.el
-;; * 91_singular.el
-;; * 92_sage.el
-;;
-;; 09_font.el is for font setting:
-;; (setq face-attribute 'default nil
-;;                      :family <font-file-name>
-;;                      :height <font-size>)
-;;
-;; 91_singular.el is for Running SINGULAR under Emacs.
-;; For more detail, see
-;;   https://www.singular.uni-kl.de/Manual/latest/sing_23htm#SEC30 :
-;; (add-to-list 'load-path "<singular-emacs-home-directory>")
-;; (autoload 'singular "singular"
-;;   "Start Singular using default values." t)
-;; (autoload 'singular-other "singular"
-;;   "Aak for arguments and start Singular" t)
-;;
-;; 92_sage.el is for running SageMath under Emacs.
-;; This contains
-;;
-;; - sage-shell-mode
-;; - auto-complete-sage
-;; - helm-sage
-;;
-;; For more detail, see indivisual README in GitHub.
-;;
-;;
-;;
-;; This init file uses init-loader.el;
-;;
-;; * 00 -- 09: init Emacs
-;; * 10 -- 19: fundamental setting for programinngs
-;; * 20 -- 89: settings for indivisual language
-;; * 90 -- 98: computer algebra systems
-;; * 99: keybindings
-;;
 
 ;;; Code:
 ;; define the func to add load-path
