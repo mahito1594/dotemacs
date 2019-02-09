@@ -1,7 +1,7 @@
 ;;; init --- my init file
 ;;; Commentary:
-;; My init file for Emacs ver 24 or later.
-;; Use use-pacakage.el as pacakge installer.
+;; My init file for Emacs ver 25.3 or later.
+;; Use straight.el and use-pacakage.el as pacakge installer.
 ;;
 
 ;;; Code:
@@ -18,17 +18,25 @@
 ;; add to load-path given dirs and its subdirs
 (add-to-load-path "elisp" "conf" "public_repos")
 
-;; install use-package
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/")t)
-  (package-initialize)
-  (unless package-archive-contents (package-refresh-contents))
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
-  (require 'use-package)
-  (setq use-package-always-ensure t))
+;; install straight.el, see
+;; https://github.com/raxod502/straight.el#getting-started
+(when (>= emacs-major-version 25.3)
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage)))
+
+;; install use-package via straght.el
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 ;; init-loader
 (use-package init-loader

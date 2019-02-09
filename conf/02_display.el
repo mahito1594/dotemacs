@@ -36,7 +36,7 @@
 
 ;; hilight for corresponding parens
 (use-package paren
-  :ensure nil
+  :straight nil
   :config
   (show-paren-mode 1)
   (setq show-paren-style 'mixed))

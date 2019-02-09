@@ -16,7 +16,7 @@
 
 ;; for macOS, settings about file names
 (use-package ucs-normalize
-  :ensure nil
+  :straight nil
   :if (eq system-type 'darwin)
   :config
   (set-file-name-coding-system 'utf-8-hfs)

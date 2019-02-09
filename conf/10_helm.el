@@ -15,7 +15,7 @@
          ("C-z" . helm-select-action))
   :config
   (use-package helm-config
-    :ensure nil)
+    :straight nil)
   (helm-mode 1)
   )
 

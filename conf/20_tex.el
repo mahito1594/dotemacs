@@ -36,7 +36,7 @@
 
 ;; RefTeX
 (use-package reftex
-  :ensure nil
+  :straight nil
   :hook (yatex-mode . reftex-mode)
   :bind (:map reftex-mode-map
               ("C-c )" . nil)
@@ -76,7 +76,7 @@
 
 ;; BibTeX
 (use-package bibtex
-  :ensure nil
+  :straight nil
   :config
   (setq bibtex-user-optional-fields
         '(("yomi" "Yomigana")
