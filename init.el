@@ -34,7 +34,8 @@
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage)))
 
-;; install use-package via straght.el
+;; install use-package and el-patch
+(straight-use-package 'el-patch)
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
