@@ -5,12 +5,13 @@
 ;;; Code:
 
 (use-package yatex
+  :defer t
   :mode (("\\.tex\\'" . yatex-mode)
          ("\\.sty\\'" . yatex-mode)
          ("\\.ltx\\'" . yatex-mode))
-  :config
-  ;; settings:
+  :init
   (setq YaTeX-inhibit-prefix-letter t)
+  :config
   (setq YaTeX-kanji-code 4) ; use UTF-8
   (setq YaTeX-use-AMS-LaTeX t)
   (setq tex-command "latexmk")
@@ -33,6 +34,12 @@
           ("Fq" "setF_q" "Fq")
           ("AA" "setA" "AA")))
   )
+
+(use-package company-math
+  :after company
+  :config
+  (add-to-list 'company-backends 'company-math-symbols-latex)
+  (add-to-list 'company-backends 'company-latex-commands))
 
 ;; RefTeX
 (use-package reftex
