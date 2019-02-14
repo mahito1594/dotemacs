@@ -10,10 +10,5 @@
 (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 (define-key global-map (kbd "C-x ?") 'help-for-help)
 
-;; bibtex-mode
-(with-eval-after-load "bibtex"
-  (define-key bibtex-mode-map (kbd "C-j") nil)
-  (define-key bibtex-mode-map (kbd "<C-return>") 'bibtex-next-field))
-
 (provide '99_keybind)
 ;;; 99_keybind.el ends here

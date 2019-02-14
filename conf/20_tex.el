@@ -36,7 +36,7 @@
   )
 
 (use-package company-math
-  :after company
+  :after (yatex)
   :config
   (add-to-list 'company-backends 'company-math-symbols-latex)
   (add-to-list 'company-backends 'company-latex-commands))
@@ -44,6 +44,7 @@
 ;; RefTeX
 (use-package reftex
   :straight nil
+  :defer t
   :hook (yatex-mode . reftex-mode)
   :bind (:map reftex-mode-map
               ("C-c )" . nil)
@@ -84,14 +85,11 @@
 ;; BibTeX
 (use-package bibtex
   :straight nil
-  :config
-  (setq bibtex-user-optional-fields
-        '(("yomi" "Yomigana")
-          ("MRNUMBER" "Math. Rev. number")
-          ("archivePrefix" "name of preprint server" "arXiv")
-          ("eprint" "Electric preprint")
-          ("primaryClass" "Primary class used by arXiv")
-          ("shortjournal" "Journal Abbreviations")))
+  :mode (("\\.bib\\'" . bibtex-mode))
+  :bind (:map bibtex-mode-map
+              ("C-j" . nil)
+              ("<C-return>" . bibtex-next-field))
+  :init
   (setq bibtex-autokey-name-case-convert 'capitalize)
   (setq bibtex-autokey-titleword-case-convert 'capitalize)
   (setq bibtex-autokey-titleword-separator "")
@@ -102,9 +100,18 @@
   (setq bibtex-autokey-titleword-ignore
         '("A" "An" "On" "The" "a" "an" "on" "the"
           "Le" "La" "Les" "le" "la" "les"
-          "Zur" "zur")))
+          "Zur" "zur"))
+  :config
+  (setq bibtex-user-optional-fields
+        '(("yomi" "Yomigana")
+          ("MRNUMBER" "Math. Rev. number")
+          ("archivePrefix" "name of preprint server" "arXiv")
+          ("eprint" "Electric preprint")
+          ("primaryClass" "Primary class used by arXiv")
+          ("shortjournal" "Journal Abbreviations"))))
 
 (use-package ebib
+  :commands (ebib)
   :bind (:map ebib-multiline-mode-map
          ("C-c C-c" . ebib-quit-multiline-buffer-and-save))
   :init
