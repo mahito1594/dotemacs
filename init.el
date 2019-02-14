@@ -21,6 +21,7 @@
 ;; install straight.el, see
 ;; https://github.com/raxod502/straight.el#getting-started
 (when (>= emacs-major-version 25.3)
+  (setq straight-check-for-modifications 'live-with-find) ; => '(check-on-save find-when-checking)
   (defvar bootstrap-version)
   (let ((bootstrap-file
          (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
