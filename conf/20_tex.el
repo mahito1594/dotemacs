@@ -22,8 +22,8 @@
                               (regexp . "\\(\\s-*\\)&")
                               (repeat . t)
                               (mode . '(yatex-mode))))))
-  ;; my symbols
   (setq YaTeX-math-sign-alist-private
+        ;; my math symbols
         '(("NN" "setN" "N")
           ("ZZ" "setZ" "Z")
           ("QQ" "setQ" "Q")
@@ -33,13 +33,12 @@
           ("Fp" "setF_p" "Fp")
           ("Fq" "setF_q" "Fq")
           ("AA" "setA" "AA")))
+  (use-package company-math
+    ;; completion by company
+    :config
+    (add-to-list 'company-backends 'company-math-symbols-latex)
+    (add-to-list 'company-backends 'company-latex-commands))
   )
-
-(use-package company-math
-  :after (yatex)
-  :config
-  (add-to-list 'company-backends 'company-math-symbols-latex)
-  (add-to-list 'company-backends 'company-latex-commands))
 
 ;; RefTeX
 (use-package reftex
@@ -84,12 +83,22 @@
 
 ;; BibTeX
 (use-package bibtex
+  :defer t
   :straight nil
   :mode (("\\.bib\\'" . bibtex-mode))
   :bind (:map bibtex-mode-map
               ("C-j" . nil)
               ("<C-return>" . bibtex-next-field))
-  :init
+  :config
+  ;; Add optional fields
+  (setq bibtex-user-optional-fieldsa
+        '(("yomi" "Yomigana")
+          ("MRNUMBER" "Math. Rev. number")
+          ("archivePrefix" "name of preprint server" "arXiv")
+          ("eprint" "Electric preprint")
+          ("primaryClass" "Primary class used by arXiv")
+          ("shortjournal" "Journal Abbreviations")))
+  ;; Customize `bibtex-generate-autokey' function
   (setq bibtex-autokey-name-case-convert 'capitalize)
   (setq bibtex-autokey-titleword-case-convert 'capitalize)
   (setq bibtex-autokey-titleword-separator "")
@@ -100,17 +109,10 @@
   (setq bibtex-autokey-titleword-ignore
         '("A" "An" "On" "The" "a" "an" "on" "the"
           "Le" "La" "Les" "le" "la" "les"
-          "Zur" "zur"))
-  :config
-  (setq bibtex-user-optional-fields
-        '(("yomi" "Yomigana")
-          ("MRNUMBER" "Math. Rev. number")
-          ("archivePrefix" "name of preprint server" "arXiv")
-          ("eprint" "Electric preprint")
-          ("primaryClass" "Primary class used by arXiv")
-          ("shortjournal" "Journal Abbreviations"))))
+          "Zur" "zur")))
 
 (use-package ebib
+  :defer t
   :commands (ebib)
   :bind (:map ebib-multiline-mode-map
          ("C-c C-c" . ebib-quit-multiline-buffer-and-save))
