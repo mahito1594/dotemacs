@@ -8,6 +8,7 @@
 
 ;;;; Auto complete
 (use-package company
+  :blackout t
   :defer t
   :init
   (add-hook 'after-init-hook 'global-company-mode)
@@ -34,6 +35,7 @@
 
 ;;;; Syntax checker
 (use-package flycheck
+  :blackout t
   :defer t
   :commands (global-flycheck-mode)
   :init

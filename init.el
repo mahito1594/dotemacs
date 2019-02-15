@@ -5,8 +5,8 @@
 ;;
 
 ;;; Code:
-;; define the func to add load-path
 (defun add-to-load-path (&rest paths)
+  "This function add the given `PATHS' to `load-path' recursively."
   (let (path)
     (dolist (path paths paths)
       (let ((default-directory
@@ -18,9 +18,13 @@
 ;; add to load-path given dirs and its subdirs
 (add-to-load-path "elisp" "conf" "public_repos")
 
+;;;; Straight.el
 ;; install straight.el, see
 ;; https://github.com/raxod502/straight.el#getting-started
-(when (>= emacs-major-version 25.3)
+(if (< emacs-major-version 25.3)
+    ;; Require Emacs ver 25.3 or later. If you use an old one,
+    ;; `use-package' do nothing.
+    (defmacro use-package (&rest args))
   (setq straight-check-for-modifications 'live-with-find) ; => '(check-on-save find-when-checking)
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -33,14 +37,17 @@
            'silent 'inhibit-cookies)
         (goto-char (point-max))
         (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage)))
+    (load bootstrap-file nil 'nomessage))
+  (straight-use-package 'el-patch)
+  (straight-use-package 'use-package)
+  (setq straight-use-package-by-default t))
 
-;; install use-package and el-patch
-(straight-use-package 'el-patch)
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+;;;; Blackout
+(use-package blackout
+  ;; hide some major/minor mode in the mode line
+  :straight (:host github :repo "raxod502/blackout"))
 
-;; init-loader
+;;;; init-loader
 (use-package init-loader
   :config
   (setq init-loader-show-log-after-init 'error-only)
