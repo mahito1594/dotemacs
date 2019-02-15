@@ -33,11 +33,17 @@
           ("Fp" "setF_p" "Fp")
           ("Fq" "setF_q" "Fq")
           ("AA" "setA" "AA")))
+  ;; Completion
   (use-package company-math
     ;; completion by company
     :config
     (add-to-list 'company-backends 'company-math-symbols-latex)
     (add-to-list 'company-backends 'company-latex-commands))
+  ;; Syntax checker
+  (use-package flycheck-yatex
+    :straight (:host github :repo "mahito1594/flycheck-yatex")
+    :config
+    (add-to-list 'flycheck-checkers 'yatex-chktex))
   )
 
 ;; RefTeX
