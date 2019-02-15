@@ -10,8 +10,9 @@
 (use-package company
   :blackout t
   :defer t
+  :commands (global-company-mode)
   :init
-  (add-hook 'after-init-hook 'global-company-mode)
+  (add-hook 'after-init-hook #'global-company-mode)
   :config
   ;; key bindings: Switching from auto-complete. See
   ;; https://github.com/company-mode/company-mode/wiki/Switching-from-AC

@@ -43,8 +43,9 @@
   (use-package flycheck-yatex
     :straight (:host github :repo "mahito1594/flycheck-yatex")
     :config
-    (add-to-list 'flycheck-checkers 'yatex-chktex))
-  )
+    (add-to-list 'flycheck-checkers 'yatex-chktex)
+    ;; (add-to-list 'flycheck-checkers 'yatex-lacheck)
+    ))
 
 ;; RefTeX
 (use-package reftex

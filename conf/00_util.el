@@ -37,7 +37,7 @@
   :config
   (exec-path-from-shell-initialize))
 
-;; mute beep sounds
+;;;; mute beep sounds
 (setq ring-bell-function 'ignore)
 
 ;;;; Highlights
@@ -107,8 +107,9 @@
          ("<tab>" . helm-execute-persistent-action)
          ("C-i" . helm-execute-persistent-action)
          ("C-z" . helm-select-action))
+  :init
+  (add-hook 'after-init-hook #'helm-mode)
   :config
-  (helm-mode 1)
   (use-package helm-swoop
     :bind (("M-i" . helm-swoop)
            ("M-I" . helm-swoop-back-to-last-point)
@@ -127,5 +128,5 @@
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 (add-hook 'after-init-hook 'server-start)
 
-(provide '01_util)
-;;; 01_util.el ends here
+(provide '00_util)
+;;; 00_util.el ends here

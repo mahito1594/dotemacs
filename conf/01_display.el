@@ -25,5 +25,5 @@
   :config
   (powerline-default-theme))
 
-(provide '02_display)
-;;; 02_display.el ends here
+(provide '01_display)
+;;; 01_display.el ends here

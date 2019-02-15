@@ -53,7 +53,7 @@
   (setq init-loader-show-log-after-init 'error-only)
   (init-loader-load "~/.emacs.d/conf"))
 
-;; custom file
+;;;; custom file
 (setq custom-file "~/.emacs.d/custom-file.el")
 (if (file-exists-p (expand-file-name "~/.emacs.d/custom-file.el"))
     (load (expand-file-name custom-file) t nil nil))
