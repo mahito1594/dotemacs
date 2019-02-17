@@ -8,19 +8,24 @@
 ;;
 ;; Requirement:
 ;;  * jedi
+;;  * pylint
+;;  * flake8
 ;;  * autopep8
 ;;  * virtualenv
 
 ;;; Code:
-(use-package python-mode
+(use-package python
+  ;; use build-in `python.el', NOT `python-mode.el'!
+  :straight nil
   :defer t
-  :commands (python-mode)
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
-  :init
-  (setq py-install-directory (locate-user-emacs-file "straight/build/python-mode/"))
   :config
-  (setq py-shell-name "python3")
+  (when (executable-find "python3")
+    ;; use python3 if it exists
+    (setq python-shell-interpreter "python3")
+    (setq flycheck-python-pylint-executable "python3")
+    (setq flycheck-python-flake8-executable "python3"))
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
   (use-package company-jedi
@@ -28,7 +33,6 @@
     :config
     (add-to-list 'company-backends 'company-jedi)
     (add-hook 'python-mode-hook 'jedi:setup)
-    (setq jedi:environment-virtualenv (list (locate-user-emacs-file ".python-environments/")))
     (setq jedi:complete-on-dot t)
     (setq jedi:use-shortcuts t))
   (use-package py-autopep8
