@@ -5,7 +5,7 @@
 
 ;;;; Garbage Collection
 (setq garbage-collection-messages t)    ; echo when GC run
-(setq gc-cons-threshold (* gc-cons-threshold 10))
+(setq gc-cons-threshold (* gc-cons-threshold 100))
 
 ;;;; character encodings
 (set-language-environment "Japanese")
@@ -98,7 +98,7 @@
 
 ;;;; Helm
 (use-package helm
-  :blackout t
+  :demand t
   :bind (("M-x" . helm-M-x)
          ("M-y" . helm-show-kill-ring)
          ("C-x C-f" . helm-find-files)
@@ -107,9 +107,9 @@
          ("<tab>" . helm-execute-persistent-action)
          ("C-i" . helm-execute-persistent-action)
          ("C-z" . helm-select-action))
-  :init
-  (add-hook 'after-init-hook #'helm-mode)
   :config
+  (require 'helm-config)
+  (helm-mode 1)
   (use-package helm-swoop
     :bind (("M-i" . helm-swoop)
            ("M-I" . helm-swoop-back-to-last-point)
@@ -122,7 +122,8 @@
            ("C-s" . helm-next-line)
            :map helm-multi-swoop-map
            ("C-r" . helm-previous-line)
-           ("C-s" . helm-next-line))))
+           ("C-s" . helm-next-line)))
+  :blackout t)
 
 ;;;; Hooks
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)

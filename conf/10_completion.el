@@ -8,7 +8,6 @@
 
 ;;;; Auto complete
 (use-package company
-  :blackout t
   :defer t
   :commands (global-company-mode)
   :init
@@ -32,11 +31,10 @@
     :if window-system
     :config
     (company-quickhelp-mode))
-  )
+  :blackout t)
 
 ;;;; Syntax checker
 (use-package flycheck
-  :blackout t
   :defer t
   :commands (global-flycheck-mode)
   :init
@@ -44,7 +42,8 @@
   :config
   (use-package flycheck-pos-tip
     :config
-    (flycheck-pos-tip-mode)))
+    (flycheck-pos-tip-mode))
+  :blackout t)
 
 (provide '12_completion)
 ;;; 12_completion.el ends here
