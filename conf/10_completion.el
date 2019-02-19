@@ -1,9 +1,16 @@
 ;;; completion --- auto completion and syntax check
+
 ;;; Commentary:
 ;; I use `company' for autocompletion.
 ;; I got an error when I use :bind macro of use-package.
 ;; So, I define keybindings with `with-eval-after-load'.
 ;; I think, this is a bug.
+
+;; Use Language Server Protocol for completion, and so on, via lsp-mode, see
+;; https://github.com/emacs-lsp/lsp-mode
+;; To use lsp for a Language XXX, add
+;; (add-hook 'XXX-mode-hook #'lsp)
+
 ;;; Code:
 
 ;;;; Auto complete
@@ -44,6 +51,21 @@
     :config
     (flycheck-pos-tip-mode))
   :blackout t)
+
+;;;; Language Server Protocol
+(use-package lsp-mode
+  :defer t
+  :commands (lsp))
+(use-package lsp-ui
+  :defer t
+  :commands (lsp-ui-mode)
+  :init
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  )
+(use-package company-lsp
+  :after (company lsp-mode)
+  :config
+  (push 'company-lsp company-backends))
 
 (provide '12_completion)
 ;;; 12_completion.el ends here
