@@ -42,10 +42,21 @@
   ;; Syntax checker
   (use-package flycheck-yatex
     :straight (:host github :repo "mahito1594/flycheck-yatex")
-    :config
-    (add-to-list 'flycheck-checkers 'yatex-chktex)
-    ;; (add-to-list 'flycheck-checkers 'yatex-lacheck)
-    ))
+    :demand t)
+  ;; outline
+  (setq my/latex-outline-regexp
+        (concat "[ \t]*" (regexp-quote "\\")
+                "\\(documentclass\\|"
+                "part\\|chap\\|\\(sub\\)*section\\)"
+                "\\*?[ \t]*[[{]"))
+  (setq my/yatex-outline-promotion-headings
+        '("\\chapter" "\\section" "\\subsection" "\\subsubsectoin"))
+  (defun my/yatex-outline-config ()
+    "Configuration on outline for `yatex-mode'."
+    (outline-minor-mode t)
+    (setq-local outline-regexp my/latex-outline-regexp)
+    (setq-local outline-promotion-headings 'my/yatex-outline-promotion-headings))
+  (add-hook 'yatex-mode-hook #'my/yatex-outline-config))
 
 ;; RefTeX
 (use-package reftex
@@ -86,7 +97,8 @@
   (setq reftex-bibpath-environment-variables
         '("!kpsewhich -show-path=.bib"))
   (setq reftex-bibliography-commands
-        '("bibliography" "nobibliography" "addbibresource")))
+        '("bibliography" "nobibliography" "addbibresource"))
+  :blackout t)
 
 ;; BibTeX
 (use-package bibtex

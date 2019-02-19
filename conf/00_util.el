@@ -80,7 +80,8 @@
                            empty
                            space-mark
                            tab-mark
-                           )))
+                           ))
+  :blackout t)
 
 ;;;; dired
 (put 'dired-find-alternate-file 'disabled nil)
