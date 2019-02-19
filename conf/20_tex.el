@@ -44,17 +44,14 @@
     :straight (:host github :repo "mahito1594/flycheck-yatex")
     :demand t)
   ;; outline
-  (setq my/latex-outline-regexp
-        (concat "[ \t]*" (regexp-quote "\\")
-                "\\(documentclass\\|"
-                "part\\|chap\\|\\(sub\\)*section\\)"
-                "\\*?[ \t]*[[{]"))
+  (require 'tex-mode)
   (setq my/yatex-outline-promotion-headings
         '("\\chapter" "\\section" "\\subsection" "\\subsubsectoin"))
   (defun my/yatex-outline-config ()
     "Configuration on outline for `yatex-mode'."
     (outline-minor-mode t)
-    (setq-local outline-regexp my/latex-outline-regexp)
+    (setq-local outline-regexp latex-outline-regexp)
+    (setq-local outline-level #'latex-outline-level)
     (setq-local outline-promotion-headings 'my/yatex-outline-promotion-headings))
   (add-hook 'yatex-mode-hook #'my/yatex-outline-config))
 
