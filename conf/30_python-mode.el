@@ -10,14 +10,19 @@
 ;; We also must install them via pip.
 
 ;;; Code:
-(use-package python-mode
+(use-package python
+  ;; use build-in `python.el', NOT `python-mode.el'!
+  :straight nil
   :defer t
-  :mode "\\.py\\'"
-  :interpreter "python"
-  :init
-  (setq py-shell-name "python3")
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
   :config
   (add-hook 'python-mode-hook #'lsp)
+  (when (executable-find "python3")
+    ;; use python3 if it exists
+    (setq python-shell-interpreter "python3")
+    (setq flycheck-python-pylint-executable "python3")
+    (setq flycheck-python-flake8-executable "python3"))
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
   (use-package py-autopep8
