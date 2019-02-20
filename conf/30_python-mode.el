@@ -13,7 +13,6 @@
 (use-package python
   ;; use build-in `python.el', NOT `python-mode.el'!
   :straight nil
-  :defer t
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
   :config
@@ -27,6 +26,7 @@
   (setq tab-width 4)
   (use-package py-autopep8
     ;; use autopep8 for code format
+    :demand t
     :bind (:map python-mode-map
                 ("C-c F" . py-autopep8)
                 ("C-c f" . py-autopep8-region))))

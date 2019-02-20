@@ -5,7 +5,6 @@
 ;;; Code:
 
 (use-package yatex
-  :defer t
   :mode (("\\.tex\\'" . yatex-mode)
          ("\\.sty\\'" . yatex-mode)
          ("\\.ltx\\'" . yatex-mode))
@@ -36,6 +35,7 @@
   ;; Completion
   (use-package company-math
     ;; completion by company
+    :demand t
     :config
     (add-to-list 'company-backends 'company-math-symbols-latex)
     (add-to-list 'company-backends 'company-latex-commands))
@@ -44,11 +44,11 @@
     :straight (:host github :repo "mahito1594/flycheck-yatex")
     :demand t)
   ;; outline
-  (require 'tex-mode)
   (setq my/yatex-outline-promotion-headings
         '("\\chapter" "\\section" "\\subsection" "\\subsubsectoin"))
   (defun my/yatex-outline-config ()
     "Configuration on outline for `yatex-mode'."
+    (require 'tex-mode)
     (outline-minor-mode t)
     (setq-local outline-regexp latex-outline-regexp)
     (setq-local outline-level #'latex-outline-level)
@@ -58,7 +58,6 @@
 ;; RefTeX
 (use-package reftex
   :straight nil
-  :defer t
   :hook (yatex-mode . reftex-mode)
   :bind (:map reftex-mode-map
               ("C-c )" . nil)
@@ -99,7 +98,6 @@
 
 ;; BibTeX
 (use-package bibtex
-  :defer t
   :straight nil
   :mode (("\\.bib\\'" . bibtex-mode))
   :bind (:map bibtex-mode-map
@@ -128,7 +126,6 @@
           "Zur" "zur")))
 
 (use-package ebib
-  :defer t
   :commands (ebib)
   :bind (:map ebib-multiline-mode-map
          ("C-c C-c" . ebib-quit-multiline-buffer-and-save))

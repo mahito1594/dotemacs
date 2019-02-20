@@ -3,10 +3,6 @@
 ;; General settigns for utilities.
 ;;; Code:
 
-;;;; Garbage Collection
-(setq garbage-collection-messages t)    ; echo when GC run
-(setq gc-cons-threshold (* gc-cons-threshold 100))
-
 ;;;; character encodings
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
@@ -33,6 +29,7 @@
 
 ;;;; Set PATH
 (use-package exec-path-from-shell
+  :demand t
   :if (memq window-system '(mac ns))
   :config
   (exec-path-from-shell-initialize))
@@ -46,14 +43,12 @@
 (use-package paren
   ;; hilight corresponding parens
   :straight nil
+  :demand t
   :config
   (show-paren-mode 1)
   (setq show-paren-style 'mixed))
 ;;; colorize delimeters
-(use-package cl-lib)
-(use-package color)
 (use-package rainbow-delimiters
-  :defer t
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 ;;; highlight for region
@@ -91,7 +86,6 @@
 ;; After then, run `fc-cache -fv' in terminal.
 (use-package all-the-icons)
 (use-package neotree
-  :after (all-the-icons)
   :defer t
   :bind (("C-c q" . neotree-toggle))
   :config

@@ -15,7 +15,6 @@
 
 ;;;; Auto complete
 (use-package company
-  :defer t
   :commands (global-company-mode)
   :init
   (add-hook 'after-init-hook #'global-company-mode)
@@ -35,6 +34,7 @@
   (setq company-selection-wrap-around t)
   (setq company-require-match 'never)
   (use-package company-quickhelp
+    :demand t
     :if window-system
     :config
     (company-quickhelp-mode))
@@ -42,30 +42,29 @@
 
 ;;;; Syntax checker
 (use-package flycheck
-  :defer t
   :commands (global-flycheck-mode)
   :init
   (add-hook 'after-init-hook #'global-flycheck-mode)
   :config
   (use-package flycheck-pos-tip
+    :demand t
     :config
     (flycheck-pos-tip-mode))
   :blackout t)
 
 ;;;; Language Server Protocol
 (use-package lsp-mode
-  :defer t
-  :commands (lsp))
+  :commands (lsp)
+  :config
+  (use-package company-lsp
+    :demand t
+    :config
+    (push 'company-lsp company-backends)))
 (use-package lsp-ui
-  :defer t
   :commands (lsp-ui-mode)
   :init
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   )
-(use-package company-lsp
-  :after (company lsp-mode)
-  :config
-  (push 'company-lsp company-backends))
 
 (provide '12_completion)
 ;;; 12_completion.el ends here

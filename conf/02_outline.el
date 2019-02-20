@@ -32,13 +32,11 @@ Inserted by installing `org-mode' or when a release is made."
                "--abbrev=0"
                "HEAD")))))
 (provide 'org-version)
-(use-package org
-  :defer t)
+(use-package org)
 
 ;;;; outline
 (use-package outline
   :straight nil
-  :defer t
   :commands (outline-minor-mode)
   :config
   (use-package outline-magic
@@ -50,7 +48,6 @@ Inserted by installing `org-mode' or when a release is made."
 ;;;; hide/show
 (use-package hideshow
   :straight nil
-  :defer t
   :commands (hs-minor-mode)
   :bind ("C-+" . hs-toggle-hiding)
   :blackout hs-minor-mode)

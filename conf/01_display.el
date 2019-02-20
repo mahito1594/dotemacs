@@ -20,8 +20,10 @@
 (use-package dracula-theme
   ;; Use Dracula thema, see
   ;; https://draculatheme.com/emacs/
+  :demand t
   :config (load-theme 'dracula t))
 (use-package powerline
+  :demand t
   :config
   (powerline-default-theme))
 

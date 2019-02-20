@@ -5,6 +5,11 @@
 ;;
 
 ;;; Code:
+
+;;;; Garbage Collection
+(setq garbage-collection-messages t)    ; echo when GC run
+(setq gc-cons-threshold (* gc-cons-threshold 250))
+
 (defun add-to-load-path (&rest paths)
   "This function add the given `PATHS' to `load-path' recursively."
   (let (path)
@@ -40,15 +45,19 @@
     (load bootstrap-file nil 'nomessage))
   (straight-use-package 'el-patch)
   (straight-use-package 'use-package)
-  (setq straight-use-package-by-default t))
+  (setq straight-use-package-by-default t)
+  (setq use-package-always-defer t)
+  )
 
 ;;;; Blackout
 (use-package blackout
   ;; hide some major/minor mode in the mode line
-  :straight (:host github :repo "raxod502/blackout"))
+  :straight (:host github :repo "raxod502/blackout")
+  :demand t)
 
 ;;;; init-loader
 (use-package init-loader
+  :demand t
   :config
   (setq init-loader-show-log-after-init 'error-only)
   (init-loader-load "~/.emacs.d/conf"))
