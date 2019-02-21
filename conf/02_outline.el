@@ -32,7 +32,20 @@ Inserted by installing `org-mode' or when a release is made."
                "--abbrev=0"
                "HEAD")))))
 (provide 'org-version)
-(use-package org)
+(use-package org
+  :config
+  ;; for org-mode (ver 9.2 or later), we should load `org-temp.el'
+  ;; in order to use easy templates.
+  (require 'org-tempo)
+  (setq org-structure-template-alist
+        (append '(("el" . "src emacs-lisp")
+                  ("py" . "src python")
+                  ("sh" . "src sh"))
+                org-structure-template-alist))
+  (setq org-src-fontify-natively t)
+  (use-package ox-gfm
+    :demand t)
+  )
 
 ;;;; outline
 (use-package outline
