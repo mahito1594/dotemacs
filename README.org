@@ -1,0 +1,106 @@
+#+STARTUP: content indent
+#+TITLE: README.org
+#+AUTHOR: Mahito Tanno
+
+* Summary
+個人用の Emacs の設定．
+
+* init.el
+init-loader と use-packege を利用し =.emacs.d/conf/= 以下の設定ファイルを読み込む．
+分割したファイルは概ね以下に従って番号をふる．
+
+- 00 -- 09: init Emacs
+- 10 -- 19: fundamental setting for programinngs
+- 20 -- 89: settings for indivisual language
+- 90 -- 98: computer algebra systems
+- 99: keybindings
+
+** [[https://github.com/raxod502/straight.el][straight.el]]
+
+* [[https://github.com/jaypei/emacs-neotree][NeoTree]]
+tree の表示に all-the-icons を利用している．
+=M-x all-the-icons-install-fonts= とした後，ターミナルで =fc-cache -fv= を実行する．
+
+=C-c q= で tree の表示， =q= で非表示．
+
+* TeX / LaTex
+TeX / LaTeX の編集には [[https://www.yatex.org/][YaTeX]] を利用する．
+イメージ数式補完のため，ユーザ変数の =YaTeX-math-sign-alist-private= によく使う記号をまとめておく：
+
+#+begin_src emacs-lisp
+    (setq YaTeX-math-sign-alist-private
+          '(("KEY1" "COMMAND1" "DESCRIPTION1")
+            ("KEY2" "COMMAND2" "DESCRIPTION2")))
+#+end_src
+
+また補完に =company-math= も利用している．
+
+BibTeX データベースの編集には bibtex-mode と
+[[http://joostkremers.github.io/ebib/][Ebib]] を利用する．
+
+Ebib は =M-x ebib= で起動する．
+
+index buffer での基本的な操作は次の通り：
+
+| key     | 操作                                            |
+|---------+-------------------------------------------------|
+| o       | =.bib= ファイルを開く                           |
+| s       | 編集を保存                                      |
+| q / z   | 終了 / 休止(=M-x ebib= で再開)                  |
+| a       | entry の追加                                    |
+| e / E   | entry の編集 / entry key の編集                 |
+| m / M   | 現在の entry をマーク / 全ての entry をマーク   |
+| x       | マークした entry をエクスポート                 |
+
+entry buffer での基本的な操作は以下の通り：
+
+| key   | 操作                              |
+|-------+-----------------------------------|
+| e     | field の編集                      |
+| a     | field の追加                      |
+| d     | field の削除                      |
+| q     | 編集の終了(index buffer へ戻る)   |
+
+また =C-c C-c= に ~ebib-quit-multiline-buffer-and-save~ を割り当てている．
+
+* Python
+Python の記述には python-mode.el を使う． 補完には auto-complete.el と
+[[https://pypi.org/project/jedi/][jedi]] を利用する．
+
+jedi と virtualenv を pip 等でインストールした後
+
+#+BEGIN_EXAMPLE
+    M-x package-install RET jedi RET
+    M-x jedi:install-server RET
+#+END_EXAMPLE
+
+とする．
+
+* Untracking files
+以下のファイルは git 管理外． 環境に応じて適当に書き加えること．
+
+** 19_font.el
+フォントに関する設定． 例えば
+
+#+begin_src emacs-lisp
+    (set-face-attribute 'default nil
+                        :family "Source Han Code JP"
+                        :height 140)
+#+end_src
+
+などとする．
+
+** 91_singular.el
+SINGULAR を Emacs で動かすための設定．
+
+#+begin_src emacs-lisp
+    (add-to-list 'load-path "<singular-emacs-home-directory>")
+    (autoload 'singular "singular"
+      "Start Singular using default values." t)
+    (autoload 'singular-other "singular"
+      "Ask for arguments and start Singular." t)
+#+end_src
+
+詳細は
+[[https://www.singular.uni-kl.de/Manual/latest/sing_23.htm#SEC30][Running
+SINGULAR under Emacs]] を参照のこと．
