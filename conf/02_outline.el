@@ -1,9 +1,14 @@
 ;;; outline --- outline and hide/show
+
+;; This program is released under the GPL v3.0 or,
+;; (at your option) any later version.  See LICENSE.
+
 ;;; Commentary:
 ;;; Code:
 
 ;;;; org-mode
-;; Install org-mode by git. See
+;; Install org-mode by git.
+;; The following code is given at
 ;; https://github.com/raxod502/straight.el#installing-org-with-straightel
 (require 'subr-x)
 (straight-use-package 'git)
@@ -43,7 +48,7 @@ Inserted by installing `org-mode' or when a release is made."
                   ("sh" . "src sh"))
                 org-structure-template-alist))
   (setq org-src-fontify-natively t)
-  (use-package ox-gfm
+  (use-package ox-gfm                   ; export to GitHub Flavored Markdown
     :demand t)
   )
 

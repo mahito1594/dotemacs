@@ -1,27 +1,35 @@
-;;; init --- my init file
+;;; init --- my config file for GNU Emacs
+
+;; Copyright (C) 2019  TANNO Mahito
+
+;; Author: Mahito Tanno
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 ;;; Commentary:
 ;; My init file for Emacs ver 25.3 or later.
 ;; Use straight.el and use-pacakage.el as pacakge installer.
-;;
+
+;; straight.el is released under the MIT License
+;; copyright (C) 2017 Radon Rosborough
+;; https://github.com/raxod502/straight.el
 
 ;;; Code:
 
 ;;;; Garbage Collection
 (setq garbage-collection-messages t)    ; echo when GC run
 (setq gc-cons-threshold (* gc-cons-threshold 250))
-
-(defun add-to-load-path (&rest paths)
-  "This function add the given `PATHS' to `load-path' recursively."
-  (let (path)
-    (dolist (path paths paths)
-      (let ((default-directory
-              (expand-file-name (concat user-emacs-directory path))))
-        (add-to-list 'load-path default-directory)
-        (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-            (normal-top-level-add-subdirs-to-load-path))))))
-
-;; add to load-path given dirs and its subdirs
-(add-to-load-path "elisp" "conf" "public_repos")
 
 ;;;; Straight.el
 ;; install straight.el, see

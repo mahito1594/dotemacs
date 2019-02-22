@@ -1,4 +1,8 @@
 ;;; python-mode --- setting for Python
+
+;; This program is released under the GPL v3.0 or,
+;; (at your option) any later version.  See LICENSE.
+
 ;;; Commentary:
 
 ;; Use python-mode with LSP.

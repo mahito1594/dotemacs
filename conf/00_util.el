@@ -1,6 +1,11 @@
 ;;; util.el --- utilities
+
+;; This program is released under the GPL v3.0 or,
+;; (at your option) any later version.  See LICENSE.
+
 ;;; Commentary:
 ;; General settigns for utilities.
+
 ;;; Code:
 
 ;;;; character encodings

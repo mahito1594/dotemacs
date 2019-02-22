@@ -1,6 +1,10 @@
 ;;; completion --- auto completion and syntax check
 
+;; This program is released under the GPL v3.0 or,
+;; (at your option) any later version.  See LICENSE.
+
 ;;; Commentary:
+
 ;; I use `company' for autocompletion.
 ;; I got an error when I use :bind macro of use-package.
 ;; So, I define keybindings with `with-eval-after-load'.
@@ -49,8 +53,7 @@
   (use-package flycheck-pos-tip
     :demand t
     :config
-    (flycheck-pos-tip-mode))
-  :blackout t)
+    (flycheck-pos-tip-mode)))
 
 ;;;; Language Server Protocol
 (use-package lsp-mode

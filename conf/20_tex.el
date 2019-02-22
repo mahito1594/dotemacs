@@ -1,5 +1,10 @@
 ;;; tex --- settings for LaTeX
+
+;; This program is released under the GPL v3.0 or,
+;; (at your option) any later version.  See LICENSE.
+
 ;;; Commentary:
+
 ;; Use YaTeX: Yet Another TeX mode for Emacs.
 ;;
 ;;; Code:
@@ -80,15 +85,6 @@
           ("remark"      ?r "rem:"  "~\\ref{%s}" nil ("remark")      nil)
           ("example"     ?x "ex:"   "~\\ref{%s}" nil ("example")     nil)
           ("conjecture"  ?c "conj:" "~\\ref{%s}" nil ("conjecture")  nil)))
-  ;; automatic insert non-breaking whitespace (~) before citation. See
-  ;; https://www.emacswiki.org/emacs/RefTeX
-  (setq reftex-format-cite-function
-        '(lambda (key fmt)
-           (let ((cite (replace-regexp-in-string "%l" key fmt)))
-             (if (or (= ?~ (string-to-char fmt))
-                     (member (preceding-char) '(?\ ?\t ?\n ?~)))
-                 cite
-               (concat "~" cite)))))
   ;; source files
   (setq reftex-bibpath-environment-variables
         '("!kpsewhich -show-path=.bib"))

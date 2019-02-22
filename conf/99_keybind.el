@@ -1,4 +1,12 @@
-;;; key binds
+;;; keybind --- set some global keybindings
+
+;; This program is released under the GPL v3.0 or,
+;; (at your option) any later version.  See LICENSE.
+
+;;; Commentary:
+
+;;; Code:
+
 (define-key global-map (kbd "C-m") 'newline-and-indent)
 (define-key global-map (kbd "C-2") 'set-mark-command)
 (define-key global-map (kbd "C-t") 'other-window)
