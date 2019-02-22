@@ -5,8 +5,12 @@
 
 ;;; Commentary:
 
-;; Use YaTeX: Yet Another TeX mode for Emacs.
-;;
+;; Use YaTeX (Yet Another TeX mode for Emacs) for writing
+;; LaTeX documents with RefTeX, outline-minor-mode.
+
+;; In order to manage BibTeX database, we use Ebib, see
+;; http://joostkremers.github.io/ebib/
+
 ;;; Code:
 
 (use-package yatex
@@ -48,17 +52,40 @@
   (use-package flycheck-yatex
     :straight (:host github :repo "mahito1594/flycheck-yatex")
     :demand t)
-  ;; outline
-  (setq my/yatex-outline-promotion-headings
-        '("\\chapter" "\\section" "\\subsection" "\\subsubsectoin"))
-  (defun my/yatex-outline-config ()
-    "Configuration on outline for `yatex-mode'."
-    (require 'tex-mode)
-    (outline-minor-mode t)
-    (setq-local outline-regexp latex-outline-regexp)
-    (setq-local outline-level #'latex-outline-level)
-    (setq-local outline-promotion-headings 'my/yatex-outline-promotion-headings))
-  (add-hook 'yatex-mode-hook #'my/yatex-outline-config))
+  ;; with outline-minor-mode:
+  ;; The following code is a modification a part of `tex-mode.el'
+  ;; which is bundled with GNU Emacs.
+  ;; Copyright (C) 1985-1986, 1989, 1992, 1994-1999, 2001-2019 Free
+  ;; Software Foundation, Inc.
+  ;; Released under the GPL v3.0 or any later version.
+  (defvar my/YaTeX-section-alist
+    '(("part" . 0)
+      ("chapter" . 1)
+      ("section" . 2)
+      ("subsection" . 3)
+      ("subsubsection" . 4)
+      ("paragraph" . 5)))
+  (defvar my/YaTeX-metasection-list
+    '("documentclass"
+      "begin{document}" "end{document}"
+      "frontmatter" "mainmatter" "appendix" "backmatter"))
+  (defvar my/YaTeX-outline-regexp
+    (concat (regexp-quote "\\")
+            (regexp-opt (append my/YaTeX-metasection-list
+                                (mapcar #'car my/YaTeX-section-alist))
+                        t)))
+  (defvar my/YaTeX-outline-promotion-headings
+    '("\\chapter" "\\section" "\\subsection" "\\subsubsection"))
+  (defun my/YaTeX-outline-level ()
+    (if (looking-at my/YaTeX-outline-regexp)
+        (1+ (or (cdr (assoc (match-string 1) my/YaTeX-section-alist)) -1))
+      1000))
+  (defun my/YaTeX-with-outline ()
+    (outline-minor-mode 1)
+    (setq-local outline-regexp my/YaTeX-outline-regexp)
+    (setq-local outline-level #'my/YaTeX-outline-level)
+    (setq-local outline-promotion-headings my/YaTeX-outline-promotion-headings))
+  (add-hook 'yatex-mode-hook #'my/YaTeX-with-outline))
 
 ;; RefTeX
 (use-package reftex
