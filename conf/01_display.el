@@ -1,5 +1,10 @@
 ;;; display.el --- settings for graphical part
+
+;; This program is released under the GPL v3.0 or,
+;; (at your option) any later version.  See LICENSE.
+
 ;;; Commentary:
+
 ;; Settings for graphical user interface
 
 ;;; Code:
