@@ -39,8 +39,25 @@ Inserted by installing `org-mode' or when a release is made."
 (provide 'org-version)
 (use-package org
   :config
-  ;; for org-mode (ver 9.2 or later), we should load `org-temp.el'
-  ;; in order to use easy templates.
+  ;; with electric-pair-mode:
+  ;; We want to disable electric-pair-mode for `<' and `>'.
+  ;; Also, we want to enable for `/' `~' and `='.
+  (defvar my/org-electric-pair-pairs
+    '((?/ . ?/) (?~ . ?~) (?= . ?=)))
+  (defun my/org-electric-pair-inhibit-predicate (c)
+    (if (char-equal ?<) t
+      (electric-pair-default-inhibit c)))
+  (defun my/org-electric-pair ()
+    (setq-local electric-pair-pairs
+                (append electric-pair-pairs my/org-electric-pair-pairs))
+    (setq-local electric-pair-text-pairs
+                (append electric-pair-text-pairs my/org-electric-pair-pairs))
+    (setq-local electric-pair-inhibit-predicate
+                #'my/org-electric-pair-inhibit-predicate))
+  (add-hook 'org-mode-hook #'my/org-electric-pair)
+  ;; For org-mode (ver 9.2 or later), we must load `org-temp.el'
+  ;; in order to use easy templates.  Or, we should use
+  ;; `org-insert-structure-template' binded to `C-c C-,'.
   (require 'org-tempo)
   (setq org-structure-template-alist
         (append '(("el" . "src emacs-lisp")
@@ -48,7 +65,8 @@ Inserted by installing `org-mode' or when a release is made."
                   ("sh" . "src sh"))
                 org-structure-template-alist))
   (setq org-src-fontify-natively t)
-  (use-package ox-gfm                   ; export to GitHub Flavored Markdown
+  ;; export to Github Flavored Markdown
+  (use-package ox-gfm
     :demand t)
   )
 
