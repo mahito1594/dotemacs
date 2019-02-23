@@ -31,6 +31,10 @@
 (setq garbage-collection-messages t)    ; echo when GC run
 (setq gc-cons-threshold (* gc-cons-threshold 250))
 
+;;;; Re setting `user-emacs-directory'
+(when load-file-name
+  (setq user-emacs-directory (file-name-directory load-file-name)))
+
 ;;;; Straight.el
 ;; install straight.el, see
 ;; https://github.com/raxod502/straight.el#getting-started

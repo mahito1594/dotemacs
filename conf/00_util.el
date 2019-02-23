@@ -27,10 +27,15 @@
   (setq locale-coding-system 'utf-8-hfs))
 
 ;;;; Backups and autosave files
+(defvar my-backup-directory nil)
+(if (file-directory-p (locate-user-emacs-file "backups"))
+    (setq my-backup-directory (locate-user-emacs-file "backups/"))
+  (make-directory (locate-user-emacs-file "backups"))
+  (setq my-backup-directory (locate-user-emacs-file "backups/")))
 (add-to-list 'backup-directory-alist
-             (cons "." "~/.emacs.d/backups/"))
+             `((".*" . ,my-backup-directory)))
 (setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "~/.emacs.d/backups/") t)))
+      `((".*" ,my-backup-directory t)))
 
 ;;;; Set PATH
 (use-package exec-path-from-shell
