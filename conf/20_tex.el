@@ -30,6 +30,8 @@
                               (regexp . "\\(\\s-*\\)&")
                               (repeat . t)
                               (mode . '(yatex-mode))))))
+  ;; user dictionary
+  (setq YaTeX-user-completion-table "~/texmf/emacs/yatexrc")
   (setq YaTeX-math-sign-alist-private
         ;; my math symbols
         '(("NN" "setN" "N")
@@ -181,7 +183,7 @@
   ;; keywords
   (setq ebib-keywords-field-keep-sorted t)
   (when (eq system-type 'darwin)
-    (setq ebib-keywords-file "~/ebib-keywords.txt"))
+    (setq ebib-keywords-file "~/texmf/emacs/ebib-keywords.txt"))
   (setq ebib-keywords-use-only-file t)
   (setq ebib-keywords-file-save-on-exit 'always)
   :config
