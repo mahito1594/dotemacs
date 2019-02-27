@@ -13,11 +13,10 @@
 (prefer-coding-system 'utf-8)
 (use-package mozc
   ;; use mozc for GNU/Linux
+  :demand t
   :if (eq system-type 'gnu/linux)
   :config
-  (setq default-input-method "japanese-mozc")
-  :bind
-  (("C-j" . toggle-input-method)))
+  (setq default-input-method "japanese-mozc"))
 (use-package ucs-normalize
   ;; for macOS, settings about file names
   :straight nil
