@@ -20,19 +20,21 @@
 (use-package ucs-normalize
   ;; for macOS, settings about file names
   :straight nil
+  :demand t
   :if (eq system-type 'darwin)
   :config
   (set-file-name-coding-system 'utf-8-hfs)
   (setq locale-coding-system 'utf-8-hfs))
 
 ;;;; Backups and autosave files
-(defvar my-backup-directory nil)
-(if (file-directory-p (locate-user-emacs-file "backups"))
-    (setq my-backup-directory (locate-user-emacs-file "backups/"))
-  (make-directory (locate-user-emacs-file "backups"))
-  (setq my-backup-directory (locate-user-emacs-file "backups/")))
-(add-to-list 'backup-directory-alist
-             `((".*" . ,my-backup-directory)))
+(defvar my-backup-directory
+  (if (file-directory-p (locate-user-emacs-file "backups"))
+      (setq my-backup-directory (locate-user-emacs-file "backups/"))
+    (make-directory (locate-user-emacs-file "backups"))
+    (setq my-backup-directory (locate-user-emacs-file "backups/")))
+  "The directory which contains backup files.")
+(setq backup-directory-alist
+      `((".*" . ,my-backup-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,my-backup-directory t)))
 
