@@ -38,7 +38,7 @@
 ;;;; Straight.el
 ;; install straight.el, see
 ;; https://github.com/raxod502/straight.el#getting-started
-(if (< emacs-major-version 25.3)
+(if (< (string-to-number emacs-version) 25.3)
     ;; Require Emacs ver 25.3 or later. If you use an old one,
     ;; `use-package' do nothing.
     (defmacro use-package (&rest args))
