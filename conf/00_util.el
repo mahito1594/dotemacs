@@ -95,40 +95,116 @@
 ;;;; Tree plugin: emacs-neotree
 ;; Type `M-x all-the-icons-install-fonts' at the first time.
 ;; After then, run `fc-cache -fv' in terminal.
-(use-package all-the-icons)
+(use-package all-the-icons
+  :demand t)
 (use-package neotree
-  :defer t
   :bind (("C-c q" . neotree-toggle))
   :config
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
-;;;; Helm
-(use-package helm
-  :demand t
-  :bind (("M-x" . helm-M-x)
-         ("M-y" . helm-show-kill-ring)
-         ("C-x C-f" . helm-find-files)
-         ("C-x b" . helm-mini)
-         :map helm-map
-         ("<tab>" . helm-execute-persistent-action)
-         ("C-i" . helm-execute-persistent-action)
-         ("C-z" . helm-select-action))
+;;;; Ivy, Counsel and Swiper
+(use-package counsel
+  :hook ((after-init . ivy-mode)
+         (ivy-mode . counsel-mode))
+  :bind (("C-s" . swiper)
+         ("C-S-s" . swiper-all)
+         ("C-c C-r" . ivy-resume)
+         :map ivy-minibuffer-map
+         ("<tab>" . ivy-alt-done)
+         ("C-w" . ivy-yank-word))
+  :custom
+  (ivy-use-virtual-buffers t)
+  (ivy-count-format "(%d/%d) ")
+  (ivy-wrap t)
+  (ivy-format-function 'ivy-format-function-arrow)
+  (counsel-yank-pop "\n---------\n")
+  (ivy-initial-inputs-alist nil)
   :config
-  (require 'helm-config)
-  (helm-mode 1)
-  (use-package helm-swoop
-    :bind (("M-i" . helm-swoop)
-           ("M-I" . helm-swoop-back-to-last-point)
-           ("C-c M-i" . helm-multi-swoop)
-           ("C-x M-i" . helm-multi-swoop-all)
-           :map isearch-mode-map
-           ("M-i" . helm-swoop-from-isearch)
-           :map helm-swoop-map
-           ("C-r" . helm-previous-line)
-           ("C-s" . helm-next-line)
-           :map helm-multi-swoop-map
-           ("C-r" . helm-previous-line)
-           ("C-s" . helm-next-line)))
+  (use-package amx
+    :demand t)
+  (use-package ivy-rich
+    ;; Show icons when you swich buffers, or find files.
+    ;; See https://github.com/Yevgnen/ivy-rich#13-customization
+    :preface
+    (defun my/ivy-rich-buffer-icon (candidate)
+      "Show buffer isons in `ivy-rich', only on GUI."
+      (when (display-graphic-p)
+        (with-current-buffer
+            (get-buffer candidate)
+          (let ((icon (all-the-icons-icon-for-mode major-mode)))
+            (if (symbolp icon)
+                (all-the-icons-icon-for-mode 'fundamental-mode)
+              icon)))))
+    (defun my/ivy-rich-file-icon (candidate)
+      "Show file icons in `ivy-rich', only on GUI."
+      (when (display-graphic-p)
+        (let ((icon
+               ;; for directories
+               (if (file-directory-p candidate)
+                   (cond
+                    ;; for `tramp-mode'
+                    ((and (fboundp 'tramp-tramp-file-p)
+                          (tramp-tramp-file-p default-directory))
+                     (all-the-icons-octicon "file-directory"))
+                    ;; for symbolic links
+                    ((file-symlink-p candidate)
+                     (all-the-icons-octicon "file-symlink-directory"))
+                    ;; for git submodules
+                    ((all-the-icons-dir-is-submodule candidate)
+                     (all-the-icons-octicon "file-submodule"))
+                    ;; for version-controled by git
+                    ((file-exists-p (format "%s/.git" candidate))
+                     (all-the-icons-octicon "repo"))
+                    ;; otherwise
+                    (t (let ((matcher (all-the-icons-match-to-alist candidate all-the-icons-dir-icon-alist)))
+                         (apply (car matcher) (list (cadr matcher))))))
+                 ;; for files
+                 (all-the-icons-icon-for-file candidate))))
+          (unless (symbolp icon)
+            (propertize icon
+                        'face `(:family ,(all-the-icons-icon-family icon) :height 1.1))))))
+    :demand t
+    :custom
+    (ivy-rich-path-style 'abbrev)
+    (ivy-rich-display-transformers-list
+     '(ivy-switch-buffer
+       (:columns
+        ((my/ivy-rich-buffer-icon :width 2)
+         (ivy-rich-candidate (:width 30))
+         (ivy-rich-switch-buffer-size (:width 7))
+         (ivy-rich-switch-buffer-indicators (:width 4 :face error :align left))
+         (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))
+         (ivy-rich-switch-buffer-project (:width 15 :face success))
+         (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))
+        :predicate
+        (lambda (cand) (get-buffer cand)))
+       counsel-M-x
+       (:columns
+        ((counsel-M-x-transformer (:width 40))
+         (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))
+       counsel-describe-function
+       (:columns
+        ((counsel-describe-function-transformer (:width 40))
+         (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))
+       counsel-describe-variable
+       (:columns
+        ((counsel-describe-variable-transformer (:width 40))
+         (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))
+       counsel-recentf
+       (:columns
+        ((ivy-rich-candidate (:width 0.8))
+         (ivy-rich-file-last-modified-time (:face font-lock-comment-face))))
+       counsel-find-file
+       (:columns
+        ((my/ivy-rich-file-icon :width 2)
+         (ivy-rich-candidate)))
+       counsel-git
+       (:columns
+        ((my/ivy-rich-file-icon :width 2)
+         (ivy-rich-candidate)))))
+    :config
+    (ivy-rich-mode +1)
+    :blackout t)
   :blackout t)
 
 ;;;; Hooks
