@@ -114,6 +114,7 @@
   :hook ((after-init . ivy-mode)
          (ivy-mode . counsel-mode))
   :bind (("C-s" . swiper)
+         ("C-r" . swiper)
          ("C-S-s" . swiper-all)
          ("C-c C-r" . ivy-resume)
          :map ivy-minibuffer-map
