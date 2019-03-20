@@ -90,7 +90,14 @@
   :blackout t)
 
 ;;;; dired
-(put 'dired-find-alternate-file 'disabled nil)
+(use-package dired
+  :straight nil
+  :demand t
+  :config
+  (put 'dired-find-alternate-file 'disabled nil))
+(use-package all-the-icons-dired
+  :if (window-system)
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 ;;;; Tree plugin: emacs-neotree
 ;; Type `M-x all-the-icons-install-fonts' at the first time.
