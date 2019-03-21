@@ -62,31 +62,33 @@
 (use-package rainbow-delimiters
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+;;; beacon
+(use-package beacon
+  :hook (after-init . beacon-mode)
+  :custom
+  (beacon-color "yellow"))
+
 ;;; highlight for region
 (transient-mark-mode 1)
-(use-package hiwin
-  ;; de-emphasize non-active windows
-  :config
-  (hiwin-activate)
-  (set-face-background 'hiwin-face "DarkSlateGray"))
 
 ;;;; Whitespaces and tabs
 (setq-default indent-tabs-mode nil)     ; Don't use tabs for indent
 (use-package whitespace
   ;; visualize whitespaces/tabs
+  :straight nil
   :defer t
   :commands (whitespace-mode)
   :bind (("C-c w" . whitespace-mode))
-  :config
-  (setq whitespace-style '(
-                           face
-                           trailing
-                           tabs
-                           spaces
-                           empty
-                           space-mark
-                           tab-mark
-                           ))
+  :custom
+  (whitespace-style '(
+                      face
+                      trailing
+                      tabs
+                      spaces
+                      empty
+                      space-mark
+                      tabmark
+                      ))
   :blackout t)
 
 ;;;; dired
@@ -107,8 +109,10 @@
   :demand t)
 (use-package neotree
   :bind (("C-c q" . neotree-toggle))
-  :config
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
+  :custom
+  (neo-theme (if (display-graphic-p)
+                 'classic
+               'arrow)))
 
 ;;;; Ivy, Counsel and Swiper
 (use-package counsel

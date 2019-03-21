@@ -22,15 +22,28 @@
 (set-frame-parameter nil 'fullscreen 'maximized) ; fullscreen
 
 ;;;; Color-theme
-(use-package dracula-theme
-  ;; Use Dracula thema, see
-  ;; https://draculatheme.com/emacs/
+(use-package doom-themes
   :demand t
-  :config (load-theme 'dracula t))
-(use-package powerline
-  :demand t
+  :custom
+  (doom-themes-enable-bold t)
+  (doom-themes-enable-italic t)
+  (doom-neotree-file-icons t)
   :config
-  (powerline-default-theme))
+  (load-theme 'doom-dracula t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-neotree-config)
+  (doom-themes-org-config))
+
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  :custom
+  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (find-file-visit-truename t)
+  :config
+  (setq doom-modeline-mu4e nil
+        doom-modeline-irc nil))
 
 (provide '01_display)
 ;;; 01_display.el ends here
