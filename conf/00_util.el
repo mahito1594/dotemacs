@@ -103,6 +103,7 @@
 ;; Type `M-x all-the-icons-install-fonts' at the first time.
 ;; After then, run `fc-cache -fv' in terminal.
 (use-package all-the-icons
+  :if (display-graphic-p)
   :demand t)
 (use-package neotree
   :bind (("C-c q" . neotree-toggle))
