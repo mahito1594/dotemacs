@@ -216,6 +216,15 @@
     :blackout t)
   :blackout t)
 
+(use-package which-key
+  :hook (after-init . which-key-mode)
+  :bind (:map which-key-mode-map
+              ("C-x DEL" . which-key-C-h-dispatch))
+  :custom
+  (which-key-popup-type 'side-window)
+  (which-key-side-window-location 'bottom)
+  :blackout t)
+
 ;;;; Hooks
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 (add-hook 'after-init-hook 'server-start)
