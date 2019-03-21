@@ -10,6 +10,10 @@ recentf
 straight/
 !straight/versions/default.el
 
+# others
+.lsp*
+amx-items
+
 # Created by https://www.gitignore.io/api/emacs
 # Edit at https://www.gitignore.io/?templates=emacs
 
