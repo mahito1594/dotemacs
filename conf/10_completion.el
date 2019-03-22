@@ -17,8 +17,14 @@
 
 ;;; Code:
 
+;;;; Snippet
+(use-package yasnippet
+  :hook (after-init . yas-global-mode)
+  :blackout t)
+
 ;;;; Auto complete
 (use-package company
+  :commands (global-company-mode)
   :hook (after-init . global-company-mode)
   :config
   ;; key bindings: Switching from auto-complete. See
@@ -103,13 +109,16 @@
   :config
   (use-package company-lsp
     :demand t
+    :after (company)
     :config
-    (push 'company-lsp company-backends)))
-(use-package lsp-ui
-  :commands (lsp-ui-mode)
-  :init
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+    (push 'company-lsp company-backends))
+  (use-package lsp-ui
+    :commands (lsp-ui-mode)
+    :hook (lsp-mode . lsp-ui-mode)
+    :demand t
+    :after (flycheck)
+    :blackout t)
   )
 
 (provide '12_completion)
-;;; 12_completion.el ends here
+;;; 10_completion.el ends here
