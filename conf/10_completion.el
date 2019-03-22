@@ -17,6 +17,11 @@
 
 ;;; Code:
 
+;;;; Snippet
+(use-package yasnippet
+  :hook (after-init . yas-global-mode)
+  :blackout t)
+
 ;;;; Auto complete
 (use-package company
   :commands (global-company-mode)
