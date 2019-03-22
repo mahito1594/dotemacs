@@ -20,7 +20,11 @@
   (use-package ccls
     :hook ((c-mode c++-mode objc-mode) . (lambda ()
                                            (require 'ccls)
-                                           (lsp))))
+                                           (lsp)))
+    :config
+    (setq ccls-sem-highlight-method 'font-lock)
+    (ccls-use-default-rainbow-sem-highlight)
+    )
   )
 
 (provide '32_clang)
