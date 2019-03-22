@@ -5,32 +5,18 @@
 
 ;;; Commentary:
 
-;; To use LSP, we need `merlin' of develop version, see
-;; https://khady.info/emacs-ocaml-lsp.html
+;; To use LSP, you should run
+;;   npm install -g ocaml-language-server
+;;   opam install merlin
 
-;; So, we use tuareg and merlin.
-;; We need install merlin, by running
-;; `opam install merlin', and then
-;; `opam user-setup install'.
+;; The devlop version of merlin integrated with LSP.  See
+;; https://khady.info/emacs-ocaml-lsp.html
 
 ;;; Code:
 
 (use-package tuareg
-  :custom
-  (merlin-error-after-save nil))
-
-(use-package merlin
-  :hook ((caml-mode tuareg-mode) . merlin-mode)
-  :config
-  (require 'opam-user-setup (locate-user-emacs-file "opam-user-setup.el"))
-  (add-to-list 'company-backends 'merlin-company-backend)
-  (use-package merlin-eldoc
-    :hook ((caml-mode tuareg-mode) . merlin-eldoc-setup))
-  (use-package flycheck-ocaml
-    :demand t
-    :after (flycheck)
-    :config
-    (flycheck-ocaml-setup)))
+  :hook (tuareg-mode . lsp)
+  )
 
 (provide '34_ocaml)
 ;;; 34_ocaml.el ends here
