@@ -98,14 +98,15 @@
 (use-package flycheck
   :hook (after-init . global-flycheck-mode)
   :config
-  (use-package flycheck-pos-tip
-    :demand t
-    :config
-    (flycheck-pos-tip-mode)))
+  (use-package flycheck-popup-tip
+    :hook (flycheck-mode . flycheck-popup-tip-mode))
+    )
 
 ;;;; Language Server Protocol
 (use-package lsp-mode
   :commands (lsp)
+  :custom
+  (lsp-prefer-flymake nil "Use `flycheck'.")
   :config
   (use-package company-lsp
     :demand t
@@ -115,8 +116,12 @@
   (use-package lsp-ui
     :commands (lsp-ui-mode)
     :hook (lsp-mode . lsp-ui-mode)
+    :bind (:map lsp-ui-mode-map
+                ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+                ([remap xref-find-references] . lsp-ui-peek-find-references))
     :demand t
-    :after (flycheck)
+    :custom
+    (lsp-ui-sideline-enable nil "Disable `lsp-ui-sideline-mode'.")
     :blackout t)
   )
 
