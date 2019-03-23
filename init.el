@@ -38,10 +38,12 @@
 ;;;; Straight.el
 ;; install straight.el, see
 ;; https://github.com/raxod502/straight.el#getting-started
-(if (< (string-to-number emacs-version) 25.3)
+(require 'subr-x)
+(if (version< emacs-version "25.3")
     ;; Require Emacs ver 25.3 or later. If you use an old one,
     ;; `use-package' do nothing.
     (defmacro use-package (&rest args))
+  (setq straight-repository-branch "develop") ; use the develop branch of straight.el
   (setq straight-check-for-modifications 'live-with-find) ; => '(check-on-save find-when-checking)
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -59,7 +61,7 @@
   (straight-use-package 'use-package)
   (setq straight-use-package-by-default t)
   (setq use-package-always-defer t)
-  )
+ ) 
 
 ;;;; Blackout
 (use-package blackout
