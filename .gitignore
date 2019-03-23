@@ -12,6 +12,7 @@ straight/
 
 # others
 .lsp*
+opam-user-setup.el
 amx-items
 
 # Created by https://www.gitignore.io/api/emacs
