@@ -38,7 +38,6 @@
 ;;;; Straight.el
 ;; install straight.el, see
 ;; https://github.com/raxod502/straight.el#getting-started
-(require 'subr-x)
 (if (version< emacs-version "25.3")
     ;; Require Emacs ver 25.3 or later. If you use an old one,
     ;; `use-package' do nothing.
