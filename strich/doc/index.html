@@ -1,0 +1,1361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-03-28 Thu 17:46 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Strich: My configuration file for Emacs</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Mahito TANNO" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="worg.css"/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Strich: My configuration file for Emacs</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6ed77bd">1. Introduction</a>
+<ul>
+<li><a href="#org0236a5a">1.1. Strich</a></li>
+<li><a href="#orga9ac94f">1.2. init.el</a></li>
+</ul>
+</li>
+<li><a href="#orgc41ffed">2. Fundamental</a>
+<ul>
+<li><a href="#orge962b01">2.1. Variables</a></li>
+<li><a href="#orgec8a329">2.2. Functions</a></li>
+<li><a href="#orgb7f6f25">2.3. Package manager</a></li>
+<li><a href="#org5210128">2.4. Some package</a></li>
+</ul>
+</li>
+<li><a href="#orgc6561c8">3. Utilities</a>
+<ul>
+<li><a href="#org86e2662">3.1. Language, Codings</a></li>
+<li><a href="#org346b3c2">3.2. Exec path</a></li>
+<li><a href="#orgddd4c26">3.3. Server</a></li>
+<li><a href="#orgd9486e5">3.4. Backup files</a></li>
+<li><a href="#orgcb1ca95">3.5. Directories</a></li>
+<li><a href="#org9188e38">3.6. Candidates</a></li>
+<li><a href="#org4c13903">3.7. Others</a></li>
+</ul>
+</li>
+<li><a href="#org93aee98">4. Completion and syntax checking</a>
+<ul>
+<li><a href="#org7e020ab">4.1. Yasnippet</a></li>
+<li><a href="#orgb5f2c7a">4.2. Company</a></li>
+<li><a href="#org2e200f7">4.3. Flycheck</a></li>
+<li><a href="#orgb79a255">4.4. LSP</a></li>
+</ul>
+</li>
+<li><a href="#org59218df">5. Programming Languages</a>
+<ul>
+<li><a href="#org5081f2c">5.1. C/C++</a></li>
+<li><a href="#org8cbc663">5.2. Emacs Lisp</a></li>
+<li><a href="#org022420d">5.3. Ocaml</a></li>
+<li><a href="#orgd2e696b">5.4. Python</a></li>
+</ul>
+</li>
+<li><a href="#orgb7c297b">6. Documents</a>
+<ul>
+<li><a href="#org38d4a48">6.1. TeX/LaTeX</a></li>
+<li><a href="#orgeb2fdfc">6.2. Org-mode</a></li>
+</ul>
+</li>
+<li><a href="#org00140f2">7. Appearance</a>
+<ul>
+<li><a href="#org4ab4928">7.1. Color theme</a></li>
+<li><a href="#org38da76a">7.2. Frame</a></li>
+<li><a href="#org4901796">7.3. Font</a></li>
+</ul>
+</li>
+<li><a href="#org5c9b7b7">8. Global keybindings</a></li>
+<li><a href="#orgd12d59b">9. License</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6ed77bd" class="outline-2">
+<h2 id="org6ed77bd"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org0236a5a" class="outline-3">
+<h3 id="org0236a5a"><span class="section-number-3">1.1</span> Strich</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+<code>strich.el</code> は個人的な Emacs の設定をまとめたものです．
+Emacs バージョン 25.4 以降での利用を想定しています．
+特にバージョン 26 以降での利用を強く勧めます．
+</p>
+
+<p>
+Strich とは角度の単位の一つです (参考 <a href="https://de.wikipedia.org/wiki/Strich_(Winkeleinheit)">Wikpedia</a> )．
+</p>
+
+<p>
+Strich は以下に強い影響を受けました．
+</p>
+
+<ul class="org-ul">
+<li>radian</li>
+<li>Centaur Emacs</li>
+<li>doom-emacs</li>
+<li>Ladicle Emacs</li>
+</ul>
+
+<p>
+Strich を編集する際は <code>strich.el</code> ではなく <code>strich.org</code> を編集します．
+編集後に <code>org-babel-tangle-file</code> を用いて <code>strich.el</code> を生成します．
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga9ac94f" class="outline-3">
+<h3 id="orga9ac94f"><span class="section-number-3">1.2</span> init.el</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+<code>init.el</code> は <code>strich.el</code> を読み込みます．
+ただし Emacs のバージョンが古い場合は <code>strich.el</code> は読み込まれません．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">strich-minimum-emacs-version</span> <span class="org-string">"25.4"</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">if</span> <span class="org-rainbow-delimiters-depth-2">(</span>version&lt; emacs-version strich-minimum-version<span class="org-rainbow-delimiters-depth-2">)</span>
+    <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-warning">error</span> <span class="org-rainbow-delimiters-depth-3">(</span>concat <span class="org-string">"Strich requires Emacs ver. %s or later, "</span>
+                   <span class="org-string">"but you use Emacs ver. %s!"</span><span class="org-rainbow-delimiters-depth-3">)</span>
+           strich-minimum-emacs-version emacs-version<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">require</span> '<span class="org-constant">strich</span> <span class="org-rainbow-delimiters-depth-3">(</span>locate-user-emacs-file <span class="org-string">"strich.el"</span><span class="org-rainbow-delimiters-depth-3">)</span> t<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc41ffed" class="outline-2">
+<h2 id="orgc41ffed"><span class="section-number-2">2</span> Fundamental</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orge962b01" class="outline-3">
+<h3 id="orge962b01"><span class="section-number-3">2.1</span> Variables</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defgroup</span> <span class="org-type">strich</span> nil
+  <span class="org-doc">"Customize your Emacs configuration via Strich."</span>
+  <span class="org-builtin">:prefix</span> <span class="org-string">"strich-"</span>
+  <span class="org-builtin">:group</span> 'emacs
+  <span class="org-builtin">:link</span> '<span class="org-rainbow-delimiters-depth-2">(</span>url-link <span class="org-builtin">:tag</span> <span class="org-string">"GitHub"</span> <span class="org-string">"https://github.com/mahito1594/dotemacs"</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">strich-locate-strich-elisp-file</span> <span class="org-rainbow-delimiters-depth-2">(</span>expand-file-name <span class="org-rainbow-delimiters-depth-3">(</span>concat user-emacs-directory
+                                                                  <span class="org-string">"strich/strich.el"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-doc">"Place where `</span><span class="org-doc"><span class="org-constant">strich.el</span></span><span class="org-doc">' should be."</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">strich-locate-strich-org-file</span> <span class="org-rainbow-delimiters-depth-2">(</span>expand-file-name <span class="org-rainbow-delimiters-depth-3">(</span>concat user-emacs-directory
+                                                                <span class="org-string">"strich/strich.org"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-doc">"Place where `</span><span class="org-doc"><span class="org-constant">strich.org</span></span><span class="org-doc">' should be."</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">strich-locate-strich-html-file</span> <span class="org-rainbow-delimiters-depth-2">(</span>expand-file-name <span class="org-rainbow-delimiters-depth-3">(</span>concat user-emacs-directory
+                                                                 <span class="org-string">"strich/doc/strich.html"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-doc">"Place where `</span><span class="org-doc"><span class="org-constant">strich.html</span></span><span class="org-doc">' shouled be."</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defcustom</span> <span class="org-variable-name">strich-backup-directory</span> <span class="org-rainbow-delimiters-depth-2">(</span>locate-user-emacs-file <span class="org-string">"backups/"</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-doc">"We save automatically files into the directory:</span>
+<span class="org-doc">We set `</span><span class="org-doc"><span class="org-constant">backup-directory-alist</span></span><span class="org-doc">' and `</span><span class="org-doc"><span class="org-constant">auto-save-file-name-transforms</span></span><span class="org-doc">' to `</span><span class="org-doc"><span class="org-constant">strich-backup-directory</span></span><span class="org-doc">'."</span>
+  <span class="org-builtin">:type</span> 'directory
+  <span class="org-builtin">:group</span> 'strich<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgec8a329" class="outline-3">
+<h3 id="orgec8a329"><span class="section-number-3">2.2</span> Functions</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">strich-open-html-doc</span> <span class="org-rainbow-delimiters-depth-2">()</span>
+  <span class="org-doc">"Open Strich document in default browser."</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">interactive</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>browse-url-of-file strich-locate-strich-html-file<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">strich-open-org-doc</span> <span class="org-rainbow-delimiters-depth-2">()</span>
+  <span class="org-doc">"Open Strich document in Org-mode."</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">interactive</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>view-file strich-locate-strich-org-file<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">strich-edit-strich</span> <span class="org-rainbow-delimiters-depth-2">()</span>
+  <span class="org-doc">"Open `</span><span class="org-doc"><span class="org-constant">strich.org</span></span><span class="org-doc">' to edit."</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">interactive</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>find-file strich-locate-strich-org-file<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">strich-make-init-elisp</span> <span class="org-rainbow-delimiters-depth-2">()</span>
+  <span class="org-doc">"Make `</span><span class="org-doc"><span class="org-constant">strich.el</span></span><span class="org-doc">' with `</span><span class="org-doc"><span class="org-constant">org-babel-tangle</span></span><span class="org-doc">'."</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">interactive</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">with-current-buffer</span>
+      <span class="org-rainbow-delimiters-depth-3">(</span>find-file-noselect strich-locate-strich-org-file<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span>org-babel-tangle<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>write-region <span class="org-rainbow-delimiters-depth-3">(</span>concat <span class="org-string">";; Local Variables&#58;\n"</span>
+                        <span class="org-string">";; buffer-read-only: t\n"</span>
+                        <span class="org-string">";; End:"</span><span class="org-rainbow-delimiters-depth-3">)</span>
+                nil strich-locate-strich-elisp-file 'append<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>message <span class="org-string">"%s is created!"</span> strich-locate-strich-elisp-file<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">strich-make-document-html</span> <span class="org-rainbow-delimiters-depth-2">()</span>
+  <span class="org-doc">"Make document html file."</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">interactive</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>straight-use-package 'org<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>straight-use-package 'htmlize<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">with-current-buffer</span> <span class="org-rainbow-delimiters-depth-3">(</span>find-file-noselect strich-locate-strich-org-file<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">setq-local</span> org-html-htmlize-output-type 'css<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span>org-html-export-to-html<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb7f6f25" class="outline-3">
+<h3 id="orgb7f6f25"><span class="section-number-3">2.3</span> Package manager</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Strich はパッケージマネージャとして <code>straight.el</code> と <code>use-package.el</code> を利用します
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org2dbd7a8"></a>straight.el<br />
+<div class="outline-text-4" id="text-2-3-1">
+<p>
+<a href="https://github.com/raxod502/straight.el">straight.el</a> は Emacs のパッケージマネージャの 1 つです．
+</p>
+
+<blockquote>
+<p>
+next-generation, purely functional package manager for the Emacs hacker.
+</p>
+</blockquote>
+
+<p>
+<code>develop</code> ブランチの <code>straight.el</code> をインストールします．
+</p>
+
+<p>
+デフォルトのままでは Emacs の起動が遅くなるので <code>straight-check-for-modifications</code> を <code>live-with-find</code> に設定しておきます．
+<code>live-with-find</code> は <code>(check-on-save find-when-checking)</code> と等価です．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> straight-repository-branch <span class="org-string">"develop"</span><span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-comment-delimiter">; </span><span class="org-comment">use the develop branch of straight.el</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> straight-check-for-modifications 'live-with-find<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-comment-delimiter">; </span><span class="org-comment">=&gt; '(check-on-save find-when-checking)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">bootstrap-version</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">let</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>bootstrap-file
+       <span class="org-rainbow-delimiters-depth-4">(</span>expand-file-name <span class="org-string">"straight/repos/straight.el/bootstrap.el"</span> user-emacs-directory<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>
+      <span class="org-rainbow-delimiters-depth-3">(</span>bootstrap-version 5<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">unless</span> <span class="org-rainbow-delimiters-depth-3">(</span>file-exists-p bootstrap-file<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">with-current-buffer</span>
+        <span class="org-rainbow-delimiters-depth-4">(</span>url-retrieve-synchronously
+         <span class="org-string">"https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"</span>
+         'silent 'inhibit-cookies<span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>goto-char <span class="org-rainbow-delimiters-depth-5">(</span>point-max<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>eval-print-last-sexp<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>load bootstrap-file nil 'nomessage<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org6904c55"></a>use-package.el<br />
+<div class="outline-text-4" id="text-2-3-2">
+<p>
+<a href="https://github.com/jwiegley/use-package">use-package</a> を用いてパッケージの設定を feature 単位で記述します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>straight-use-package 'use-package<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+keywords は次の順序で書くようにします:
+</p>
+
+<ul class="org-ul">
+<li><code>:defines</code></li>
+<li><code>:functions</code></li>
+<li><code>:preface</code></li>
+<li><code>:if</code> (or <code>:when</code>)</li>
+<li><code>:straight</code></li>
+<li><code>:load-path</code></li>
+<li><code>:commands</code></li>
+<li><code>:init</code></li>
+<li><code>:mode</code></li>
+<li><code>:interpreter</code></li>
+<li><code>:hook</code></li>
+<li><code>:bind</code></li>
+<li><code>:demand</code></li>
+<li><code>:after</code></li>
+<li><code>:custom</code></li>
+<li><code>:config</code></li>
+<li><code>:blackout</code></li>
+</ul>
+
+<p>
+<code>:preface</code> は <code>:if</code> 節の判定に関わらず読み込まれます．
+他パッケージで定義される変数や関数を用いる場合 <code>:defines</code> や <code>:functions</code> に列挙しておくのが安全なようです．
+基本的に <code>straight.el</code> を用いてパッケージをインストールするようにします．
+また，パッケージは常に遅延ロードします．
+遅延ロードをさせないときは明示的に <code>:demand t</code> を指定します．
+遅延ロードの際， <code>:after</code> などのキーワードを併用する場合は注意が必要です．
+<a href="https://jwiegley.github.io/use-package/keywords/#after">https://jwiegley.github.io/use-package/keywords/#after</a> を参照してください．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> straight-use-package-by-default t<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> use-package-always-defer t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+build-in の機能を用いるため <code>use-feature</code> マクロを定めます．
+<code>use-feature</code> は radian.el を参考にしました．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defmacro</span> <span class="org-function-name">use-feature</span> <span class="org-rainbow-delimiters-depth-2">(</span>name <span class="org-type">&amp;rest</span> args<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-doc">"Like `</span><span class="org-doc"><span class="org-constant">use-package</span></span><span class="org-doc">', but with `</span><span class="org-doc"><span class="org-constant">straight-use-package-by-default</span></span><span class="org-doc">' disabled."</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">declare</span> <span class="org-rainbow-delimiters-depth-3">(</span>indent defun<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  `<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">use-package</span> ,name
+     <span class="org-builtin">:straight</span> nil
+     ,@args<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org5210128" class="outline-3">
+<h3 id="org5210128"><span class="section-number-3">2.4</span> Some package</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+いくつかのパッケージを先にインストールします．
+これは Emacs 同梱の (古い) バージョンのパッケージの読み込みを避けるためです．
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org83831e4"></a>Org-mode<br />
+<div class="outline-text-4" id="text-2-4-1">
+<p>
+2019年3月現在の <code>straight.el</code> ではデフォルトで最新の Org-mode をインストールすることができます．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>straight-use-package 'org<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orga7f3f64"></a>blackout<br />
+<div class="outline-text-4" id="text-2-4-2">
+<p>
+<a href="https://github.com/raxod502/blackout">blackout</a> は deminish や delight のように，メジャー・マイナーモードのモードラインの表示をカスタマイズできます．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">blackout</span>
+  <span class="org-builtin">:straight</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-builtin">:host</span> github <span class="org-builtin">:repo</span> <span class="org-string">"raxod502/blackout"</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:demand</span> t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org7cabd72"></a>all-the-icons<br />
+<div class="outline-text-4" id="text-2-4-3">
+<p>
+いくつかのパッケージで <code>all-the-icons</code> のフォントを使用します．
+フォントが未インストールの場合，自動的にインストールします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">all-the-icons</span>
+  <span class="org-builtin">:demand</span> t
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">unless</span> <span class="org-rainbow-delimiters-depth-3">(</span>member <span class="org-string">"all-the-icons"</span> <span class="org-rainbow-delimiters-depth-4">(</span>font-family-list<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span>all-the-icons-install-fonts t<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-orgc6561c8" class="outline-2">
+<h2 id="orgc6561c8"><span class="section-number-2">3</span> Utilities</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org86e2662" class="outline-3">
+<h3 id="org86e2662"><span class="section-number-3">3.1</span> Language, Codings</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+日本語かつ UTF8 を使用するようにします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>set-language-environment <span class="org-string">"Japanese"</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span>prefer-coding-system 'utf-8<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+また Linux 使用時は <code>mozc</code> を用いて日本語入力を行います．
+別途 <code>emacs-mozc-bin</code> をインストールする必要があります．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">mozc</span>
+  <span class="org-builtin">:if</span> <span class="org-rainbow-delimiters-depth-2">(</span>eq system-type 'gnu/linux<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:demand</span> t
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> default-input-method <span class="org-string">"japanese-mozc"</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+macOS 使用時はファイル名の文字コードの問題があります．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-feature</span> ucs-normalize
+  <span class="org-builtin">:if</span> <span class="org-rainbow-delimiters-depth-2">(</span>eq system-type 'darwin<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:demand</span> t
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>set-file-name-coding-system 'utf-8-hfs<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> locale-coding-system 'utf-8-hfs<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org346b3c2" class="outline-3">
+<h3 id="org346b3c2"><span class="section-number-3">3.2</span> Exec path</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+ログインシェルの環境変数を引き継ぎます．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">exec-path-from-shell</span>
+  <span class="org-builtin">:if</span> <span class="org-rainbow-delimiters-depth-2">(</span>memq window-system '<span class="org-rainbow-delimiters-depth-3">(</span>mac ns<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:demand</span> t
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>exec-path-from-shell-initialize<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgddd4c26" class="outline-3">
+<h3 id="orgddd4c26"><span class="section-number-3">3.3</span> Server</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+Emacs 起動後に <code>server-start</code> します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-feature</span> server
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>after-init . server-mode<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd9486e5" class="outline-3">
+<h3 id="orgd9486e5"><span class="section-number-3">3.4</span> Backup files</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+自動バックアップとオートセーブファイルを <code>.emacs.d/backups</code> に集めます．
+<code>.emacs.d/backups</code> はカスタム変数 <code>strich-backup-directory</code> で変更できます．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> backup-directory-alist
+      `<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">".*"</span> . ,strich-backup-directory<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> auto-save-file-name-transforms
+      `<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">".*"</span> ,strich-backup-directory t<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcb1ca95" class="outline-3">
+<h3 id="orgcb1ca95"><span class="section-number-3">3.5</span> Directories</h3>
+<div class="outline-text-3" id="text-3-5">
+</div>
+<ol class="org-ol">
+<li><a id="org33987b2"></a>dired<br />
+<div class="outline-text-4" id="text-3-5-1">
+<p>
+<code>dired-mode</code> の際，ファイルのアイコンを表示するようにします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">all-the-icons-dired</span>
+  <span class="org-builtin">:if</span> <span class="org-rainbow-delimiters-depth-2">(</span>window-system<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>dired-mode . all-the-icons-dired-mode<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgc14ba7b"></a>neotree<br />
+<div class="outline-text-4" id="text-3-5-2">
+<p>
+ツリープラグインとして <a href="https://github.com/jaypei/emacs-neotree">neotree</a> を用います．
+<code>C-c t</code> で起動します．
+GUI での使用の際，all-the-icons を用いてアイコンを表示するようにします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">neotree</span>
+  <span class="org-builtin">:bind</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-c t"</span> . neotree-toggle<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>neo-theme <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">if</span> <span class="org-rainbow-delimiters-depth-4">(</span>display-graphic-p<span class="org-rainbow-delimiters-depth-4">)</span>
+                 'classic
+               'arrow<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org9188e38" class="outline-3">
+<h3 id="org9188e38"><span class="section-number-3">3.6</span> Candidates</h3>
+<div class="outline-text-3" id="text-3-6">
+</div>
+<ol class="org-ol">
+<li><a id="org3f65c79"></a>Ivy, Counsel and swiper<br />
+<div class="outline-text-4" id="text-3-6-1">
+<p>
+補完インターフェイスとして <a href="https://github.com/abo-abo/swiper">Ivy/Counsel</a> を利用します．
+詳しい使い方は<a href="https://oremacs.com/swiper/">ユーザマニュアル</a>を参照してください．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">counsel</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>after-init . ivy-mode<span class="org-rainbow-delimiters-depth-3">)</span>
+         <span class="org-rainbow-delimiters-depth-3">(</span>ivy-mode . counsel-mode<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:bind</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-s"</span> . swiper<span class="org-rainbow-delimiters-depth-3">)</span>
+         <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-r"</span> . swiper<span class="org-rainbow-delimiters-depth-3">)</span>
+         <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-S-s"</span> . swiper-all<span class="org-rainbow-delimiters-depth-3">)</span>
+         <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-c C-r"</span> . ivy-resume<span class="org-rainbow-delimiters-depth-3">)</span>
+         <span class="org-builtin">:map</span> ivy-minibuffer-map
+         <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"&lt;tab&gt;"</span> . ivy-alt-done<span class="org-rainbow-delimiters-depth-3">)</span>
+         <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-w"</span> . ivy-yank-word<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ivy-use-virtual-buffers t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ivy-count-format <span class="org-string">"(%d/%d) "</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ivy-wrap t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ivy-format-function 'ivy-format-function-arrow<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>counsel-yank-pop <span class="org-string">"\n---------\n"</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ivy-initial-inputs-alist nil<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:blackout</span> t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+<a href="https://github.com/Yevgnen/ivy-rich">ivy-rich</a> を用いてバッファ切り替えの際などにアイコンを表示するようにします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">ivy-rich</span>
+  <span class="org-builtin">:defines</span> <span class="org-rainbow-delimiters-depth-2">(</span>all-the-icons-dir-icon-alist<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:functions</span> <span class="org-rainbow-delimiters-depth-2">(</span>all-the-icons-icon-family
+              all-the-icons-icon-for-mode
+              all-the-icons-icon-for-file
+              all-the-icons-octicon
+              all-the-icons-match-to-alist<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:preface</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">defun</span> <span class="org-function-name">strich-ivy-rich-buffer-icon</span> <span class="org-rainbow-delimiters-depth-3">(</span>candidate<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-doc">"Show buffer isons in `</span><span class="org-doc"><span class="org-constant">ivy-rich</span></span><span class="org-doc">', only on GUI."</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">when</span> <span class="org-rainbow-delimiters-depth-4">(</span>display-graphic-p<span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-keyword">with-current-buffer</span>
+          <span class="org-rainbow-delimiters-depth-5">(</span>get-buffer candidate<span class="org-rainbow-delimiters-depth-5">)</span>
+        <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-keyword">let</span> <span class="org-rainbow-delimiters-depth-6">(</span><span class="org-rainbow-delimiters-depth-7">(</span>icon <span class="org-rainbow-delimiters-depth-8">(</span>all-the-icons-icon-for-mode major-mode<span class="org-rainbow-delimiters-depth-8">)</span><span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+          <span class="org-rainbow-delimiters-depth-6">(</span><span class="org-keyword">if</span> <span class="org-rainbow-delimiters-depth-7">(</span>symbolp icon<span class="org-rainbow-delimiters-depth-7">)</span>
+              <span class="org-rainbow-delimiters-depth-7">(</span>all-the-icons-icon-for-mode 'fundamental-mode<span class="org-rainbow-delimiters-depth-7">)</span>
+            icon<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">defun</span> <span class="org-function-name">strich-ivy-rich-file-icon</span> <span class="org-rainbow-delimiters-depth-3">(</span>candidate<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-doc">"Show file icons in `</span><span class="org-doc"><span class="org-constant">ivy-rich</span></span><span class="org-doc">', only on GUI."</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">when</span> <span class="org-rainbow-delimiters-depth-4">(</span>display-graphic-p<span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-keyword">let</span> <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span>icon
+             <span class="org-comment-delimiter">;; </span><span class="org-comment">for directories</span>
+             <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-keyword">if</span> <span class="org-rainbow-delimiters-depth-8">(</span>file-directory-p candidate<span class="org-rainbow-delimiters-depth-8">)</span>
+                 <span class="org-rainbow-delimiters-depth-8">(</span><span class="org-keyword">cond</span>
+                  <span class="org-comment-delimiter">;; </span><span class="org-comment">for `</span><span class="org-comment"><span class="org-constant">tramp-mode</span></span><span class="org-comment">'</span>
+                  <span class="org-rainbow-delimiters-depth-9">(</span><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">and</span> <span class="org-rainbow-delimiters-depth-2">(</span>fboundp 'tramp-tramp-file-p<span class="org-rainbow-delimiters-depth-2">)</span>
+                        <span class="org-rainbow-delimiters-depth-2">(</span>tramp-tramp-file-p default-directory<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+                   <span class="org-rainbow-delimiters-depth-1">(</span>all-the-icons-octicon <span class="org-string">"file-directory"</span><span class="org-rainbow-delimiters-depth-1">)</span><span class="org-rainbow-delimiters-depth-9">)</span>
+                  <span class="org-comment-delimiter">;; </span><span class="org-comment">for symbolic links</span>
+                  <span class="org-rainbow-delimiters-depth-9">(</span><span class="org-rainbow-delimiters-depth-1">(</span>file-symlink-p candidate<span class="org-rainbow-delimiters-depth-1">)</span>
+                   <span class="org-rainbow-delimiters-depth-1">(</span>all-the-icons-octicon <span class="org-string">"file-symlink-directory"</span><span class="org-rainbow-delimiters-depth-1">)</span><span class="org-rainbow-delimiters-depth-9">)</span>
+                  <span class="org-comment-delimiter">;; </span><span class="org-comment">for git submodules</span>
+                  <span class="org-rainbow-delimiters-depth-9">(</span><span class="org-rainbow-delimiters-depth-1">(</span>all-the-icons-dir-is-submodule candidate<span class="org-rainbow-delimiters-depth-1">)</span>
+                   <span class="org-rainbow-delimiters-depth-1">(</span>all-the-icons-octicon <span class="org-string">"file-submodule"</span><span class="org-rainbow-delimiters-depth-1">)</span><span class="org-rainbow-delimiters-depth-9">)</span>
+                  <span class="org-comment-delimiter">;; </span><span class="org-comment">for version-controled by git</span>
+                  <span class="org-rainbow-delimiters-depth-9">(</span><span class="org-rainbow-delimiters-depth-1">(</span>file-exists-p <span class="org-rainbow-delimiters-depth-2">(</span>format <span class="org-string">"%s/.git"</span> candidate<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+                   <span class="org-rainbow-delimiters-depth-1">(</span>all-the-icons-octicon <span class="org-string">"repo"</span><span class="org-rainbow-delimiters-depth-1">)</span><span class="org-rainbow-delimiters-depth-9">)</span>
+                  <span class="org-comment-delimiter">;; </span><span class="org-comment">otherwise</span>
+                  <span class="org-rainbow-delimiters-depth-9">(</span>t <span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">let</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>matcher <span class="org-rainbow-delimiters-depth-4">(</span>all-the-icons-match-to-alist candidate all-the-icons-dir-icon-alist<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+                       <span class="org-rainbow-delimiters-depth-2">(</span>apply <span class="org-rainbow-delimiters-depth-3">(</span>car matcher<span class="org-rainbow-delimiters-depth-3">)</span> <span class="org-rainbow-delimiters-depth-3">(</span>list <span class="org-rainbow-delimiters-depth-4">(</span>cadr matcher<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span><span class="org-rainbow-delimiters-depth-9">)</span><span class="org-rainbow-delimiters-depth-8">)</span>
+               <span class="org-comment-delimiter">;; </span><span class="org-comment">for files</span>
+               <span class="org-rainbow-delimiters-depth-8">(</span>all-the-icons-icon-for-file candidate<span class="org-rainbow-delimiters-depth-8">)</span><span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span>
+        <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-keyword">unless</span> <span class="org-rainbow-delimiters-depth-6">(</span>symbolp icon<span class="org-rainbow-delimiters-depth-6">)</span>
+          <span class="org-rainbow-delimiters-depth-6">(</span>propertize icon
+                      'face `<span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:family</span> ,<span class="org-rainbow-delimiters-depth-8">(</span>all-the-icons-icon-family icon<span class="org-rainbow-delimiters-depth-8">)</span> <span class="org-builtin">:height</span> 1.1<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>ivy-mode . ivy-rich-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ivy-rich-path-style 'abbrev<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ivy-rich-display-transformers-list
+   '<span class="org-rainbow-delimiters-depth-3">(</span>ivy-switch-buffer
+     <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-builtin">:columns</span>
+      <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span>strich-ivy-rich-buffer-icon <span class="org-builtin">:width</span> 2<span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-candidate <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 30<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-switch-buffer-size <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 7<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-switch-buffer-indicators <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 4 <span class="org-builtin">:face</span> error <span class="org-builtin">:align</span> left<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-switch-buffer-major-mode <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 12 <span class="org-builtin">:face</span> warning<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-switch-buffer-project <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 15 <span class="org-builtin">:face</span> success<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-switch-buffer-path <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> <span class="org-rainbow-delimiters-depth-8">(</span><span class="org-keyword">lambda</span> <span class="org-rainbow-delimiters-depth-9">(</span>x<span class="org-rainbow-delimiters-depth-9">)</span> <span class="org-rainbow-delimiters-depth-9">(</span>ivy-rich-switch-buffer-shorten-path x <span class="org-rainbow-delimiters-depth-1">(</span>ivy-rich-minibuffer-width 0.3<span class="org-rainbow-delimiters-depth-1">)</span><span class="org-rainbow-delimiters-depth-9">)</span><span class="org-rainbow-delimiters-depth-8">)</span><span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span>
+      <span class="org-builtin">:predicate</span>
+      <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-keyword">lambda</span> <span class="org-rainbow-delimiters-depth-6">(</span>cand<span class="org-rainbow-delimiters-depth-6">)</span> <span class="org-rainbow-delimiters-depth-6">(</span>get-buffer cand<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+     counsel-M-x
+     <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-builtin">:columns</span>
+      <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span>counsel-M-x-transformer <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 40<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-counsel-function-docstring <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:face</span> font-lock-doc-face<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+     counsel-describe-function
+     <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-builtin">:columns</span>
+      <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span>counsel-describe-function-transformer <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 40<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-counsel-function-docstring <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:face</span> font-lock-doc-face<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+     counsel-describe-variable
+     <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-builtin">:columns</span>
+      <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span>counsel-describe-variable-transformer <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 40<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-counsel-variable-docstring <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:face</span> font-lock-doc-face<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+     counsel-recentf
+     <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-builtin">:columns</span>
+      <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-candidate <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:width</span> 0.8<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-file-last-modified-time <span class="org-rainbow-delimiters-depth-7">(</span><span class="org-builtin">:face</span> font-lock-comment-face<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+     counsel-find-file
+     <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-builtin">:columns</span>
+      <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span>strich-ivy-rich-file-icon <span class="org-builtin">:width</span> 2<span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-candidate<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+     counsel-git
+     <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-builtin">:columns</span>
+      <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span>strich-ivy-rich-file-icon <span class="org-builtin">:width</span> 2<span class="org-rainbow-delimiters-depth-6">)</span>
+       <span class="org-rainbow-delimiters-depth-6">(</span>ivy-rich-candidate<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:blackout</span> t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+<a href="https://github.com/DarwinAwardWinner/amx">amx</a> を用いて <code>M-x</code> を ivy と統合します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">amx</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>ivy-mode . amx-mode<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org1a38cb2"></a>emacs-which-key<br />
+<div class="outline-text-4" id="text-3-6-2">
+<p>
+<a href="https://github.com/justbur/emacs-which-key">which-key</a> を用いてキーバインドを表示させます．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">which-key</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>after-init . which-key-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:bind</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-builtin">:map</span> which-key-mode-map
+              <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-x DEL"</span> . which-key-C-h-dispatch<span class="org-rainbow-delimiters-depth-3">)</span>
+              <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-c DEL"</span> . which-key-C-h-dispatch<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>which-key-popup-type 'side-window<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>which-key-side-window-location 'bottom<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:blackout</span> t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org4c13903" class="outline-3">
+<h3 id="org4c13903"><span class="section-number-3">3.7</span> Others</h3>
+<div class="outline-text-3" id="text-3-7">
+</div>
+<ol class="org-ol">
+<li><a id="orgdf61ca8"></a>Parenthesis<br />
+<div class="outline-text-4" id="text-3-7-1">
+<p>
+対応する括弧類は自動的に挿入し，また強調するようにします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-feature</span> elec-pair
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>after-init . electric-pair-mode<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-feature</span> paren
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>after-init . show-paren-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>show-paren-style 'mixed<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">rainbow-delimiters</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>prog-mode . rainbow-delimiters-mode<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgb59544a"></a>Whitespace<br />
+<div class="outline-text-4" id="text-3-7-2">
+<p>
+<code>C-c w</code> で空白文字を可視化します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-feature</span> whitespace
+  <span class="org-builtin">:commands</span> <span class="org-rainbow-delimiters-depth-2">(</span>whitespace-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:bind</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-c w"</span> . whitespace-mode<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>whitespace-style '<span class="org-rainbow-delimiters-depth-3">(</span>
+                      face
+                      trailing
+                      tabs
+                      spaces
+                      empty
+                      space-mark
+                      tab-mark
+                      <span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:blackout</span> t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org68180b1"></a>Cursor<br />
+<div class="outline-text-4" id="text-3-7-3">
+<p>
+<a href="https://github.com/Malabarba/beacon">beacon</a> を用いてカーソルを目立たせます．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">beacon</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>after-init . beacon-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>beacon-color <span class="org-string">"yellow"</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org4155f9a"></a>Region<br />
+<div class="outline-text-4" id="text-3-7-4">
+<p>
+選択中のリージョンをハイライトします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>add-hook 'after-init-hook #'transient-mark-mode<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org8368891"></a>Ring bell<br />
+<div class="outline-text-4" id="text-3-7-5">
+<p>
+エラー時のベル音を消します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> ring-bell-function 'ignore<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org93aee98" class="outline-2">
+<h2 id="org93aee98"><span class="section-number-2">4</span> Completion and syntax checking</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org7e020ab" class="outline-3">
+<h3 id="org7e020ab"><span class="section-number-3">4.1</span> Yasnippet</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">yasnippet</span>
+  <span class="org-builtin">:blackout</span> t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb5f2c7a" class="outline-3">
+<h3 id="orgb5f2c7a"><span class="section-number-3">4.2</span> Company</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+補完には <a href="https://github.com/company-mode/company-mode">company-mode</a> を用います．
+各種設定は <a href="https://github.com/company-mode/company-mode/wiki/Switching-from-AC">Switching from AC</a> を参考にしました．
+<code>:bind</code> キーワードを使うとうまく読み込まないため， <code>:config</code> と <code>define-key</code> を利用しています
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">company</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>after-init . global-company-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>define-key company-active-map <span class="org-rainbow-delimiters-depth-3">(</span>kbd <span class="org-string">"&lt;backtab&gt;"</span><span class="org-rainbow-delimiters-depth-3">)</span> 'company-select-previous<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>define-key company-active-map <span class="org-rainbow-delimiters-depth-3">(</span>kbd <span class="org-string">"&lt;tab&gt;"</span><span class="org-rainbow-delimiters-depth-3">)</span> 'company-complete-common-or-cycle<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>define-key company-active-map <span class="org-rainbow-delimiters-depth-3">(</span>kbd <span class="org-string">"M-n"</span><span class="org-rainbow-delimiters-depth-3">)</span> nil<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>define-key company-active-map <span class="org-rainbow-delimiters-depth-3">(</span>kbd <span class="org-string">"M-p"</span><span class="org-rainbow-delimiters-depth-3">)</span> nil<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>define-key company-active-map <span class="org-rainbow-delimiters-depth-3">(</span>kbd <span class="org-string">"C-n"</span><span class="org-rainbow-delimiters-depth-3">)</span> #'company-select-next<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>define-key company-active-map <span class="org-rainbow-delimiters-depth-3">(</span>kbd <span class="org-string">"C-p"</span><span class="org-rainbow-delimiters-depth-3">)</span> #'company-select-previous<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> company-idle-delay 0<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> company-selection-wrap-around t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> company-require-match 'never<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:blackout</span> t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+<a href="https://github.com/expez/company-quickhelp">company-quickhelp</a> を用いて補完候補のドキュメントを読めるようにしておきます．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">company-quickhelp</span>
+  <span class="org-builtin">:if</span> <span class="org-rainbow-delimiters-depth-2">(</span>window-system<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>company-mode . company-quickhelp-mode<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+<a href="https://github.com/sebastiencs/company-box">company-box</a> を用いて補完候補にアイコンを表示します．
+デフォルトの設定のままだと，アイコンが大きく感じるので適当に調整をします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">company-box</span>
+  <span class="org-builtin">:functions</span> <span class="org-rainbow-delimiters-depth-2">(</span>all-the-icons-faicon all-the-icons-octicon all-the-icons-material all-the-icons-alltheicon<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:preface</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">strich-company-box-icons-all-the-icons</span>
+    `<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-rainbow-delimiters-depth-4">(</span>Unknown       . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cog"</span>                      <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Text          . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-octicon    <span class="org-string">"file-text"</span>                <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Method        . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cube"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Function      . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cube"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Constructor   . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cube"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Field         . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cog"</span>                      <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Variable      . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cog"</span>                      <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Class         . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cogs"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Interface     . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"share"</span>                    <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Module        . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-alltheicon <span class="org-string">"less"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Property      . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"wrench"</span>                   <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Unit          . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"settings_system_daydream"</span> <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Value         . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"format_align_right"</span>       <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Enum          . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"content_copy"</span>             <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Keyword       . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"filter_center_focus"</span>      <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Snippet       . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"content_paste"</span>            <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Color         . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"palette"</span>                  <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>File          . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"file"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Reference     . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"collections_bookmark"</span>     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Folder        . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"folder"</span>                   <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>EnumMember    . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"format_align_right"</span>       <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Constant      . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"square-o"</span>                 <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Struct        . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cogs"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Event         . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"bolt"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Operator      . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"control_point"</span>            <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>TypeParameter . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-faicon     <span class="org-string">"cogs"</span>                     <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-4">(</span>Template      . ,<span class="org-rainbow-delimiters-depth-5">(</span>all-the-icons-material   <span class="org-string">"format_align_center"</span>      <span class="org-builtin">:height</span> 0.9<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+      <span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:if</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">and</span> <span class="org-rainbow-delimiters-depth-3">(</span>window-system<span class="org-rainbow-delimiters-depth-3">)</span>
+           <span class="org-rainbow-delimiters-depth-3">(</span>&gt;= emacs-major-version 26<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>company-mode . company-box-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>company-box-show-single-candidate t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>company-box-max-candidates 50<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> company-box-backends-colors nil<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> company-box-icons-alist 'strich-company-box-icons-all-the-icons<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:blackout</span> t<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2e200f7" class="outline-3">
+<h3 id="org2e200f7"><span class="section-number-3">4.3</span> Flycheck</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+文法チェックには <a href="https://www.flycheck.org/en/latest/">Flycheck</a> を利用します．
+後述の <a href="#orgb79a255">LSP</a> を用いる場合には暴走するという情報があるので要確認です．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">flycheck</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>after-init . global-flycheck-mode<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+エラー内容の表示に <a href="https://github.com/flycheck/flycheck-popup-tip">flycheck-popup-tip</a> を利用します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">flycheck-popup-tip</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>flycheck-mode . flycheck-popup-tip-mode<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb79a255" class="outline-3">
+<h3 id="orgb79a255"><span class="section-number-3">4.4</span> LSP</h3>
+</div>
+</div>
+<div id="outline-container-org59218df" class="outline-2">
+<h2 id="org59218df"><span class="section-number-2">5</span> Programming Languages</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org5081f2c" class="outline-3">
+<h3 id="org5081f2c"><span class="section-number-3">5.1</span> C/C++</h3>
+</div>
+
+<div id="outline-container-org8cbc663" class="outline-3">
+<h3 id="org8cbc663"><span class="section-number-3">5.2</span> Emacs Lisp</h3>
+</div>
+
+<div id="outline-container-org022420d" class="outline-3">
+<h3 id="org022420d"><span class="section-number-3">5.3</span> Ocaml</h3>
+</div>
+
+<div id="outline-container-orgd2e696b" class="outline-3">
+<h3 id="orgd2e696b"><span class="section-number-3">5.4</span> Python</h3>
+</div>
+</div>
+
+<div id="outline-container-orgb7c297b" class="outline-2">
+<h2 id="orgb7c297b"><span class="section-number-2">6</span> Documents</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org38d4a48" class="outline-3">
+<h3 id="org38d4a48"><span class="section-number-3">6.1</span> TeX/LaTeX</h3>
+</div>
+
+<div id="outline-container-orgeb2fdfc" class="outline-3">
+<h3 id="orgeb2fdfc"><span class="section-number-3">6.2</span> Org-mode</h3>
+</div>
+</div>
+
+<div id="outline-container-org00140f2" class="outline-2">
+<h2 id="org00140f2"><span class="section-number-2">7</span> Appearance</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-org4ab4928" class="outline-3">
+<h3 id="org4ab4928"><span class="section-number-3">7.1</span> Color theme</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+<a href="https://github.com/hlissner/emacs-doom-themes">doom-themes</a> の <code>doom-dracula</code> テーマを利用する．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">doom-themes</span>
+  <span class="org-builtin">:demand</span> t
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-themes-enable-bold t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-themes-enable-italic t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-neotree-file-icons t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>load-theme 'doom-dracula t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-themes-visual-bell-config<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-themes-neotree-config<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-themes-org-config<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+またモードラインを <a href="https://github.com/seagle0128/doom-modeline">doom-modeline</a> でカスタマイズする．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">doom-modeline</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>after-init . doom-modeline-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-modeline-buffer-file-name-style 'truncate-upto-project<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-modeline-icon t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>doom-modeline-major-mode-color-icon t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>find-file-visit-truename t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> doom-modeline-mu4e nil
+        doom-modeline-irc nil<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org38da76a" class="outline-3">
+<h3 id="org38da76a"><span class="section-number-3">7.2</span> Frame</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+ツールバー等，特に必要のないものは表示しないようにする．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> inhibit-startup-screen t<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span>tool-bar-mode -1<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span>scroll-bar-mode -1<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span>size-indication-mode +1<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">setq</span> frame-title-format <span class="org-string">"%f"</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+Emacs 26 以上を使用している場合 <code>display-line-numbers-mode</code> を利用する．
+そうでない場合は <code>columnu-number-mode</code> と <code>line-number-mode</code> を利用する．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">if</span> <span class="org-rainbow-delimiters-depth-2">(</span>version&lt;= <span class="org-string">"26.0.50"</span> emacs-version<span class="org-rainbow-delimiters-depth-2">)</span>
+    <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">progn</span>
+      <span class="org-rainbow-delimiters-depth-3">(</span>global-display-line-numbers-mode<span class="org-rainbow-delimiters-depth-3">)</span>
+      <span class="org-rainbow-delimiters-depth-3">(</span>column-number-mode -1<span class="org-rainbow-delimiters-depth-3">)</span>
+      <span class="org-rainbow-delimiters-depth-3">(</span>line-number-mode -1<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>column-number-mode +1<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>line-number-mode +1<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+Emacs 起動時にフレームを最大化します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>set-frame-parameter nil 'fullscreen 'maximized<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4901796" class="outline-3">
+<h3 id="org4901796"><span class="section-number-3">7.3</span> Font</h3>
+<div class="outline-text-3" id="text-7-3">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>set-face-attribute 'default nil
+                    <span class="org-builtin">:family</span> <span class="org-string">"Source Han Code JP"</span>
+                    <span class="org-builtin">:height</span> 140<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org5c9b7b7" class="outline-2">
+<h2 id="org5c9b7b7"><span class="section-number-2">8</span> Global keybindings</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+global-map のキーバインドを次のように変更します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>define-key global-map <span class="org-rainbow-delimiters-depth-2">(</span>kbd <span class="org-string">"C-m"</span><span class="org-rainbow-delimiters-depth-2">)</span> 'newline-and-indent<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span>define-key global-map <span class="org-rainbow-delimiters-depth-2">(</span>kbd <span class="org-string">"C-2"</span><span class="org-rainbow-delimiters-depth-2">)</span> 'set-mark-command<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span>define-key global-map <span class="org-rainbow-delimiters-depth-2">(</span>kbd <span class="org-string">"C-t"</span><span class="org-rainbow-delimiters-depth-2">)</span> 'other-window<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span>define-key global-map <span class="org-rainbow-delimiters-depth-2">(</span>kbd <span class="org-string">"C-;"</span><span class="org-rainbow-delimiters-depth-2">)</span> 'comment-line<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+また <code>C-h</code> を <code>DEL</code> と入れ替えます．
+<code>help-for-help</code> は <code>C-x ?</code> にバインドします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>define-key key-translation-map <span class="org-rainbow-delimiters-depth-2">(</span>kbd <span class="org-string">"C-h"</span><span class="org-rainbow-delimiters-depth-2">)</span> <span class="org-rainbow-delimiters-depth-2">(</span>kbd <span class="org-string">"DEL"</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-rainbow-delimiters-depth-1">(</span>define-key global-map <span class="org-rainbow-delimiters-depth-2">(</span>kbd <span class="org-string">"C-x ?"</span><span class="org-rainbow-delimiters-depth-2">)</span> 'help-for-help<span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd12d59b" class="outline-2">
+<h2 id="orgd12d59b"><span class="section-number-2">9</span> License</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+本設定ファイル (<code>strich.el</code>) は <a href="https://www.gnu.org/licenses/gpl.html">GNU 一般公衆ライセンス</a> (バージョン 3 または以降の任意のバージョン) で公開しています．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">provide</span> '<span class="org-constant">strich</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">strich.el ends here</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Mahito TANNO</p>
+<p class="date">Created: 2019-03-28 Thu 17:46</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
