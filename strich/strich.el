@@ -1,4 +1,4 @@
-;;; strich.el --- My configuration file for Emacs -*- lexical-binding:t -*-
+;;; strich.el --- My configuration file for Emacs -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2019  TANNO Mahito
 
@@ -70,7 +70,8 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
   (with-current-buffer
       (find-file-noselect strich-locate-strich-org-file)
     (org-babel-tangle))
-  (write-region (concat ";; Local Variables:\n"
+  (write-region (concat "\n"
+                        ";; Local Variables:\n"
                         ";; buffer-read-only: t\n"
                         ";; End:")
                 nil strich-locate-strich-elisp-file 'append)
@@ -388,6 +389,41 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
 (use-package flycheck-popup-tip
   :hook (flycheck-mode . flycheck-popup-tip-mode))
 
+(use-feature org
+  :defines (electric-pair-pairs electric-pair-text-pairs)
+  :functions (electric-pair-default-inhibit)
+  :preface
+  (defvar strich-org-electric-pair-pairs
+    '((?~ . ?~) (?= . ?=)))
+
+  (defun strich-org-electric-pair-inhibit (char)
+    "Do not insert close `>'."
+    (if (char-equal char ?<)
+        t
+      (electric-pair-default-inhibit char)))
+  (defun strich-org-electric-pair-mode ()
+    "Use Org-mode with electric-pair-mode."
+    (electric-pair-mode +1)
+    (setq-local electric-pair-pairs (append electric-pair-pairs
+                                            strich-org-electric-pair-pairs))
+    (setq-local electric-pair-text-pairs (append electric-pair-text-pairs
+                                                 strich-org-electric-pair-pairs))
+    (setq-local electric-pair-inhibit-predicate #'strich-org-electric-pair-inhibit))
+  :hook (org-mode . strich-org-electric-pair-mode)
+  :custom
+  (org-startup-indented t)
+  (org-fontify-natively t)
+  :config
+  (setq org-structure-template-alist (append '(("el" . "src emacs-lisp"))
+                                             org-structure-template-alist)))
+
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
+
+(use-package ox-gfm
+  :demand t
+  :after (org))
+
 (use-package doom-themes
   :demand t
   :custom
@@ -441,6 +477,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
 
 (provide 'strich)
 ;;; strich.el ends here
+
 ;; Local Variables:
 ;; buffer-read-only: t
 ;; End:

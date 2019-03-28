@@ -25,7 +25,7 @@ Strich を編集する際は ~strich.el~ ではなく ~strich.org~ を編集し�
 編集後に =org-babel-tangle-file= を用いて ~strich.el~ を生成します．
 
 #+begin_src emacs-lisp :exports none
-  ;;; strich.el --- My configuration file for Emacs -*- lexical-binding:t -*-
+  ;;; strich.el --- My configuration file for Emacs -*- lexical-binding: t -*-
 
   ;; Copyright (C) 2019  TANNO Mahito
 
@@ -125,7 +125,8 @@ Strich を編集する際は ~strich.el~ ではなく ~strich.org~ を編集し�
     (with-current-buffer
         (find-file-noselect strich-locate-strich-org-file)
       (org-babel-tangle))
-    (write-region (concat ";; Local Variables:\n"
+    (write-region (concat "\n"
+                          ";; Local Variables:\n"
                           ";; buffer-read-only: t\n"
                           ";; End:")
                   nil strich-locate-strich-elisp-file 'append)
@@ -644,6 +645,66 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 #+end_src
 
 ** LSP
+* Documents
+** Org-mode
+[[https://orgmode.org/][Org-mode]] の設定を行います．
+前の方で ~(straight-use-package 'org)~ しているので ~use-feature~ マクロを用います．
+Org-mode でのマークアップのため，electric pair の設定を適当に変更します．
+また， ~electric-pair-mode~ により ~>~ が自動挿入されるのを禁止しています．
+
+Org-mode 9.2 より easy templete の代わりに =org-insert-structure-templete= (~C-c C-,~) を使うようになったようです．
+easy templete を利用するには =(require 'org-temp)= する必要があります．
+
+#+begin_src emacs-lisp
+  (use-feature org
+    :defines (electric-pair-pairs electric-pair-text-pairs)
+    :functions (electric-pair-default-inhibit)
+    :preface
+    (defvar strich-org-electric-pair-pairs
+      '((?~ . ?~) (?= . ?=)))
+  
+    (defun strich-org-electric-pair-inhibit (char)
+      "Do not insert close `>'."
+      (if (char-equal char ?<)
+          t
+        (electric-pair-default-inhibit char)))
+    (defun strich-org-electric-pair-mode ()
+      "Use Org-mode with electric-pair-mode."
+      (electric-pair-mode +1)
+      (setq-local electric-pair-pairs (append electric-pair-pairs
+                                              strich-org-electric-pair-pairs))
+      (setq-local electric-pair-text-pairs (append electric-pair-text-pairs
+                                                   strich-org-electric-pair-pairs))
+      (setq-local electric-pair-inhibit-predicate #'strich-org-electric-pair-inhibit))
+    :hook (org-mode . strich-org-electric-pair-mode)
+    :custom
+    (org-startup-indented t)
+    (org-fontify-natively t)
+    :config
+    (setq org-structure-template-alist (append '(("el" . "src emacs-lisp"))
+                                               org-structure-template-alist)))
+#+end_src
+
+[[https://github.com/sabof/org-bullets][org-bullets]] で見た目を変更します．
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode))
+#+end_src
+
+Github Flavored Markdown へのエクスポートのため [[https://github.com/larstvei/ox-gfm][ox-gfm]] をインストールします．
+
+#+begin_src emacs-lisp
+  (use-package ox-gfm
+    :demand t
+    :after (org))
+#+end_src
+
+** TeX/LaTeX
+*** YaTeX
+*** BibTeX
+*** Ebib
+
 * Programming Languages
 ** C/C++
 
@@ -653,11 +714,7 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 
 ** Python
 
-* Documents
-** TeX/LaTeX
-
-** Org-mode
-
+* Computer Algebra System
 * Appearance
 ** Color theme
 [[https://github.com/hlissner/emacs-doom-themes][doom-themes]] の ~doom-dracula~ テーマを利用する．
