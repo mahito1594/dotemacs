@@ -77,25 +77,16 @@ Strich を編集する際は ~strich.el~ ではなく ~strich.org~ を編集し�
 #+end_src
 
 #+begin_src emacs-lisp
-  (defvar strich-locate-strich-elisp-file (expand-file-name (concat user-emacs-directory
-                                                                    "strich/strich.el"))
-    "Place where `strich.el' should be.")
-
-  (defvar strich-locate-strich-org-file (expand-file-name (concat user-emacs-directory
-                                                                  "strich/strich.org"))
-    "Place where `strich.org' should be.")
-
-  (defvar strich-locate-strich-html-file (expand-file-name (concat user-emacs-directory
-                                                                   "strich/doc/index.html"))
-    "Place where `strich.html' shouled be.")
-#+end_src
-
-#+begin_src emacs-lisp
-  (defcustom strich-backup-directory (locate-user-emacs-file "backups/")
+  (defcustom strich-backup-directory (expand-file-name "backups" user-emacs-directory)
     "We save automatically files into the directory:
   We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-backup-directory'."
     :type 'directory
     :group 'strich)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defvar strich-local-config-directory (expand-file-name "local" user-emacs-directory)
+    "You put Emacs Lisp files here for local config.")
 #+end_src
 
 ** Functions
@@ -142,6 +133,27 @@ Strich を編集する際は ~strich.el~ ではなく ~strich.org~ を編集し�
     (with-current-buffer (find-file-noselect strich-locate-strich-org-file)
       (setq-local org-html-htmlize-output-type 'css)
       (org-html-export-to-html)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun strich-load-config-files (re dir)
+    "Load files which match to regular expression RE in DIR."
+    (when (file-directory-p dir)
+      (add-to-list 'load-path dir)
+      (dolist (file (strich--pickup-config-files re dir))
+        (condition-case err-var
+            (load file)
+          (error (message "%s" err-var))))))
+
+  (defun strich--pickup-config-files (re dir)
+    "Pick up files which match to regular expression RE in DIR."
+    (let ((files (directory-files dir))
+          (targets '()))
+      (dolist (file files)
+        (when (and (string-match re file)
+                   (string-match "\\.el\\'" file))
+          (add-to-list 'targets file)))
+      (sort targets 'string<)))
 #+end_src
 
 ** Package manager
@@ -714,7 +726,6 @@ Github Flavored Markdown へのエクスポートのため [[https://github.com/
 
 ** Python
 
-* Computer Algebra System
 * Appearance
 ** Color theme
 [[https://github.com/hlissner/emacs-doom-themes][doom-themes]] の ~doom-dracula~ テーマを利用する．
@@ -779,7 +790,7 @@ Emacs 起動時にフレームを最大化します．
 #+end_src
 
 ** Font
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (set-face-attribute 'default nil
                       :family "Source Han Code JP"
                       :height 140)
@@ -800,6 +811,26 @@ global-map のキーバインドを次のように変更します．
 #+begin_src emacs-lisp
   (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
   (define-key global-map (kbd "C-x ?") 'help-for-help)
+#+end_src
+* Local configuration
+~.emacs.d/local~ 以下にマシン・環境ごとの設定を記述した ~.el~ ファイルを配置します．
+~strich-load-local-config-files~ は ~.el~ ファイルを辞書式順序で読み込みます．
+バイトコンパイルした同名の ~.elc~ ファイルがあると，そちらを優先して読み込みます．
+ただし ~.elc~ ファイルはあるが ~.el~ ファイルがない場合，その ~.elc~ ファイルは *読み込まれません* ．
+シンボリックリンクがある場合，読み込みが失敗するかもしれません．
+
+#+begin_src emacs-lisp
+  (strich-load-config-files ".*" strich-local-config-directory)
+#+end_src
+
+~init-loader.el~ のように数字 2 桁のプレフィックスをつけたファイルに限定したい場合，
+次のように定義すれば良いと思います (未検証)．
+
+#+begin_src emacs-lisp :tangle no
+  (defvar strich-local-config-default-regexp "\\(?:\\`[[:digit:]]\\{2\\}\\)"
+    "Regular expression determining valid configuration file names.")
+
+  (strich-load-config-files strich-local-config-default-regexp strich-local-config-directory)
 #+end_src
 
 * License

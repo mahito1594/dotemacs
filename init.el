@@ -31,12 +31,20 @@
 
 (defvar strich-minimum-emacs-version "25.4")
 
+(defvar strich-locate-strich-elisp-file (expand-file-name "strich.el" user-emacs-directory)
+  "Place where `strich.el' should be.")
+
+(defvar strich-locate-strich-org-file (expand-file-name "strich.org" user-emacs-directory)
+  "Place where `strich.org' should be.")
+
+(defvar strich-locate-strich-html-file (expand-file-name "doc/index.html" user-emacs-directory)
+  "Place where html document shouled be.")
+
 (if (version< emacs-version strich-minimum-emacs-version)
     (error (concat "Strich requires Emacs ver. %s or later, "
                    "but you use Emacs ver. %s!")
            strich-minimum-emacs-version emacs-version)
-  (add-to-list 'load-path (locate-user-emacs-file "strich"))
-  (require 'strich))
+  (load strich-locate-strich-elisp-file))
 
 (provide 'init)
 ;;; init.el ends here

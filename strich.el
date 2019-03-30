@@ -31,23 +31,14 @@
   :group 'emacs
   :link '(url-link :tag "GitHub" "https://github.com/mahito1594/dotemacs"))
 
-(defvar strich-locate-strich-elisp-file (expand-file-name (concat user-emacs-directory
-                                                                  "strich/strich.el"))
-  "Place where `strich.el' should be.")
-
-(defvar strich-locate-strich-org-file (expand-file-name (concat user-emacs-directory
-                                                                "strich/strich.org"))
-  "Place where `strich.org' should be.")
-
-(defvar strich-locate-strich-html-file (expand-file-name (concat user-emacs-directory
-                                                                 "strich/doc/index.html"))
-  "Place where `strich.html' shouled be.")
-
-(defcustom strich-backup-directory (locate-user-emacs-file "backups/")
+(defcustom strich-backup-directory (expand-file-name "backups" user-emacs-directory)
   "We save automatically files into the directory:
 We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-backup-directory'."
   :type 'directory
   :group 'strich)
+
+(defvar strich-local-config-directory (expand-file-name "local" user-emacs-directory)
+  "You put Emacs Lisp files here for local config.")
 
 (defun strich-open-html-doc ()
   "Open Strich document in default browser."
@@ -85,6 +76,25 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
   (with-current-buffer (find-file-noselect strich-locate-strich-org-file)
     (setq-local org-html-htmlize-output-type 'css)
     (org-html-export-to-html)))
+
+(defun strich-load-config-files (re dir)
+  "Load files which match to regular expression RE in DIR."
+  (when (file-directory-p dir)
+    (add-to-list 'load-path dir)
+    (dolist (file (strich--pickup-config-files re dir))
+      (condition-case err-var
+          (load file)
+        (error (message "%s" err-var))))))
+
+(defun strich--pickup-config-files (re dir)
+  "Pick up files which match to regular expression RE in DIR."
+  (let ((files (directory-files dir))
+        (targets '()))
+    (dolist (file files)
+      (when (and (string-match re file)
+                 (string-match "\\.el\\'" file))
+        (add-to-list 'targets file)))
+    (sort targets 'string<)))
 
 (setq straight-repository-branch "develop") ; use the develop branch of straight.el
 (setq straight-check-for-modifications 'live-with-find) ; => '(check-on-save find-when-checking)
@@ -463,10 +473,6 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
 
 (set-frame-parameter nil 'fullscreen 'maximized)
 
-(set-face-attribute 'default nil
-                    :family "Source Han Code JP"
-                    :height 140)
-
 (define-key global-map (kbd "C-m") 'newline-and-indent)
 (define-key global-map (kbd "C-2") 'set-mark-command)
 (define-key global-map (kbd "C-t") 'other-window)
@@ -474,6 +480,8 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
 
 (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 (define-key global-map (kbd "C-x ?") 'help-for-help)
+
+(strich-load-config-files ".*" strich-local-config-directory)
 
 (provide 'strich)
 ;;; strich.el ends here
