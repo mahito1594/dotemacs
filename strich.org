@@ -152,7 +152,7 @@ Strich を編集する際は ~strich.el~ ではなく ~strich.org~ を編集し�
       (dolist (file files)
         (when (and (string-match re file)
                    (string-match "\\.el\\'" file))
-          (add-to-list 'targets file)))
+          (push file targets)))
       (sort targets 'string<)))
 #+end_src
 
@@ -657,6 +657,41 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 #+end_src
 
 ** LSP
+いくつかの言語では Language Server Protocol を用いて補完・文法チェックを行います．
+詳細は各言語の設定を参照してください．
+
+ここでは [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] を利用します．
+補完には [[https://github.com/tigersoldier/company-lsp][company-lsp]] を，文法チェックには [[https://github.com/emacs-lsp/lsp-ui][lsp-ui/flycheck]] を利用します．
+
+lsp-mode と flycheck を併用するにはカスタム変数 ~lsp-prefer-flymake~ を ~nil~ にセットします．
+また flycheck-popup-tip を使用していると画面がうるさくなるのでカスタム変数 ~lsp-ui-sideline-enable~ を ~nil~ にセットし，
+~lsp-ui-sideline-mode~ を無効化します．
+
+大きいプロジェクトを開くと flycheck が重くなるという話もあるので場合によっては flymake を使うほうが良いかもしれません．
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :commands (lsp)
+    :custom
+    (lsp-prefer-flymake nil "Use `flycheck'."))
+
+  (use-package company-lsp
+    :demand t
+    :after (company)
+    :config
+    (push 'company-lsp company-backends))
+
+  (use-package lsp-ui
+    :commands (lsp-ui-mode)
+    :hook (lsp-mode . lsp-ui-mode)
+    :bind (:map lsp-ui-mode-map
+                ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+                ([remap xref-find-references] . lsp-ui-peek-find-references))
+    :custom
+    (lsp-ui-sideline-enable nil "Disable `lsp-ui-sideline-mode'.")
+    :blackout t)
+#+end_src
+
 * Documents
 ** Org-mode
 [[https://orgmode.org/][Org-mode]] の設定を行います．
@@ -719,6 +754,30 @@ Github Flavored Markdown へのエクスポートのため [[https://github.com/
 
 * Programming Languages
 ** C/C++
+Language Server として [[https://github.com/MaskRay/ccls][ccls]] を利用します．
+ccls のインストール方法については [[https://github.com/MaskRay/ccls/wiki/Build][Wiki/Build]] を参照してください．
+
+macOS の場合は homebrew からインストールできます．
+
+#+begin_src sh :tangle no
+  brew tap twlz0ne/homebrew-ccls
+  brew install ccls
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package ccls
+    :hook ((c-mode c++-mode objc-mode) . (lambda ()
+                                           (require 'ccls)
+                                           (lsp)))
+    :config
+    (setq ccls-sem-highlight-method 'font-lock)
+    (ccls-use-default-rainbow-sem-highlight))
+
+  (use-package modern-cpp-font-lock
+    :commands (modern-c++-font-lock-mode)
+    :hook (c++-mode-hook . modern-c++-font-lock-mode)
+    :blackout t)
+#+end_src
 
 ** Emacs Lisp
 

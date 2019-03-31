@@ -93,7 +93,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
     (dolist (file files)
       (when (and (string-match re file)
                  (string-match "\\.el\\'" file))
-        (add-to-list 'targets file)))
+        (push file targets)))
     (sort targets 'string<)))
 
 (setq straight-repository-branch "develop") ; use the develop branch of straight.el
@@ -399,6 +399,27 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
 (use-package flycheck-popup-tip
   :hook (flycheck-mode . flycheck-popup-tip-mode))
 
+(use-package lsp-mode
+  :commands (lsp)
+  :custom
+  (lsp-prefer-flymake nil "Use `flycheck'."))
+
+(use-package company-lsp
+  :demand t
+  :after (company)
+  :config
+  (push 'company-lsp company-backends))
+
+(use-package lsp-ui
+  :commands (lsp-ui-mode)
+  :hook (lsp-mode . lsp-ui-mode)
+  :bind (:map lsp-ui-mode-map
+              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+              ([remap xref-find-references] . lsp-ui-peek-find-references))
+  :custom
+  (lsp-ui-sideline-enable nil "Disable `lsp-ui-sideline-mode'.")
+  :blackout t)
+
 (use-feature org
   :defines (electric-pair-pairs electric-pair-text-pairs)
   :functions (electric-pair-default-inhibit)
@@ -433,6 +454,19 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `strich-
 (use-package ox-gfm
   :demand t
   :after (org))
+
+(use-package ccls
+  :hook ((c-mode c++-mode objc-mode) . (lambda ()
+                                         (require 'ccls)
+                                         (lsp)))
+  :config
+  (setq ccls-sem-highlight-method 'font-lock)
+  (ccls-use-default-rainbow-sem-highlight))
+
+(use-package modern-cpp-font-lock
+  :commands (modern-c++-font-lock-mode)
+  :hook (c++-mode-hook . modern-c++-font-lock-mode)
+  :blackout t)
 
 (use-package doom-themes
   :demand t
