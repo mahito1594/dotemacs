@@ -1,5 +1,6 @@
 ### Added by the user ###
 # config files
+custom-file.el
 conf/09_font.el
 conf/91_singular.el
 

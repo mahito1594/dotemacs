@@ -17,34 +17,47 @@
 
 ;;; Commentary:
 
-;; This init file
-;;  1. insatlls `straight.el', a package manager, and
-;;  2. load `strich.el', my Emacs configuration.
-;; For more details, see `strich.org' or see `strich.html'.
+;; This init file load `my-init.el'.  See `README.org'.
 
 ;;; Code:
-(setq debug-on-error t
-      init-file-debug t)
 
+;;; Debugging
+(setq debug-on-error t)
+(setq init-file-debug t)
+
+;;; Load file
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
-(defvar strich-minimum-emacs-version "25.4")
+;;; Variables and constants
+(defconst my-minimum-emacs-version "25.4"
+  "Expected minimum Emacs version.")
+(defconst my-elisp-directory
+  (expand-file-name "elisp" user-emacs-directory)
+  "We should put here your self-made Emacs Lisp files.")
+(defconst my-site-lisp-directory
+  (expand-file-name "site-lisp" user-emacs-directory)
+  "We should put here packages.")
 
-(defvar strich-locate-strich-elisp-file (expand-file-name "strich.el" user-emacs-directory)
-  "Place where `strich.el' should be.")
+;;; Load path
+(add-to-list 'load-path my-elisp-directory) ; add `.emacs.d/elisp' to load-path
+;; Add all subdirectories in `site-lisp' to load-path
+(let ((default-directory my-site-lisp-directory))
+  (add-to-list 'load-path default-directory)
+  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+      (normal-top-level-add-subdirs-to-load-path)))
 
-(defvar strich-locate-strich-org-file (expand-file-name "strich.org" user-emacs-directory)
-  "Place where `strich.org' should be.")
-
-(defvar strich-locate-strich-html-file (expand-file-name "doc/index.html" user-emacs-directory)
-  "Place where html document shouled be.")
-
-(if (version< emacs-version strich-minimum-emacs-version)
+;;; Load `my-init.el'.
+(if (version< emacs-version my-minimum-emacs-version)
     (error (concat "Strich requires Emacs ver. %s or later, "
                    "but you use Emacs ver. %s!")
-           strich-minimum-emacs-version emacs-version)
-  (load strich-locate-strich-elisp-file))
+           my-minimum-emacs-version emacs-version)
+  (require 'my-init))
+
+;;; Set and load `custom-file'.
+(setq custom-file (locate-user-emacs-file "custom-file.el"))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 (provide 'init)
 ;;; init.el ends here
