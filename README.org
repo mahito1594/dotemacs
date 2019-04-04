@@ -842,7 +842,7 @@ macOS の場合は homebrew からインストールできます．
 
 * Appearance
 ** Color theme
-[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] の ~doom-dracula~ テーマを利用する．
+[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] の ~doom-dracula~ テーマを利用します．
 
 #+begin_src emacs-lisp
   (use-package doom-themes
@@ -858,7 +858,7 @@ macOS の場合は homebrew からインストールできます．
     (doom-themes-org-config))
 #+end_src
 
-またモードラインを [[https://github.com/seagle0128/doom-modeline][doom-modeline]] でカスタマイズする．
+またモードラインを [[https://github.com/seagle0128/doom-modeline][doom-modeline]] でカスタマイズします．
 
 #+begin_src emacs-lisp
   (use-package doom-modeline
