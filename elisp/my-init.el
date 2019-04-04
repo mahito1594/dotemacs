@@ -140,50 +140,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :blackout t)
 
 (use-package ivy-rich
-  :defines (all-the-icons-dir-icon-alist)
-  :functions (all-the-icons-icon-family
-              all-the-icons-icon-for-mode
-              all-the-icons-icon-for-file
-              all-the-icons-octicon
-              all-the-icons-match-to-alist)
-  :preface
-  (defun my-ivy-rich-buffer-icon (candidate)
-    "Show buffer isons in `ivy-rich', only on GUI."
-    (when (display-graphic-p)
-      (with-current-buffer
-          (get-buffer candidate)
-        (let ((icon (all-the-icons-icon-for-mode major-mode)))
-          (if (symbolp icon)
-              (all-the-icons-icon-for-mode 'fundamental-mode)
-            icon)))))
-  (defun my-ivy-rich-file-icon (candidate)
-    "Show file icons in `ivy-rich', only on GUI."
-    (when (display-graphic-p)
-      (let ((icon
-             ;; for directories
-             (if (file-directory-p candidate)
-                 (cond
-                  ;; for `tramp-mode'
-                  ((and (fboundp 'tramp-tramp-file-p)
-                        (tramp-tramp-file-p default-directory))
-                   (all-the-icons-octicon "file-directory"))
-                  ;; for symbolic links
-                  ((file-symlink-p candidate)
-                   (all-the-icons-octicon "file-symlink-directory"))
-                  ;; for git submodules
-                  ((all-the-icons-dir-is-submodule candidate)
-                   (all-the-icons-octicon "file-submodule"))
-                  ;; for version-controled by git
-                  ((file-exists-p (format "%s/.git" candidate))
-                   (all-the-icons-octicon "repo"))
-                  ;; otherwise
-                  (t (let ((matcher (all-the-icons-match-to-alist candidate all-the-icons-dir-icon-alist)))
-                       (apply (car matcher) (list (cadr matcher))))))
-               ;; for files
-               (all-the-icons-icon-for-file candidate))))
-        (unless (symbolp icon)
-          (propertize icon
-                      'face `(:family ,(all-the-icons-icon-family icon) :height 1.1))))))
+  :functions (my-ivy-rich-buffer-icon my-ivy-rich-file-icon)
   :hook (ivy-mode . ivy-rich-mode)
   :custom
   (ivy-rich-path-style 'abbrev)
@@ -365,25 +322,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :blackout t)
 
 (use-feature org
-  :defines (electric-pair-pairs electric-pair-text-pairs)
-  :functions (electric-pair-default-inhibit)
-  :preface
-  (defvar my-org-electric-pair-pairs
-    '((?~ . ?~) (?= . ?=)))
-
-  (defun my-org-electric-pair-inhibit (char)
-    "Do not insert close `>'."
-    (if (char-equal char ?<)
-        t
-      (electric-pair-default-inhibit char)))
-  (defun my-org-electric-pair-mode ()
-    "Use Org-mode with electric-pair-mode."
-    (electric-pair-mode +1)
-    (setq-local electric-pair-pairs (append electric-pair-pairs
-                                            my-org-electric-pair-pairs))
-    (setq-local electric-pair-text-pairs (append electric-pair-text-pairs
-                                                 my-org-electric-pair-pairs))
-    (setq-local electric-pair-inhibit-predicate #'my-org-electric-pair-inhibit))
+  :functions (my-org-electric-pair-mode)
   :hook (org-mode . my-org-electric-pair-mode)
   :custom
   (org-startup-indented t)
@@ -411,6 +350,18 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :commands (modern-c++-font-lock-mode)
   :hook (c++-mode-hook . modern-c++-font-lock-mode)
   :blackout t)
+
+(use-feature python
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
+  :hook (python-mode . (lambda ()
+                         (lsp)
+                         (setq-local indent-tabs-mode nil)
+                         (setq-local tab-width 4)))
+  :config
+  (when (executable-find "python3")
+    ;; use python3 if it exists
+    (setq python-shell-interpreter "python3")))
 
 (use-package doom-themes
   :demand t

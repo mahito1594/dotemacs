@@ -446,53 +446,53 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 #+end_src
 
 [[https://github.com/Yevgnen/ivy-rich][ivy-rich]] を用いてバッファ切り替えの際などにアイコンを表示するようにします．
+関数 =my-ivy-rich-buffer-icon=, =my-ivy-rich-file-icon= を定義し，バッファ切替時等にアイコンを表示するようにします．
+
+#+begin_src emacs-lisp :tangle ./elisp/utility.el
+  ;;; for ivy-rich: show icons
+  (defun my-ivy-rich-buffer-icon (candidate)
+    "Show buffer isons in `ivy-rich', only on GUI."
+    (when (display-graphic-p)
+      (with-current-buffer
+          (get-buffer candidate)
+        (let ((icon (all-the-icons-icon-for-mode major-mode)))
+          (if (symbolp icon)
+              (all-the-icons-icon-for-mode 'fundamental-mode)
+            icon)))))
+
+  (defun my-ivy-rich-file-icon (candidate)
+    "Show file icons in `ivy-rich', only on GUI."
+    (when (display-graphic-p)
+      (let ((icon
+             ;; for directories
+             (if (file-directory-p candidate)
+                 (cond
+                  ;; for `tramp-mode'
+                  ((and (fboundp 'tramp-tramp-file-p)
+                        (tramp-tramp-file-p default-directory))
+                   (all-the-icons-octicon "file-directory"))
+                  ;; for symbolic links
+                  ((file-symlink-p candidate)
+                   (all-the-icons-octicon "file-symlink-directory"))
+                  ;; for git submodules
+                  ((all-the-icons-dir-is-submodule candidate)
+                   (all-the-icons-octicon "file-submodule"))
+                  ;; for version-controled by git
+                  ((file-exists-p (format "%s/.git" candidate))
+                   (all-the-icons-octicon "repo"))
+                  ;; otherwise
+                  (t (let ((matcher (all-the-icons-match-to-alist candidate all-the-icons-dir-icon-alist)))
+                       (apply (car matcher) (list (cadr matcher))))))
+               ;; for files
+               (all-the-icons-icon-for-file candidate))))
+        (unless (symbolp icon)
+          (propertize icon
+                      'face `(:family ,(all-the-icons-icon-family icon) :height 1.1))))))
+#+end_src
 
 #+begin_src emacs-lisp
   (use-package ivy-rich
-    :defines (all-the-icons-dir-icon-alist)
-    :functions (all-the-icons-icon-family
-                all-the-icons-icon-for-mode
-                all-the-icons-icon-for-file
-                all-the-icons-octicon
-                all-the-icons-match-to-alist)
-    :preface
-    (defun my-ivy-rich-buffer-icon (candidate)
-      "Show buffer isons in `ivy-rich', only on GUI."
-      (when (display-graphic-p)
-        (with-current-buffer
-            (get-buffer candidate)
-          (let ((icon (all-the-icons-icon-for-mode major-mode)))
-            (if (symbolp icon)
-                (all-the-icons-icon-for-mode 'fundamental-mode)
-              icon)))))
-    (defun my-ivy-rich-file-icon (candidate)
-      "Show file icons in `ivy-rich', only on GUI."
-      (when (display-graphic-p)
-        (let ((icon
-               ;; for directories
-               (if (file-directory-p candidate)
-                   (cond
-                    ;; for `tramp-mode'
-                    ((and (fboundp 'tramp-tramp-file-p)
-                          (tramp-tramp-file-p default-directory))
-                     (all-the-icons-octicon "file-directory"))
-                    ;; for symbolic links
-                    ((file-symlink-p candidate)
-                     (all-the-icons-octicon "file-symlink-directory"))
-                    ;; for git submodules
-                    ((all-the-icons-dir-is-submodule candidate)
-                     (all-the-icons-octicon "file-submodule"))
-                    ;; for version-controled by git
-                    ((file-exists-p (format "%s/.git" candidate))
-                     (all-the-icons-octicon "repo"))
-                    ;; otherwise
-                    (t (let ((matcher (all-the-icons-match-to-alist candidate all-the-icons-dir-icon-alist)))
-                         (apply (car matcher) (list (cadr matcher))))))
-                 ;; for files
-                 (all-the-icons-icon-for-file candidate))))
-          (unless (symbolp icon)
-            (propertize icon
-                        'face `(:family ,(all-the-icons-icon-family icon) :height 1.1))))))
+    :functions (my-ivy-rich-buffer-icon my-ivy-rich-file-icon)
     :hook (ivy-mode . ivy-rich-mode)
     :custom
     (ivy-rich-path-style 'abbrev)
@@ -761,30 +761,32 @@ lsp-mode と flycheck を併用するにはカスタム変数 ~lsp-prefer-flymak
 Org-mode でのマークアップのため，electric pair の設定を適当に変更します．
 また， ~electric-pair-mode~ により ~>~ が自動挿入されるのを禁止しています．
 
+#+begin_src emacs-lisp :tangle ./elisp/utility.el
+  ;;; for Org-mode: integrate with electric-pair-mode
+  (defvar my-org-electric-pair-pairs
+    '((?~ . ?~) (?= . ?=)))
+
+  (defun my-org-electric-pair-inhibit (char)
+    "Do not insert close `>'."
+    (if (char-equal char ?<)
+        t
+      (electric-pair-default-inhibit char)))
+  (defun my-org-electric-pair-mode ()
+    "Use Org-mode with electric-pair-mode."
+    (electric-pair-mode +1)
+    (setq-local electric-pair-pairs (append electric-pair-pairs
+                                            my-org-electric-pair-pairs))
+    (setq-local electric-pair-text-pairs (append electric-pair-text-pairs
+                                                 my-org-electric-pair-pairs))
+    (setq-local electric-pair-inhibit-predicate #'my-org-electric-pair-inhibit))
+#+end_src
+
 Org-mode 9.2 より easy templete の代わりに =org-insert-structure-templete= (~C-c C-,~) を使うようになったようです．
 easy templete を利用するには =(require 'org-temp)= する必要があります．
 
 #+begin_src emacs-lisp
   (use-feature org
-    :defines (electric-pair-pairs electric-pair-text-pairs)
-    :functions (electric-pair-default-inhibit)
-    :preface
-    (defvar my-org-electric-pair-pairs
-      '((?~ . ?~) (?= . ?=)))
-  
-    (defun my-org-electric-pair-inhibit (char)
-      "Do not insert close `>'."
-      (if (char-equal char ?<)
-          t
-        (electric-pair-default-inhibit char)))
-    (defun my-org-electric-pair-mode ()
-      "Use Org-mode with electric-pair-mode."
-      (electric-pair-mode +1)
-      (setq-local electric-pair-pairs (append electric-pair-pairs
-                                              my-org-electric-pair-pairs))
-      (setq-local electric-pair-text-pairs (append electric-pair-text-pairs
-                                                   my-org-electric-pair-pairs))
-      (setq-local electric-pair-inhibit-predicate #'my-org-electric-pair-inhibit))
+    :functions (my-org-electric-pair-mode)
     :hook (org-mode . my-org-electric-pair-mode)
     :custom
     (org-startup-indented t)
@@ -846,6 +848,34 @@ macOS の場合は homebrew からインストールできます．
 ** Ocaml
 
 ** Python
+Emacs 同梱の ~python.el~ を利用します．
+~python-mode.el~ ではないことに注意してください．
+
+~python3~ がインストールされている場合， ~python2~ ではなく ~python3~ を使うようにします．
+またインデントには空白 4 文字を用いるようにします．
+
+LSP ([[https://github.com/palantir/python-language-server][pyls]]) を利用して補完・文法チェックを行います．
+インストールは
+
+#+begin_src sh :tangle no
+  ~$ pip install 'python-language-server[all]'
+#+end_src
+
+とします．
+
+#+begin_src emacs-lisp
+  (use-feature python
+    :mode ("\\.py\\'" . python-mode)
+    :interpreter ("python" . python-mode)
+    :hook (python-mode . (lambda ()
+                           (lsp)
+                           (setq-local indent-tabs-mode nil)
+                           (setq-local tab-width 4)))
+    :config
+    (when (executable-find "python3")
+      ;; use python3 if it exists
+      (setq python-shell-interpreter "python3")))
+#+end_src
 
 * Appearance
 ** Color theme
