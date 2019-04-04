@@ -51,9 +51,16 @@ Emacs バージョン 25.4 以降での利用を想定しています．
   ;; you must edit `README.org' instead.
 
   ;;; Code:
-  (eval-when-compile
-    (require 'utility))
 #+end_src
+
+起動時にガベージコレクタが走らないように閾値を下げます．
+また，ガベージコレクタが走ったときはエコーエリアにメッセージを出すようにします．
+
+#+begin_src emacs-lisp
+  (setq gc-cons-threshold (* 8 1000 1000))
+  (setq garbage-collection-messages t)
+#+end_src
+
 ** init.el
 ~init.el~ は ~elisp/~ と， ~site-lisp/~ およびその以下のサブディレクトリを =load-path= に追加し， ~my-init.el~ を読み込みます．
 ただし Emacs のバージョンが古い場合は ~my-init.el~ は読み込まれません．

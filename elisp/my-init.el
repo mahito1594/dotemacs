@@ -24,8 +24,9 @@
 ;; you must edit `README.org' instead.
 
 ;;; Code:
-(eval-when-compile
-  (require 'utility))
+
+(setq gc-cons-threshold (* 8 1000 1000))
+(setq garbage-collection-messages t)
 
 (require 'utility)
 
