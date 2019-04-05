@@ -1,8 +1,6 @@
-;;; init --- my config file for GNU Emacs
+;;; init.el --- init Emacs -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2019  TANNO Mahito
-
-;; Author: Mahito Tanno
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,67 +16,48 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; My init file for Emacs ver 25.3 or later.
-;; Use straight.el and use-pacakage.el as pacakge installer.
 
-;; straight.el is released under the MIT License
-;; copyright (C) 2017 Radon Rosborough
-;; https://github.com/raxod502/straight.el
+;; This init file load `my-init.el'.  See `README.org'.
 
 ;;; Code:
 
-;;;; Garbage Collection
-(setq garbage-collection-messages t)    ; echo when GC run
-(setq gc-cons-threshold (* gc-cons-threshold 250))
+;;; Debugging
+(setq debug-on-error t)
+(setq init-file-debug t)
 
-;;;; Re setting `user-emacs-directory'
+;;; Load file
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
-;;;; Straight.el
-;; install straight.el, see
-;; https://github.com/raxod502/straight.el#getting-started
-(if (version< emacs-version "25.3")
-    ;; Require Emacs ver 25.3 or later. If you use an old one,
-    ;; `use-package' do nothing.
-    (defmacro use-package (&rest args))
-  (setq straight-repository-branch "develop") ; use the develop branch of straight.el
-  (setq straight-check-for-modifications 'live-with-find) ; => '(check-on-save find-when-checking)
-  (defvar bootstrap-version)
-  (let ((bootstrap-file
-         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-        (bootstrap-version 5))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-  (straight-use-package 'el-patch)
-  (straight-use-package 'use-package)
-  (setq straight-use-package-by-default t)
-  (setq use-package-always-defer t)
- ) 
+;;; Variables and constants
+(defconst my-minimum-emacs-version "25.4"
+  "Expected minimum Emacs version.")
+(defconst my-elisp-directory
+  (expand-file-name "elisp" user-emacs-directory)
+  "We should put here your self-made Emacs Lisp files.")
+(defconst my-site-lisp-directory
+  (expand-file-name "site-lisp" user-emacs-directory)
+  "We should put here packages.")
 
-;;;; Blackout
-(use-package blackout
-  ;; hide some major/minor mode in the mode line
-  :straight (:host github :repo "raxod502/blackout")
-  :demand t)
+;;; Load path
+(add-to-list 'load-path my-elisp-directory) ; add `.emacs.d/elisp' to load-path
+;; Add all subdirectories in `site-lisp' to load-path
+(let ((default-directory my-site-lisp-directory))
+  (add-to-list 'load-path default-directory)
+  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+      (normal-top-level-add-subdirs-to-load-path)))
 
-;;;; init-loader
-(use-package init-loader
-  :demand t
-  :config
-  (setq init-loader-show-log-after-init 'error-only)
-  (init-loader-load "~/.emacs.d/conf"))
+;;; Load `my-init.el'.
+(if (version< emacs-version my-minimum-emacs-version)
+    (error (concat "Strich requires Emacs ver. %s or later, "
+                   "but you use Emacs ver. %s!")
+           my-minimum-emacs-version emacs-version)
+  (require 'my-init))
 
-;;;; custom file
-(setq custom-file "~/.emacs.d/custom-file.el")
-(if (file-exists-p (expand-file-name "~/.emacs.d/custom-file.el"))
-    (load (expand-file-name custom-file) t nil nil))
+;;; Set and load `custom-file'.
+(setq custom-file (locate-user-emacs-file "custom-file.el"))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 (provide 'init)
 ;;; init.el ends here

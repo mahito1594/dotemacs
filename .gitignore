@@ -1,7 +1,7 @@
 ### Added by the user ###
 # config files
-conf/09_font.el
-conf/91_singular.el
+custom-file.el
+local/
 
 # recentf
 recentf
