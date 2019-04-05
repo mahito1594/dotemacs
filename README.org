@@ -14,10 +14,8 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 
 設定を記述するにあたって，以下に強い影響を受けました．
 
-- radian
-- Centaur Emacs
-- doom-emacs
-- Ladicle Emacs
+- [[https://github.com/raxod502/radian/tree/develop/emacs][radian/emacs]] (by [[https://github.com/raxod502][raxod502]])
+- [[https://github.com/seagle0128/.emacs.d][Centaur Emacs]] (by [[https://github.com/seagle0128][seagle0128]])
 
 ~my-init.el~ を編集する際は ~README.org~ を編集します．
 編集後に =org-babel-tangle= を用いて ~my-init.el~ を生成します．

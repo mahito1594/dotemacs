@@ -1,8 +1,7 @@
 ### Added by the user ###
 # config files
 custom-file.el
-conf/09_font.el
-conf/91_singular.el
+local/
 
 # recentf
 recentf
@@ -17,7 +16,6 @@ amx-items
 opam-user-setup.el
 irony/
 image-dired/
-local/
 
 # Created by https://www.gitignore.io/api/emacs
 # Edit at https://www.gitignore.io/?templates=emacs
