@@ -30,7 +30,7 @@
 
 (require 'utility)
 
-(defvar my-backup-directory (expand-file-name "backups" user-emacs-directory)
+(defvar my-backup-directory (expand-file-name "backups/" user-emacs-directory)
   "We save automatically files into the directory:
 We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-backup-directory'.")
 
@@ -327,6 +327,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :custom
   (org-startup-indented t)
   (org-fontify-natively t)
+  (org-html-htmlize-output-type 'css)
   :config
   (setq org-structure-template-alist (append '(("el" . "src emacs-lisp"))
                                              org-structure-template-alist)))
@@ -337,6 +338,136 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
 (use-package ox-gfm
   :demand t
   :after (ox))
+
+(use-package htmlize
+  :demand t
+  :after (ox))
+
+(use-package yatex
+  :functions (my-YaTeX-with-outline)
+  :preface
+  (defvar my-YaTeX-user-completion-table
+    (expand-file-name "~/texmf/emacs/yatexrc")
+    "You put here your own completion table.")
+  :commands (yatex-mode)
+  :init
+  (setq YaTeX-inhibit-prefix-letter t)
+  :mode (("\\.tex\\'" . yatex-mode)
+         ("\\.sty\\'" . yatex-mode)
+         ("\\.ltx\\'" . yatex-mode))
+  :hook (yatex-mode . my-YaTeX-with-outline)
+  :config
+  (setq YaTeX-kanji-code 4)		; use UTF-8
+  (setq YaTeX-use-AMS-LaTeX t)
+  (setq tex-command "latexmk")
+  (setq YaTeX-user-completion-table my-YaTeX-user-completion-table)
+  (add-hook 'align-load-hook
+            #'(lambda ()
+                (add-to-list 'align-rules-list '(yatex-table
+                                                 (regexp . "\\(\\s-*\\)&")
+                                                 (repeat . t)
+                                                 (mode . '(yatex-mode))))))
+  )
+
+(use-package company-math
+  :demand t
+  :after (company yatex)
+  :config
+  (push 'company-math-symbols-latex company-backends)
+  (push 'company-latex-commands company-backends))
+
+(use-package flycheck-yatex
+  :straight (:host github :repo "mahito1594/flycheck-yatex")
+  :demand t
+  :after (flycheck yatex))
+
+(use-feature reftex
+  :hook (yatex-mode . reftex-mode)
+  :bind (:map reftex-mode-map
+              ("C-c )" . nil)
+              ("C-c (" . reftex-reference)
+              ("C-c {" . reftex-cleveref-cref))
+  :custom
+  (reftex-ref-style-default-list '("Cleveref"))
+  (reftex-label-alist '((nil ?e nil "~\\ref{%s}" nil nil) ; omit parens surrounding eq-like reference
+                        ("definition"  ?d "def:"  "~\\ref{%s}" nil ("definiton")   nil)
+                        ("proposition" ?p "prop:" "~\\ref{%s}" nil ("proposition") nil)
+                        ("theorem"     ?p "thm:"  "~\\ref{%s}" nil ("theorem")     nil)
+                        ("lemma"       ?p "lem:"  "~\\ref{%s}" nil ("lemma")       nil)
+                        ("corollary"   ?p "cor:"  "~\\ref{%s}" nil ("corollary")   nil)
+                        ("remark"      ?r "rem:"  "~\\ref{%s}" nil ("remark")      nil)
+                        ("example"     ?x "ex:"   "~\\ref{%s}" nil ("example")     nil)
+                        ("conjecture"  ?c "conj:" "~\\ref{%s}" nil ("conjecture")  nil)))
+  (reftex-bibpath-environment-varibales '("!kpsewhich -show-path=.bib"))
+  (reftex-bibliography-commands '("bibliography"
+                                  "nobibliography"
+                                  "addbibresource")))
+
+(use-feature bibtex
+  :mode (("\\.bib\\'" . bibtex-mode))
+  :bind (:map bibtex-mode-map
+              ("C-j" . nil)
+              ("C-<return>" . bibtex-next-field))
+  :custom
+  (bibtex-user-optional-fields '(("yomi" "Yomigana")
+                                 ("MRNUMBER" "Math. Rev. Number")
+                                 ("archivePrefix" "name of preprint server" "arXiv")
+                                 ("eprint" "Electric Print")
+                                 ("primaryClass" "Primary class used by arXiv")
+                                 ("shortjournal" "Journal Abbreviation")))
+  (bibtex-autokey-name-case-convert 'capitalize)
+  (bibtex-autokey-titleword-case-convert 'capitalize)
+  (bibtex-autokey-titleword-separator "")
+  (bibtex-autokey-titleword-length nil)
+  (bibtex-autokey-titlewords 1)
+  (bibtex-autokey-year-length 4)
+  (bibtex-autokey-year-title-separator ":")
+  (bibtex-autokey-titleword-ignore '("A" "An" "On" "The" "a" "an" "on" "the"
+                                     "Le" "La" "Les" "le" "la" "les"
+                                     "Zur" "zur")))
+
+(use-package ebib
+  :functions (my-ebib-name-transform-function)
+  :preface
+  (defvar my-ebib-keywords-file (expand-file-name "~/texmf/emacs/ebib-keywords.txt")
+    "You put here `ebib-keywords.txt'.")
+  :commands (ebib)
+  :bind (:map ebib-multiline-mode-map
+              ("C-c C-c" . ebib-quit-multiline-buffer-and-save))
+  :custom
+  (ebib-bitex-dialect 'BibTeX)
+  ;; Preload database
+  (ebib-preload-bib-files '("~/texmf/bibtex/bib/articles.bib"
+                            "~/texmf/bibtex/bib/books.bib"
+                            "~/texmf/bibtex/bib/others.bib"))
+  ;; Extra fields
+  (ebib-extra-fields '((BibTeX "crossref"
+                               "annote"
+                               "keywords"
+                               "doi"
+                               "shortjournal"
+                               "archivePrefix" "eprint" "primaryClass"
+                               "MRCLASS" "MRNUMBER"
+                               "file")
+                       (biblatex "crossref"
+                                 "annotation"
+                                 "keywords"
+                                 "shortjournal"
+                                 "archivePrefix" "primaryClass"
+                                 "MRCLASS" "MRNUMBER"
+                                 "file")))
+  ;; Files
+  (ebib-file-search-dirs '("~/BibFile/Papers"
+                           "~/BibFile/Books"
+                           "~/BibFile/Proceedings"))
+  (ebib-name-transform-function #'my-ebib-name-transform-function)
+  (ebib-file-associations (cond ((eq system-type 'darwin) '(("pdf" . "open") ("ps" . "open")))
+                                (t '(("pdf" . "xpdf") ("ps" . "gv")))))
+  ;; Keywords
+  (ebib-keywords-use-only-file t)
+  (ebib-keywords-field-keep-sorted t)
+  (ebib-keywords-file-save-on-exit 'always)
+  (ebib-keywords-file my-ebib-keywords-file))
 
 (use-package ccls
   :hook ((c-mode c++-mode objc-mode) . (lambda ()

@@ -46,11 +46,11 @@
 (defun my-make-all ()
   "Make `my-init.el', `utility.el' and `index.html'."
   (interactive)
-  (my-make-init-elisp)
+  (my-make-init)
   (byte-compile-file my-locate-utility)
   (my-make-document))
 
-(defun my-make-init-elisp ()
+(defun my-make-init ()
   "Make `my-init.el' with `org-babel-tangle'."
   (interactive)
   (with-current-buffer (find-file-noselect my-locate-readme)
@@ -59,10 +59,7 @@
 (defun my-make-document ()
   "Make document html file."
   (interactive)
-  (straight-use-package 'org)
-  (straight-use-package 'htmlize)
   (with-current-buffer (find-file-noselect my-locate-readme)
-    (setq-local org-html-htmlize-output-type 'css)
     (org-html-export-to-html)))
 
 (defun my-load-config-files (re dir)
@@ -141,6 +138,54 @@
   (setq-local electric-pair-text-pairs (append electric-pair-text-pairs
                                                my-org-electric-pair-pairs))
   (setq-local electric-pair-inhibit-predicate #'my-org-electric-pair-inhibit))
+
+;;; For YaTeX: integrate with outline-minor-mode
+;; The following code is a modification a part of `tex-mode.el'
+;; which is bundled with GNU Emacs.
+;; Copyright (C) 1985-1986, 1989, 1992, 1994-1999, 2001-2019 Free
+;; Software Foundation, Inc.
+;; Released under the GPL v3.0 or any later version.
+
+(defvar my-YaTeX-section-alist
+  '(("part" . 0)
+    ("chapter" . 1)
+    ("section" . 2)
+    ("subsection" . 3)
+    ("subsubsection" . 4)
+    ("paragraph" . 5)))
+
+(defvar my-YaTeX-metasection-list
+  '("documentclass"
+    "begin{document}" "end{document}"
+    "frontmatter" "mainmatter" "appendix" "backmatter"))
+
+(defvar my-YaTeX-outline-regexp
+  (concat (regexp-quote "\\")
+          (regexp-opt (append my-YaTeX-metasection-list
+                              (mapcar #'car my-YaTeX-section-alist))
+                      t)))
+
+(defvar my-YaTeX-outline-promotion-headings
+  '("\\chapter" "\\section" "\\subsection" "\\subsubsection"))
+
+(defun my-YaTeX-outline-level ()
+  (if (looking-at my-YaTeX-outline-regexp)
+      (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
+    1000))
+
+(defun my-YaTeX-with-outline ()
+  (outline-minor-mode 1)
+  (setq-local outline-regexp my-YaTeX-outline-regexp)
+  (setq-local outline-level #'my-YaTeX-outline-level)
+  (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
+
+;;; For Ebib
+(defun my-ebib-name-transform-function (key)
+  "Serach file of the form
+       SEARCH-DIRS/FIRST-AUTHOR/ENTRY-KEY"
+  (format "%s/%s"
+          (substring key (string-match "[A-Za-z]+" key) (match-end 0))
+          (replace-regexp-in-string ":" "" key)))
 
 (provide 'utility)
 ;;; utility.el ends here

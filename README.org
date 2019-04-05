@@ -122,7 +122,7 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 ファイルを ~.emacs.d/backups~ 以下に自動保存します．
 
 #+begin_src emacs-lisp
-  (defvar my-backup-directory (expand-file-name "backups" user-emacs-directory)
+  (defvar my-backup-directory (expand-file-name "backups/" user-emacs-directory)
     "We save automatically files into the directory:
   We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-backup-directory'.")
 #+end_src
@@ -163,15 +163,15 @@ Emacs バージョン 25.4 以降での利用を想定しています．
   (defun my-make-all ()
     "Make `my-init.el', `utility.el' and `index.html'."
     (interactive)
-    (my-make-init-elisp)
+    (my-make-init)
     (byte-compile-file my-locate-utility)
     (my-make-document))
 #+end_src
 
-~my-init.el~ を生成するには関数 =my-make-init-elisp= を利用します．
+~my-init.el~ を生成するには関数 =my-make-init= を利用します．
 
 #+begin_src emacs-lisp :tangle ./elisp/utility.el
-  (defun my-make-init-elisp ()
+  (defun my-make-init ()
     "Make `my-init.el' with `org-babel-tangle'."
     (interactive)
     (with-current-buffer (find-file-noselect my-locate-readme)
@@ -183,10 +183,7 @@ Emacs バージョン 25.4 以降での利用を想定しています．
   (defun my-make-document ()
     "Make document html file."
     (interactive)
-    (straight-use-package 'org)
-    (straight-use-package 'htmlize)
     (with-current-buffer (find-file-noselect my-locate-readme)
-      (setq-local org-html-htmlize-output-type 'css)
       (org-html-export-to-html)))
 #+end_src
 
@@ -781,6 +778,7 @@ Org-mode でのマークアップのため，electric pair の設定を適当に
     (setq-local electric-pair-inhibit-predicate #'my-org-electric-pair-inhibit))
 #+end_src
 
+HTML へのエクスポート時に CSS を分離するように ~org-html-htmlize-output-type~ を変更します．
 Org-mode 9.2 より easy templete の代わりに =org-insert-structure-templete= (~C-c C-,~) を使うようになったようです．
 easy templete を利用するには =(require 'org-temp)= する必要があります．
 
@@ -791,6 +789,7 @@ easy templete を利用するには =(require 'org-temp)= する必要があり�
     :custom
     (org-startup-indented t)
     (org-fontify-natively t)
+    (org-html-htmlize-output-type 'css)
     :config
     (setq org-structure-template-alist (append '(("el" . "src emacs-lisp"))
                                                org-structure-template-alist)))
@@ -811,10 +810,301 @@ Github Flavored Markdown へのエクスポートのため [[https://github.com/
     :after (ox))
 #+end_src
 
+HTML へのエクスポートの際，コードハイライトに [[https://github.com/hniksic/emacs-htmlize][htmlize]] を利用します．
+
+#+begin_src emacs-lisp
+  (use-package htmlize
+    :demand t
+    :after (ox))
+#+end_src
+
 ** TeX/LaTeX
 *** YaTeX
+TeX/LaTeX 文書の編集には [[http://yatex.org/][YaTeX: Yet Another TeX mode for Emacs]] を利用します．
+基本的な使い方は[[https://www.yatex.org/yatexref.txt][クイックヘルプ]]を参照してください．
+よく使うものを抜き出すと
+
+|---------------+---------------------------------------|
+| Key           | Action                                |
+|---------------+---------------------------------------|
+| ~C-c C-b SPC~ | Insert \begin{%s} ... \end{%s}        |
+| ~C-c C-s~     | Insert \section{%s} ... etc.          |
+| ~C-c C-c~     | Change env. name (on \begin or \end)  |
+| ~C-c C-k~     | Kill LaTeX command (on LaTeX command) |
+| ~C-c )~       | Enclose region by ()                  |
+| ~C-c ]~       | Enclose region by []                  |
+| ~C-c }~       | Enclose region by {}                  |
+| ~C-c C-g~     | Cursor jump                           |
+|---------------+---------------------------------------|
+
+outline-minor-mode と併用するためにいくつかの変数や関数を定義します．
+これらの定義は GNU Emacs 同梱の tex-mode.el でのそれとほぼ同等です．
+変数 ~ouline-promotion-headings~ は outline-magic のためのものです．
+
+#+begin_src emacs-lisp :tangle ./elisp/utility.el
+  ;;; For YaTeX: integrate with outline-minor-mode
+  ;; The following code is a modification a part of `tex-mode.el'
+  ;; which is bundled with GNU Emacs.
+  ;; Copyright (C) 1985-1986, 1989, 1992, 1994-1999, 2001-2019 Free
+  ;; Software Foundation, Inc.
+  ;; Released under the GPL v3.0 or any later version.
+
+  (defvar my-YaTeX-section-alist
+    '(("part" . 0)
+      ("chapter" . 1)
+      ("section" . 2)
+      ("subsection" . 3)
+      ("subsubsection" . 4)
+      ("paragraph" . 5)))
+
+  (defvar my-YaTeX-metasection-list
+    '("documentclass"
+      "begin{document}" "end{document}"
+      "frontmatter" "mainmatter" "appendix" "backmatter"))
+
+  (defvar my-YaTeX-outline-regexp
+    (concat (regexp-quote "\\")
+            (regexp-opt (append my-YaTeX-metasection-list
+                                (mapcar #'car my-YaTeX-section-alist))
+                        t)))
+
+  (defvar my-YaTeX-outline-promotion-headings
+    '("\\chapter" "\\section" "\\subsection" "\\subsubsection"))
+
+  (defun my-YaTeX-outline-level ()
+    (if (looking-at my-YaTeX-outline-regexp)
+        (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
+      1000))
+
+  (defun my-YaTeX-with-outline ()
+    (outline-minor-mode 1)
+    (setq-local outline-regexp my-YaTeX-outline-regexp)
+    (setq-local outline-level #'my-YaTeX-outline-level)
+    (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
+#+end_src
+
+YaTeX の読み込み前に ~YaTeX-inhibit-prefix-letter~ を t に設定することで，
+YaTeX のプレフィックスキーを ~C-c C-英字~ に変更します．
+TeX 文書でのエンコーディングには UTF-8 を利用します．
+また，コンパイルには [[https://ctan.org/pkg/latexmk][Latexmk]] を使用します．
+ユーザ補完辞書は ~~/texmf/emacs/yatexrc~ に指定します．
+macOS では ~TEXMFHOME~ は ~~/Library/texmf~ のようなので適宜ホームディレクトリにシンボリックリンクを張ります．
+
+#+begin_src emacs-lisp
+  (use-package yatex
+    :functions (my-YaTeX-with-outline)
+    :preface
+    (defvar my-YaTeX-user-completion-table
+      (expand-file-name "~/texmf/emacs/yatexrc")
+      "You put here your own completion table.")
+    :commands (yatex-mode)
+    :init
+    (setq YaTeX-inhibit-prefix-letter t)
+    :mode (("\\.tex\\'" . yatex-mode)
+           ("\\.sty\\'" . yatex-mode)
+           ("\\.ltx\\'" . yatex-mode))
+    :hook (yatex-mode . my-YaTeX-with-outline)
+    :config
+    (setq YaTeX-kanji-code 4)		; use UTF-8
+    (setq YaTeX-use-AMS-LaTeX t)
+    (setq tex-command "latexmk")
+    (setq YaTeX-user-completion-table my-YaTeX-user-completion-table)
+    (add-hook 'align-load-hook
+              #'(lambda ()
+                  (add-to-list 'align-rules-list '(yatex-table
+                                                   (regexp . "\\(\\s-*\\)&")
+                                                   (repeat . t)
+                                                   (mode . '(yatex-mode))))))
+    )
+#+end_src
+
+イメージ数式補完の他に [[https://github.com/vspinu/company-math][company-math]] による補完を利用します．
+
+#+begin_src emacs-lisp
+  (use-package company-math
+    :demand t
+    :after (company yatex)
+    :config
+    (push 'company-math-symbols-latex company-backends)
+    (push 'company-latex-commands company-backends))
+#+end_src
+
+文法チェッカである chktex や lacheck を flycheck を通して利用できるようにします．
+
+#+begin_src emacs-lisp
+  (use-package flycheck-yatex
+    :straight (:host github :repo "mahito1594/flycheck-yatex")
+    :demand t
+    :after (flycheck yatex))
+#+end_src
+
+*** RefTeX
+参考文献や相互参照のために [[https://www.gnu.org/software/auctex/reftex.html][RefTeX]] を利用します．
+YaTeX の =YaTeX-insert-paren-region= と併用するために ~C-c )~ を nil にバインドします．
+
+|---------+------------------------|
+| Key     | Action                 |
+|---------+------------------------|
+| ~C-c =~ | Show table of contents |
+| ~C-c (~ | Insert \ref            |
+| ~C-c [~ | Insert \cite           |
+|---------+------------------------|
+
+相互参照に [[https://ctan.org/pkg/cleveref][cleveref]] を利用するには次の 2 通りの方法があります．
+
+1. 関数 =reftex-cleveref-cref= を利用する．
+2. カスタム変数 =reftex-ref-style-default-list= を =("Cleveref")= に変更する．
+
+#+begin_src emacs-lisp
+  (use-feature reftex
+    :hook (yatex-mode . reftex-mode)
+    :bind (:map reftex-mode-map
+                ("C-c )" . nil)
+                ("C-c (" . reftex-reference)
+                ("C-c {" . reftex-cleveref-cref))
+    :custom
+    (reftex-ref-style-default-list '("Cleveref"))
+    (reftex-label-alist '((nil ?e nil "~\\ref{%s}" nil nil) ; omit parens surrounding eq-like reference
+                          ("definition"  ?d "def:"  "~\\ref{%s}" nil ("definiton")   nil)
+                          ("proposition" ?p "prop:" "~\\ref{%s}" nil ("proposition") nil)
+                          ("theorem"     ?p "thm:"  "~\\ref{%s}" nil ("theorem")     nil)
+                          ("lemma"       ?p "lem:"  "~\\ref{%s}" nil ("lemma")       nil)
+                          ("corollary"   ?p "cor:"  "~\\ref{%s}" nil ("corollary")   nil)
+                          ("remark"      ?r "rem:"  "~\\ref{%s}" nil ("remark")      nil)
+                          ("example"     ?x "ex:"   "~\\ref{%s}" nil ("example")     nil)
+                          ("conjecture"  ?c "conj:" "~\\ref{%s}" nil ("conjecture")  nil)))
+    (reftex-bibpath-environment-varibales '("!kpsewhich -show-path=.bib"))
+    (reftex-bibliography-commands '("bibliography"
+                                    "nobibliography"
+                                    "addbibresource")))
+#+end_src
+
 *** BibTeX
+BibTeX データベースの簡単な編集，および後述の Ebib が利用する設定を記述します．
+
+特に citation key を ~<第一著者の姓><出版年>:<論文タイトルの最初の1語>~ の形に自動作成するため，
+=bibtex-autokey-*= を適当に設定します．
+
+#+begin_src emacs-lisp
+  (use-feature bibtex
+    :mode (("\\.bib\\'" . bibtex-mode))
+    :bind (:map bibtex-mode-map
+                ("C-j" . nil)
+                ("C-<return>" . bibtex-next-field))
+    :custom
+    (bibtex-user-optional-fields '(("yomi" "Yomigana")
+                                   ("MRNUMBER" "Math. Rev. Number")
+                                   ("archivePrefix" "name of preprint server" "arXiv")
+                                   ("eprint" "Electric Print")
+                                   ("primaryClass" "Primary class used by arXiv")
+                                   ("shortjournal" "Journal Abbreviation")))
+    (bibtex-autokey-name-case-convert 'capitalize)
+    (bibtex-autokey-titleword-case-convert 'capitalize)
+    (bibtex-autokey-titleword-separator "")
+    (bibtex-autokey-titleword-length nil)
+    (bibtex-autokey-titlewords 1)
+    (bibtex-autokey-year-length 4)
+    (bibtex-autokey-year-title-separator ":")
+    (bibtex-autokey-titleword-ignore '("A" "An" "On" "The" "a" "an" "on" "the"
+                                       "Le" "La" "Les" "le" "la" "les"
+                                       "Zur" "zur")))
+#+end_src
+
 *** Ebib
+文献管理には [[https://github.com/joostkremers/ebib][Ebib]] を利用します．
+基本的には ~~/texmf/bibtex/bib~ 以下の ~.bib~ ファイルに文献情報を記述していきます．
+論文の PDF は ~~/BibFile~ 以下に適切に配置し，Dropbox 等で同期します．
+
+Index buffer での基本操作は次の通りです．
+
+|-----+-------------------------|
+| Key | Action                  |
+|-----+-------------------------|
+| ~o~ | Open .bib file          |
+| ~f~ | Open file               |
+| ~u~ | Browse URL              |
+| ~a~ | Add entry               |
+| ~e~ | Edit entry              |
+| ~E~ | Edit entry-key          |
+| ~m~ | Mark current entry      |
+| ~M~ | Mark all entries        |
+| ~x~ | Export marked entries   |
+| ~!~ | Auto-generate entry-key |
+| ~s~ | Save                    |
+| ~z~ | Pause                   |
+| ~q~ | Quit                    |
+|-----+-------------------------|
+
+Entry buffer での基本操作は次のとおりです．
+
+|-----+-----------------------|
+| Key | Action                |
+|-----+-----------------------|
+| ~a~ | Add field             |
+| ~e~ | Edit field            |
+| ~m~ | Edit multiline buffer |
+| ~d~ | Delete field          |
+| ~q~ | Quit                  |
+|-----+-----------------------|
+
+PDF 閲覧のために次のような関数を定義しておきます．
+
+#+begin_src emacs-lisp :tangle ./elisp/utility.el
+  ;;; For Ebib
+  (defun my-ebib-name-transform-function (key)
+    "Serach file of the form
+         SEARCH-DIRS/FIRST-AUTHOR/ENTRY-KEY"
+    (format "%s/%s"
+            (substring key (string-match "[A-Za-z]+" key) (match-end 0))
+            (replace-regexp-in-string ":" "" key)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package ebib
+    :functions (my-ebib-name-transform-function)
+    :preface
+    (defvar my-ebib-keywords-file (expand-file-name "~/texmf/emacs/ebib-keywords.txt")
+      "You put here `ebib-keywords.txt'.")
+    :commands (ebib)
+    :bind (:map ebib-multiline-mode-map
+                ("C-c C-c" . ebib-quit-multiline-buffer-and-save))
+    :custom
+    (ebib-bitex-dialect 'BibTeX)
+    ;; Preload database
+    (ebib-preload-bib-files '("~/texmf/bibtex/bib/articles.bib"
+                              "~/texmf/bibtex/bib/books.bib"
+                              "~/texmf/bibtex/bib/others.bib"))
+    ;; Extra fields
+    (ebib-extra-fields '((BibTeX "crossref"
+                                 "annote"
+                                 "keywords"
+                                 "doi"
+                                 "shortjournal"
+                                 "archivePrefix" "eprint" "primaryClass"
+                                 "MRCLASS" "MRNUMBER"
+                                 "file")
+                         (biblatex "crossref"
+                                   "annotation"
+                                   "keywords"
+                                   "shortjournal"
+                                   "archivePrefix" "primaryClass"
+                                   "MRCLASS" "MRNUMBER"
+                                   "file")))
+    ;; Files
+    (ebib-file-search-dirs '("~/BibFile/Papers"
+                             "~/BibFile/Books"
+                             "~/BibFile/Proceedings"))
+    (ebib-name-transform-function #'my-ebib-name-transform-function)
+    (ebib-file-associations (cond ((eq system-type 'darwin) '(("pdf" . "open") ("ps" . "open")))
+                                  (t '(("pdf" . "xpdf") ("ps" . "gv")))))
+    ;; Keywords
+    (ebib-keywords-use-only-file t)
+    (ebib-keywords-field-keep-sorted t)
+    (ebib-keywords-file-save-on-exit 'always)
+    (ebib-keywords-file my-ebib-keywords-file))
+#+end_src
+
+** Markdown
 
 * Programming Languages
 ** C/C++

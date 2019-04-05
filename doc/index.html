@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-04 Thu 22:20 -->
+<!-- 2019-04-05 Fri 22:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>My configuration file for Emacs</title>
@@ -240,6 +240,28 @@ for the JavaScript code in this tag.
  }
 /*]]>*///-->
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
@@ -248,74 +270,75 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org54f9b8d">1. Introduction</a>
+<li><a href="#orge2d8ee7">1. Introduction</a>
 <ul>
-<li><a href="#org9b897fa">1.1. my-init.el</a></li>
-<li><a href="#org2245f3e">1.2. init.el</a></li>
-<li><a href="#org2d810c3">1.3. utility.el</a></li>
+<li><a href="#orgde7acfc">1.1. my-init.el</a></li>
+<li><a href="#org6d714e5">1.2. init.el</a></li>
+<li><a href="#orgabf69df">1.3. utility.el</a></li>
 </ul>
 </li>
-<li><a href="#org5a9b291">2. Fundamental</a>
+<li><a href="#org639f5e8">2. Fundamental</a>
 <ul>
-<li><a href="#org5c45e8a">2.1. Variables</a></li>
-<li><a href="#org1fa1052">2.2. Functions</a></li>
-<li><a href="#orgfec94b9">2.3. Package manager</a></li>
-<li><a href="#org54d79fe">2.4. Some package</a></li>
+<li><a href="#orga731395">2.1. Variables</a></li>
+<li><a href="#org49c5fee">2.2. Functions</a></li>
+<li><a href="#org376f1c4">2.3. Package manager</a></li>
+<li><a href="#org18e0bb2">2.4. Some package</a></li>
 </ul>
 </li>
-<li><a href="#org7dbe862">3. Utilities</a>
+<li><a href="#orga66594c">3. Utilities</a>
 <ul>
-<li><a href="#orga0a6da5">3.1. Language, Codings</a></li>
-<li><a href="#orgbf6e9a7">3.2. Exec path</a></li>
-<li><a href="#orgdfacd05">3.3. Server</a></li>
-<li><a href="#org5942f84">3.4. Backup files</a></li>
-<li><a href="#org82c1e42">3.5. Directories</a></li>
-<li><a href="#org5d7124c">3.6. Candidates</a></li>
-<li><a href="#orge130b72">3.7. Others</a></li>
+<li><a href="#org1ffe54f">3.1. Language, Codings</a></li>
+<li><a href="#org76339c1">3.2. Exec path</a></li>
+<li><a href="#org6ecb537">3.3. Server</a></li>
+<li><a href="#org539dcc4">3.4. Backup files</a></li>
+<li><a href="#org3936047">3.5. Directories</a></li>
+<li><a href="#orga13cd19">3.6. Candidates</a></li>
+<li><a href="#org8c8554b">3.7. Others</a></li>
 </ul>
 </li>
-<li><a href="#org76b3225">4. Completion and syntax checking</a>
+<li><a href="#orgde7dbf4">4. Completion and syntax checking</a>
 <ul>
-<li><a href="#org38b6a14">4.1. Yasnippet</a></li>
-<li><a href="#orgbded8a2">4.2. Company</a></li>
-<li><a href="#org61c5f98">4.3. Flycheck</a></li>
-<li><a href="#org8502b2e">4.4. LSP</a></li>
+<li><a href="#org23ae5de">4.1. Yasnippet</a></li>
+<li><a href="#org812e44e">4.2. Company</a></li>
+<li><a href="#org44c195e">4.3. Flycheck</a></li>
+<li><a href="#org6912d59">4.4. LSP</a></li>
 </ul>
 </li>
-<li><a href="#org39b64d7">5. Documents</a>
+<li><a href="#orgcfe9db1">5. Documents</a>
 <ul>
-<li><a href="#org8a25a53">5.1. Org-mode</a></li>
-<li><a href="#orgb151494">5.2. TeX/LaTeX</a></li>
+<li><a href="#orga4d7d90">5.1. Org-mode</a></li>
+<li><a href="#org6ffe2c0">5.2. TeX/LaTeX</a></li>
+<li><a href="#orge1de00f">5.3. Markdown</a></li>
 </ul>
 </li>
-<li><a href="#org4408f54">6. Programming Languages</a>
+<li><a href="#org0a4fec3">6. Programming Languages</a>
 <ul>
-<li><a href="#org56035b7">6.1. C/C++</a></li>
-<li><a href="#org35c5bd6">6.2. Emacs Lisp</a></li>
-<li><a href="#orge7aef38">6.3. Ocaml</a></li>
-<li><a href="#orgaa5fed1">6.4. Python</a></li>
+<li><a href="#org8ebf399">6.1. C/C++</a></li>
+<li><a href="#org0e90c0f">6.2. Emacs Lisp</a></li>
+<li><a href="#org7ed0dc2">6.3. Ocaml</a></li>
+<li><a href="#org6c25bcb">6.4. Python</a></li>
 </ul>
 </li>
-<li><a href="#org47ab12a">7. Appearance</a>
+<li><a href="#org8d9ca36">7. Appearance</a>
 <ul>
-<li><a href="#orgcbdd49e">7.1. Color theme</a></li>
-<li><a href="#org705f819">7.2. Frame</a></li>
-<li><a href="#orgdb34b22">7.3. Font</a></li>
+<li><a href="#org8490131">7.1. Color theme</a></li>
+<li><a href="#orgdbb2e9b">7.2. Frame</a></li>
+<li><a href="#org6495c3a">7.3. Font</a></li>
 </ul>
 </li>
-<li><a href="#org94a6566">8. Global keybindings</a></li>
-<li><a href="#orgebb8086">9. Local configuration</a></li>
-<li><a href="#org386b9aa">10. License</a></li>
+<li><a href="#orgda76967">8. Global keybindings</a></li>
+<li><a href="#org857d409">9. Local configuration</a></li>
+<li><a href="#org1f35b95">10. License</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org54f9b8d" class="outline-2">
-<h2 id="org54f9b8d"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orge2d8ee7" class="outline-2">
+<h2 id="orge2d8ee7"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org9b897fa" class="outline-3">
-<h3 id="org9b897fa"><span class="section-number-3">1.1</span> my-init.el</h3>
+<div id="outline-container-orgde7acfc" class="outline-3">
+<h3 id="orgde7acfc"><span class="section-number-3">1.1</span> my-init.el</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 <code>my-init.el</code> に個人的な Emacs の設定をまとめてあります．
@@ -356,8 +379,8 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 </div>
 
-<div id="outline-container-org2245f3e" class="outline-3">
-<h3 id="org2245f3e"><span class="section-number-3">1.2</span> init.el</h3>
+<div id="outline-container-org6d714e5" class="outline-3">
+<h3 id="org6d714e5"><span class="section-number-3">1.2</span> init.el</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 <code>init.el</code> は <code>elisp/</code> と， <code>site-lisp/</code> およびその以下のサブディレクトリを <code>load-path</code> に追加し， <code>my-init.el</code> を読み込みます．
@@ -371,8 +394,8 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 </div>
 
-<div id="outline-container-org2d810c3" class="outline-3">
-<h3 id="org2d810c3"><span class="section-number-3">1.3</span> utility.el</h3>
+<div id="outline-container-orgabf69df" class="outline-3">
+<h3 id="orgabf69df"><span class="section-number-3">1.3</span> utility.el</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 変数・定数・関数のうち，いくつかは <code>elisp/utility.el</code> に抜き出します．
@@ -387,16 +410,16 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 </div>
 
-<div id="outline-container-org5a9b291" class="outline-2">
-<h2 id="org5a9b291"><span class="section-number-2">2</span> Fundamental</h2>
+<div id="outline-container-org639f5e8" class="outline-2">
+<h2 id="org639f5e8"><span class="section-number-2">2</span> Fundamental</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org5c45e8a" class="outline-3">
-<h3 id="org5c45e8a"><span class="section-number-3">2.1</span> Variables</h3>
+<div id="outline-container-orga731395" class="outline-3">
+<h3 id="orga731395"><span class="section-number-3">2.1</span> Variables</h3>
 <div class="outline-text-3" id="text-2-1">
 </div>
 <ol class="org-ol">
-<li><a id="org62faffe"></a>Init file and its document<br />
+<li><a id="org4f5216b"></a>Init file and its document<br />
 <div class="outline-text-4" id="text-2-1-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-locate-readme</span> <span class="org-rainbow-delimiters-depth-2">(</span>expand-file-name <span class="org-string">"README.org"</span> user-emacs-directory<span class="org-rainbow-delimiters-depth-2">)</span>
@@ -415,14 +438,14 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 </li>
 
-<li><a id="orgb6fb107"></a>Backup file<br />
+<li><a id="org1e12ae9"></a>Backup file<br />
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 ファイルを <code>.emacs.d/backups</code> 以下に自動保存します．
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-backup-directory</span> <span class="org-rainbow-delimiters-depth-2">(</span>expand-file-name <span class="org-string">"backups"</span> user-emacs-directory<span class="org-rainbow-delimiters-depth-2">)</span>
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-backup-directory</span> <span class="org-rainbow-delimiters-depth-2">(</span>expand-file-name <span class="org-string">"backups/"</span> user-emacs-directory<span class="org-rainbow-delimiters-depth-2">)</span>
   <span class="org-doc">"We save automatically files into the directory:</span>
 <span class="org-doc">We set `</span><span class="org-doc"><span class="org-constant">backup-directory-alist</span></span><span class="org-doc">' and `</span><span class="org-doc"><span class="org-constant">auto-save-file-name-transforms</span></span><span class="org-doc">' to `</span><span class="org-doc"><span class="org-constant">my-backup-directory</span></span><span class="org-doc">'."</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
@@ -430,7 +453,7 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 </li>
 
-<li><a id="org7b8e01a"></a>Local configuration directory<br />
+<li><a id="org3dc96b7"></a>Local configuration directory<br />
 <div class="outline-text-4" id="text-2-1-3">
 <p>
 環境・マシンごとの設定を <code>.emacs.d/local</code> 以下に配置します．
@@ -447,12 +470,12 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </ol>
 </div>
 
-<div id="outline-container-org1fa1052" class="outline-3">
-<h3 id="org1fa1052"><span class="section-number-3">2.2</span> Functions</h3>
+<div id="outline-container-org49c5fee" class="outline-3">
+<h3 id="org49c5fee"><span class="section-number-3">2.2</span> Functions</h3>
 <div class="outline-text-3" id="text-2-2">
 </div>
 <ol class="org-ol">
-<li><a id="orgb570f9f"></a>Open document<br />
+<li><a id="orgb1dfa8f"></a>Open document<br />
 <div class="outline-text-4" id="text-2-2-1">
 <p>
 <code>M-x my-open-document</code> で本設定ファイルを HTML にエクスポートしたものをブラウザで開きます．
@@ -468,7 +491,7 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 </li>
 
-<li><a id="orgbb5cb1a"></a>Edit init file<br />
+<li><a id="org8c8d47a"></a>Edit init file<br />
 <div class="outline-text-4" id="text-2-2-2">
 <p>
 <code>README.org</code> を編集するには <code>C-x C-f</code> で開くか <code>M-x my-edit-init</code> とします．
@@ -490,18 +513,18 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 <pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">my-make-all</span> <span class="org-rainbow-delimiters-depth-2">()</span>
   <span class="org-doc">"Make `</span><span class="org-doc"><span class="org-constant">my-init.el</span></span><span class="org-doc">', `</span><span class="org-doc"><span class="org-constant">utility.el</span></span><span class="org-doc">' and `</span><span class="org-doc"><span class="org-constant">index.html</span></span><span class="org-doc">'."</span>
   <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">interactive</span><span class="org-rainbow-delimiters-depth-2">)</span>
-  <span class="org-rainbow-delimiters-depth-2">(</span>my-make-init-elisp<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>my-make-init<span class="org-rainbow-delimiters-depth-2">)</span>
   <span class="org-rainbow-delimiters-depth-2">(</span>byte-compile-file my-locate-utility<span class="org-rainbow-delimiters-depth-2">)</span>
   <span class="org-rainbow-delimiters-depth-2">(</span>my-make-document<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
 </div>
 
 <p>
-<code>my-init.el</code> を生成するには関数 <code>my-make-init-elisp</code> を利用します．
+<code>my-init.el</code> を生成するには関数 <code>my-make-init</code> を利用します．
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">my-make-init-elisp</span> <span class="org-rainbow-delimiters-depth-2">()</span>
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">my-make-init</span> <span class="org-rainbow-delimiters-depth-2">()</span>
   <span class="org-doc">"Make `</span><span class="org-doc"><span class="org-constant">my-init.el</span></span><span class="org-doc">' with `</span><span class="org-doc"><span class="org-constant">org-babel-tangle</span></span><span class="org-doc">'."</span>
   <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">interactive</span><span class="org-rainbow-delimiters-depth-2">)</span>
   <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">with-current-buffer</span> <span class="org-rainbow-delimiters-depth-3">(</span>find-file-noselect my-locate-readme<span class="org-rainbow-delimiters-depth-3">)</span>
@@ -514,21 +537,18 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 <pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">my-make-document</span> <span class="org-rainbow-delimiters-depth-2">()</span>
   <span class="org-doc">"Make document html file."</span>
   <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">interactive</span><span class="org-rainbow-delimiters-depth-2">)</span>
-  <span class="org-rainbow-delimiters-depth-2">(</span>straight-use-package 'org<span class="org-rainbow-delimiters-depth-2">)</span>
-  <span class="org-rainbow-delimiters-depth-2">(</span>straight-use-package 'htmlize<span class="org-rainbow-delimiters-depth-2">)</span>
   <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">with-current-buffer</span> <span class="org-rainbow-delimiters-depth-3">(</span>find-file-noselect my-locate-readme<span class="org-rainbow-delimiters-depth-3">)</span>
-    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">setq-local</span> org-html-htmlize-output-type 'css<span class="org-rainbow-delimiters-depth-3">)</span>
     <span class="org-rainbow-delimiters-depth-3">(</span>org-html-export-to-html<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
 </div>
 </div>
 </li>
 
-<li><a id="org5094aad"></a>Load local configuration<br />
+<li><a id="org549182a"></a>Load local configuration<br />
 <div class="outline-text-4" id="text-2-2-3">
 <p>
 <code>(my-load-config-files re dir)</code> は <code>dir</code> 内の，正規表現 <code>re</code> とマッチする <code>.el</code> ファイルを全てロードします．
-詳しくは <a href="#orgebb8086">9</a> を参照してください．
+詳しくは <a href="#org857d409">9</a> を参照してください．
 </p>
 
 <div class="org-src-container">
@@ -557,8 +577,8 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </ol>
 </div>
 
-<div id="outline-container-orgfec94b9" class="outline-3">
-<h3 id="orgfec94b9"><span class="section-number-3">2.3</span> Package manager</h3>
+<div id="outline-container-org376f1c4" class="outline-3">
+<h3 id="org376f1c4"><span class="section-number-3">2.3</span> Package manager</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 パッケージマネージャとして <code>straight.el</code> と <code>use-package.el</code> を利用します
@@ -566,7 +586,7 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 
 <ol class="org-ol">
-<li><a id="org883ca88"></a>straight.el<br />
+<li><a id="orgd9b1614"></a>straight.el<br />
 <div class="outline-text-4" id="text-2-3-1">
 <p>
 <a href="https://github.com/raxod502/straight.el">straight.el</a> は Emacs のパッケージマネージャの 1 つです．
@@ -607,7 +627,7 @@ next-generation, purely functional package manager for the Emacs hacker.
 </div>
 </li>
 
-<li><a id="orgdb23d44"></a>use-package.el<br />
+<li><a id="org90ffd68"></a>use-package.el<br />
 <div class="outline-text-4" id="text-2-3-2">
 <p>
 <a href="https://github.com/jwiegley/use-package">use-package</a> を用いてパッケージの設定を feature 単位で記述します．
@@ -677,8 +697,8 @@ build-in の機能を用いるため <code>use-feature</code> マクロを定め
 </ol>
 </div>
 
-<div id="outline-container-org54d79fe" class="outline-3">
-<h3 id="org54d79fe"><span class="section-number-3">2.4</span> Some package</h3>
+<div id="outline-container-org18e0bb2" class="outline-3">
+<h3 id="org18e0bb2"><span class="section-number-3">2.4</span> Some package</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 いくつかのパッケージを先にインストールします．
@@ -687,7 +707,7 @@ build-in の機能を用いるため <code>use-feature</code> マクロを定め
 </div>
 
 <ol class="org-ol">
-<li><a id="org3e2a583"></a>Org-mode<br />
+<li><a id="org35d3c11"></a>Org-mode<br />
 <div class="outline-text-4" id="text-2-4-1">
 <p>
 2019年3月現在の <code>straight.el</code> ではデフォルトで最新の Org-mode をインストールすることができます．
@@ -700,7 +720,7 @@ build-in の機能を用いるため <code>use-feature</code> マクロを定め
 </div>
 </li>
 
-<li><a id="org23e8a5b"></a>blackout<br />
+<li><a id="orged10035"></a>blackout<br />
 <div class="outline-text-4" id="text-2-4-2">
 <p>
 <a href="https://github.com/raxod502/blackout">blackout</a> は deminish や delight のように，メジャー・マイナーモードのモードラインの表示をカスタマイズできます．
@@ -715,7 +735,7 @@ build-in の機能を用いるため <code>use-feature</code> マクロを定め
 </div>
 </li>
 
-<li><a id="orgc4a05a4"></a>all-the-icons<br />
+<li><a id="org75c3175"></a>all-the-icons<br />
 <div class="outline-text-4" id="text-2-4-3">
 <p>
 いくつかのパッケージで <code>all-the-icons</code> のフォントを使用します．
@@ -736,12 +756,12 @@ build-in の機能を用いるため <code>use-feature</code> マクロを定め
 </div>
 </div>
 
-<div id="outline-container-org7dbe862" class="outline-2">
-<h2 id="org7dbe862"><span class="section-number-2">3</span> Utilities</h2>
+<div id="outline-container-orga66594c" class="outline-2">
+<h2 id="orga66594c"><span class="section-number-2">3</span> Utilities</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orga0a6da5" class="outline-3">
-<h3 id="orga0a6da5"><span class="section-number-3">3.1</span> Language, Codings</h3>
+<div id="outline-container-org1ffe54f" class="outline-3">
+<h3 id="org1ffe54f"><span class="section-number-3">3.1</span> Language, Codings</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 日本語かつ UTF8 を使用するようにします．
@@ -783,8 +803,8 @@ macOS 使用時はファイル名の文字コードの問題があります．
 </div>
 </div>
 
-<div id="outline-container-orgbf6e9a7" class="outline-3">
-<h3 id="orgbf6e9a7"><span class="section-number-3">3.2</span> Exec path</h3>
+<div id="outline-container-org76339c1" class="outline-3">
+<h3 id="org76339c1"><span class="section-number-3">3.2</span> Exec path</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 ログインシェルの環境変数を引き継ぎます．
@@ -801,8 +821,8 @@ macOS 使用時はファイル名の文字コードの問題があります．
 </div>
 </div>
 
-<div id="outline-container-orgdfacd05" class="outline-3">
-<h3 id="orgdfacd05"><span class="section-number-3">3.3</span> Server</h3>
+<div id="outline-container-org6ecb537" class="outline-3">
+<h3 id="org6ecb537"><span class="section-number-3">3.3</span> Server</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 Emacs 起動後に <code>server-start</code> します．
@@ -816,8 +836,8 @@ Emacs 起動後に <code>server-start</code> します．
 </div>
 </div>
 
-<div id="outline-container-org5942f84" class="outline-3">
-<h3 id="org5942f84"><span class="section-number-3">3.4</span> Backup files</h3>
+<div id="outline-container-org539dcc4" class="outline-3">
+<h3 id="org539dcc4"><span class="section-number-3">3.4</span> Backup files</h3>
 <div class="outline-text-3" id="text-3-4">
 <p>
 自動バックアップとオートセーブファイルを <code>.emacs.d/backups</code> に集めます．
@@ -837,12 +857,12 @@ Emacs 起動後に <code>server-start</code> します．
 </div>
 </div>
 
-<div id="outline-container-org82c1e42" class="outline-3">
-<h3 id="org82c1e42"><span class="section-number-3">3.5</span> Directories</h3>
+<div id="outline-container-org3936047" class="outline-3">
+<h3 id="org3936047"><span class="section-number-3">3.5</span> Directories</h3>
 <div class="outline-text-3" id="text-3-5">
 </div>
 <ol class="org-ol">
-<li><a id="orge499297"></a>dired<br />
+<li><a id="org510c6c6"></a>dired<br />
 <div class="outline-text-4" id="text-3-5-1">
 <p>
 <code>dired-mode</code> の際，ファイルのアイコンを表示するようにします．
@@ -857,7 +877,7 @@ Emacs 起動後に <code>server-start</code> します．
 </div>
 </li>
 
-<li><a id="org0243091"></a>neotree<br />
+<li><a id="org679704d"></a>neotree<br />
 <div class="outline-text-4" id="text-3-5-2">
 <p>
 ツリープラグインとして <a href="https://github.com/jaypei/emacs-neotree">neotree</a> を用います．
@@ -879,12 +899,12 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </ol>
 </div>
 
-<div id="outline-container-org5d7124c" class="outline-3">
-<h3 id="org5d7124c"><span class="section-number-3">3.6</span> Candidates</h3>
+<div id="outline-container-orga13cd19" class="outline-3">
+<h3 id="orga13cd19"><span class="section-number-3">3.6</span> Candidates</h3>
 <div class="outline-text-3" id="text-3-6">
 </div>
 <ol class="org-ol">
-<li><a id="org27dc78e"></a>Ivy, Counsel and swiper<br />
+<li><a id="org6597bf4"></a>Ivy, Counsel and swiper<br />
 <div class="outline-text-4" id="text-3-6-1">
 <p>
 補完インターフェイスとして <a href="https://github.com/abo-abo/swiper">Ivy/Counsel</a> を利用します．
@@ -1019,7 +1039,7 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </li>
 
-<li><a id="org18abd1a"></a>emacs-which-key<br />
+<li><a id="orgfacb3b9"></a>emacs-which-key<br />
 <div class="outline-text-4" id="text-3-6-2">
 <p>
 <a href="https://github.com/justbur/emacs-which-key">which-key</a> を用いてキーバインドを表示させます．
@@ -1042,12 +1062,12 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </ol>
 </div>
 
-<div id="outline-container-orge130b72" class="outline-3">
-<h3 id="orge130b72"><span class="section-number-3">3.7</span> Others</h3>
+<div id="outline-container-org8c8554b" class="outline-3">
+<h3 id="org8c8554b"><span class="section-number-3">3.7</span> Others</h3>
 <div class="outline-text-3" id="text-3-7">
 </div>
 <ol class="org-ol">
-<li><a id="org2890050"></a>Parenthesis<br />
+<li><a id="org7a5c729"></a>Parenthesis<br />
 <div class="outline-text-4" id="text-3-7-1">
 <p>
 対応する括弧類は自動的に挿入し，また強調するようにします．
@@ -1069,7 +1089,7 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </li>
 
-<li><a id="org07a4b56"></a>Whitespace<br />
+<li><a id="orgc7a24fd"></a>Whitespace<br />
 <div class="outline-text-4" id="text-3-7-2">
 <p>
 <code>C-c w</code> で空白文字を可視化します．
@@ -1095,7 +1115,7 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </li>
 
-<li><a id="orgede4688"></a>Cursor<br />
+<li><a id="org76f3d5c"></a>Cursor<br />
 <div class="outline-text-4" id="text-3-7-3">
 <p>
 <a href="https://github.com/Malabarba/beacon">beacon</a> を用いてカーソルを目立たせます．
@@ -1111,7 +1131,7 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </li>
 
-<li><a id="org8969d5a"></a>Region<br />
+<li><a id="org42aceb1"></a>Region<br />
 <div class="outline-text-4" id="text-3-7-4">
 <p>
 選択中のリージョンをハイライトします．
@@ -1124,7 +1144,7 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </li>
 
-<li><a id="org7c12954"></a>Ring bell<br />
+<li><a id="org6c77ca4"></a>Ring bell<br />
 <div class="outline-text-4" id="text-3-7-5">
 <p>
 エラー時のベル音を消します．
@@ -1140,12 +1160,12 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </div>
 
-<div id="outline-container-org76b3225" class="outline-2">
-<h2 id="org76b3225"><span class="section-number-2">4</span> Completion and syntax checking</h2>
+<div id="outline-container-orgde7dbf4" class="outline-2">
+<h2 id="orgde7dbf4"><span class="section-number-2">4</span> Completion and syntax checking</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org38b6a14" class="outline-3">
-<h3 id="org38b6a14"><span class="section-number-3">4.1</span> Yasnippet</h3>
+<div id="outline-container-org23ae5de" class="outline-3">
+<h3 id="org23ae5de"><span class="section-number-3">4.1</span> Yasnippet</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">yasnippet</span>
@@ -1155,8 +1175,8 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </div>
 
-<div id="outline-container-orgbded8a2" class="outline-3">
-<h3 id="orgbded8a2"><span class="section-number-3">4.2</span> Company</h3>
+<div id="outline-container-org812e44e" class="outline-3">
+<h3 id="org812e44e"><span class="section-number-3">4.2</span> Company</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 補完には <a href="https://github.com/company-mode/company-mode">company-mode</a> を用います．
@@ -1245,12 +1265,12 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </div>
 
-<div id="outline-container-org61c5f98" class="outline-3">
-<h3 id="org61c5f98"><span class="section-number-3">4.3</span> Flycheck</h3>
+<div id="outline-container-org44c195e" class="outline-3">
+<h3 id="org44c195e"><span class="section-number-3">4.3</span> Flycheck</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 文法チェックには <a href="https://www.flycheck.org/en/latest/">Flycheck</a> を利用します．
-後述の <a href="#org8502b2e">LSP</a> を用いる場合には暴走するという情報があるので要確認です．
+後述の <a href="#org6912d59">LSP</a> を用いる場合には暴走するという情報があるので要確認です．
 </p>
 
 <div class="org-src-container">
@@ -1271,8 +1291,8 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </div>
 </div>
 
-<div id="outline-container-org8502b2e" class="outline-3">
-<h3 id="org8502b2e"><span class="section-number-3">4.4</span> LSP</h3>
+<div id="outline-container-org6912d59" class="outline-3">
+<h3 id="org6912d59"><span class="section-number-3">4.4</span> LSP</h3>
 <div class="outline-text-3" id="text-4-4">
 <p>
 いくつかの言語では Language Server Protocol を用いて補完・文法チェックを行います．
@@ -1321,12 +1341,12 @@ lsp-mode と flycheck を併用するにはカスタム変数 <code>lsp-prefer-f
 </div>
 </div>
 
-<div id="outline-container-org39b64d7" class="outline-2">
-<h2 id="org39b64d7"><span class="section-number-2">5</span> Documents</h2>
+<div id="outline-container-orgcfe9db1" class="outline-2">
+<h2 id="orgcfe9db1"><span class="section-number-2">5</span> Documents</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org8a25a53" class="outline-3">
-<h3 id="org8a25a53"><span class="section-number-3">5.1</span> Org-mode</h3>
+<div id="outline-container-orga4d7d90" class="outline-3">
+<h3 id="orga4d7d90"><span class="section-number-3">5.1</span> Org-mode</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 <a href="https://orgmode.org/">Org-mode</a> の設定を行います．
@@ -1357,6 +1377,7 @@ Org-mode でのマークアップのため，electric pair の設定を適当に
 </div>
 
 <p>
+HTML へのエクスポート時に CSS を分離するように <code>org-html-htmlize-output-type</code> を変更します．
 Org-mode 9.2 より easy templete の代わりに <code>org-insert-structure-templete</code> (<code>C-c C-,</code>) を使うようになったようです．
 easy templete を利用するには <code>(require 'org-temp)</code> する必要があります．
 </p>
@@ -1368,6 +1389,7 @@ easy templete を利用するには <code>(require 'org-temp)</code> する必�
   <span class="org-builtin">:custom</span>
   <span class="org-rainbow-delimiters-depth-2">(</span>org-startup-indented t<span class="org-rainbow-delimiters-depth-2">)</span>
   <span class="org-rainbow-delimiters-depth-2">(</span>org-fontify-natively t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>org-html-htmlize-output-type 'css<span class="org-rainbow-delimiters-depth-2">)</span>
   <span class="org-builtin">:config</span>
   <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> org-structure-template-alist <span class="org-rainbow-delimiters-depth-3">(</span>append '<span class="org-rainbow-delimiters-depth-4">(</span><span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"el"</span> . <span class="org-string">"src emacs-lisp"</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
                                              org-structure-template-alist<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
@@ -1394,27 +1416,535 @@ Github Flavored Markdown へのエクスポートのため <a href="https://gith
   <span class="org-builtin">:after</span> <span class="org-rainbow-delimiters-depth-2">(</span>ox<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
 </div>
+
+<p>
+HTML へのエクスポートの際，コードハイライトに <a href="https://github.com/hniksic/emacs-htmlize">htmlize</a> を利用します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">htmlize</span>
+  <span class="org-builtin">:demand</span> t
+  <span class="org-builtin">:after</span> <span class="org-rainbow-delimiters-depth-2">(</span>ox<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
 </div>
 </div>
 
-<div id="outline-container-orgb151494" class="outline-3">
-<h3 id="orgb151494"><span class="section-number-3">5.2</span> TeX/LaTeX</h3>
+<div id="outline-container-org6ffe2c0" class="outline-3">
+<h3 id="org6ffe2c0"><span class="section-number-3">5.2</span> TeX/LaTeX</h3>
 <div class="outline-text-3" id="text-5-2">
 </div>
 <ol class="org-ol">
-<li><a id="org34d96ef"></a>YaTeX<br /></li>
-<li><a id="orgb8e3625"></a>BibTeX<br /></li>
-<li><a id="org335a19d"></a>Ebib<br /></li>
+<li><a id="org21437f8"></a>YaTeX<br />
+<div class="outline-text-4" id="text-5-2-1">
+<p>
+TeX/LaTeX 文書の編集には <a href="http://yatex.org/">YaTeX: Yet Another TeX mode for Emacs</a> を利用します．
+基本的な使い方は<a href="https://www.yatex.org/yatexref.txt">クイックヘルプ</a>を参照してください．
+よく使うものを抜き出すと
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Key</th>
+<th scope="col" class="org-left">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>C-c C-b SPC</code></td>
+<td class="org-left">Insert \begin{%s} &#x2026; \end{%s}</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c C-s</code></td>
+<td class="org-left">Insert \section{%s} &#x2026; etc.</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c C-c</code></td>
+<td class="org-left">Change env. name (on \begin or \end)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c C-k</code></td>
+<td class="org-left">Kill LaTeX command (on LaTeX command)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c )</code></td>
+<td class="org-left">Enclose region by ()</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c ]</code></td>
+<td class="org-left">Enclose region by []</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c }</code></td>
+<td class="org-left">Enclose region by {}</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c C-g</code></td>
+<td class="org-left">Cursor jump</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+outline-minor-mode と併用するためにいくつかの変数や関数を定義します．
+これらの定義は GNU Emacs 同梱の tex-mode.el でのそれとほぼ同等です．
+変数 <code>ouline-promotion-headings</code> は outline-magic のためのものです．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;;; </span><span class="org-comment">For YaTeX: integrate with outline-minor-mode</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">The following code is a modification a part of `</span><span class="org-comment"><span class="org-constant">tex-mode.el</span></span><span class="org-comment">'</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">which is bundled with GNU Emacs.</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Copyright (C) 1985-1986, 1989, 1992, 1994-1999, 2001-2019 Free</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Software Foundation, Inc.</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Released under the GPL v3.0 or any later version.</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-YaTeX-section-alist</span>
+  '<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"part"</span> . 0<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"chapter"</span> . 1<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"section"</span> . 2<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"subsection"</span> . 3<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"subsubsection"</span> . 4<span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"paragraph"</span> . 5<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-YaTeX-metasection-list</span>
+  '<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"documentclass"</span>
+    <span class="org-string">"begin{document}"</span> <span class="org-string">"end{document}"</span>
+    <span class="org-string">"frontmatter"</span> <span class="org-string">"mainmatter"</span> <span class="org-string">"appendix"</span> <span class="org-string">"backmatter"</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-YaTeX-outline-regexp</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>concat <span class="org-rainbow-delimiters-depth-3">(</span>regexp-quote <span class="org-string">"\\"</span><span class="org-rainbow-delimiters-depth-3">)</span>
+          <span class="org-rainbow-delimiters-depth-3">(</span>regexp-opt <span class="org-rainbow-delimiters-depth-4">(</span>append my-YaTeX-metasection-list
+                              <span class="org-rainbow-delimiters-depth-5">(</span>mapcar #'car my-YaTeX-section-alist<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+                      t<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-YaTeX-outline-promotion-headings</span>
+  '<span class="org-rainbow-delimiters-depth-2">(</span><span class="org-string">"\\chapter"</span> <span class="org-string">"\\section"</span> <span class="org-string">"\\subsection"</span> <span class="org-string">"\\subsubsection"</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">my-YaTeX-outline-level</span> <span class="org-rainbow-delimiters-depth-2">()</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">if</span> <span class="org-rainbow-delimiters-depth-3">(</span>looking-at my-YaTeX-outline-regexp<span class="org-rainbow-delimiters-depth-3">)</span>
+      <span class="org-rainbow-delimiters-depth-3">(</span>1+ <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-keyword">or</span> <span class="org-rainbow-delimiters-depth-5">(</span>cdr <span class="org-rainbow-delimiters-depth-6">(</span>assoc <span class="org-rainbow-delimiters-depth-7">(</span>match-string 1<span class="org-rainbow-delimiters-depth-7">)</span> my-YaTeX-section-alist<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span> -1<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>
+    1000<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">my-YaTeX-with-outline</span> <span class="org-rainbow-delimiters-depth-2">()</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>outline-minor-mode 1<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq-local</span> outline-regexp my-YaTeX-outline-regexp<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq-local</span> outline-level #'my-YaTeX-outline-level<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq-local</span> outline-promotion-headings my-YaTeX-outline-promotion-headings<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+YaTeX の読み込み前に <code>YaTeX-inhibit-prefix-letter</code> を t に設定することで，
+YaTeX のプレフィックスキーを <code>C-c C-英字</code> に変更します．
+TeX 文書でのエンコーディングには UTF-8 を利用します．
+また，コンパイルには <a href="https://ctan.org/pkg/latexmk">Latexmk</a> を使用します．
+ユーザ補完辞書は <code>~/texmf/emacs/yatexrc</code> に指定します．
+macOS では <code>TEXMFHOME</code> は <code>~/Library/texmf</code> のようなので適宜ホームディレクトリにシンボリックリンクを張ります．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">yatex</span>
+  <span class="org-builtin">:functions</span> <span class="org-rainbow-delimiters-depth-2">(</span>my-YaTeX-with-outline<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:preface</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-YaTeX-user-completion-table</span>
+    <span class="org-rainbow-delimiters-depth-3">(</span>expand-file-name <span class="org-string">"~/texmf/emacs/yatexrc"</span><span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-doc">"You put here your own completion table."</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:commands</span> <span class="org-rainbow-delimiters-depth-2">(</span>yatex-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:init</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> YaTeX-inhibit-prefix-letter t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:mode</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"\\.tex\\'"</span> . yatex-mode<span class="org-rainbow-delimiters-depth-3">)</span>
+         <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"\\.sty\\'"</span> . yatex-mode<span class="org-rainbow-delimiters-depth-3">)</span>
+         <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"\\.ltx\\'"</span> . yatex-mode<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>yatex-mode . my-YaTeX-with-outline<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> YaTeX-kanji-code 4<span class="org-rainbow-delimiters-depth-2">)</span>             <span class="org-comment-delimiter">; </span><span class="org-comment">use UTF-8</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> YaTeX-use-AMS-LaTeX t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> tex-command <span class="org-string">"latexmk"</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">setq</span> YaTeX-user-completion-table my-YaTeX-user-completion-table<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>add-hook 'align-load-hook
+            #'<span class="org-rainbow-delimiters-depth-3">(</span>lambda <span class="org-rainbow-delimiters-depth-4">()</span>
+                <span class="org-rainbow-delimiters-depth-4">(</span>add-to-list 'align-rules-list '<span class="org-rainbow-delimiters-depth-5">(</span>yatex-table
+                                                 <span class="org-rainbow-delimiters-depth-6">(</span>regexp . <span class="org-string">"</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">(</span></span><span class="org-string">\\s-*</span><span class="org-string"><span class="org-regexp-grouping-backslash">\\</span></span><span class="org-string"><span class="org-regexp-grouping-construct">)</span></span><span class="org-string">&amp;"</span><span class="org-rainbow-delimiters-depth-6">)</span>
+                                                 <span class="org-rainbow-delimiters-depth-6">(</span>repeat . t<span class="org-rainbow-delimiters-depth-6">)</span>
+                                                 <span class="org-rainbow-delimiters-depth-6">(</span>mode . '<span class="org-rainbow-delimiters-depth-7">(</span>yatex-mode<span class="org-rainbow-delimiters-depth-7">)</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+イメージ数式補完の他に <a href="https://github.com/vspinu/company-math">company-math</a> による補完を利用します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">company-math</span>
+  <span class="org-builtin">:demand</span> t
+  <span class="org-builtin">:after</span> <span class="org-rainbow-delimiters-depth-2">(</span>company yatex<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:config</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">push</span> 'company-math-symbols-latex company-backends<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">push</span> 'company-latex-commands company-backends<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+文法チェッカである chktex や lacheck を flycheck を通して利用できるようにします．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">flycheck-yatex</span>
+  <span class="org-builtin">:straight</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-builtin">:host</span> github <span class="org-builtin">:repo</span> <span class="org-string">"mahito1594/flycheck-yatex"</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:demand</span> t
+  <span class="org-builtin">:after</span> <span class="org-rainbow-delimiters-depth-2">(</span>flycheck yatex<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org8702965"></a>RefTeX<br />
+<div class="outline-text-4" id="text-5-2-2">
+<p>
+参考文献や相互参照のために <a href="https://www.gnu.org/software/auctex/reftex.html">RefTeX</a> を利用します．
+YaTeX の <code>YaTeX-insert-paren-region</code> と併用するために <code>C-c )</code> を nil にバインドします．
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Key</th>
+<th scope="col" class="org-left">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>C-c =</code></td>
+<td class="org-left">Show table of contents</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c (</code></td>
+<td class="org-left">Insert \ref</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>C-c [</code></td>
+<td class="org-left">Insert \cite</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+相互参照に <a href="https://ctan.org/pkg/cleveref">cleveref</a> を利用するには次の 2 通りの方法があります．
+</p>
+
+<ol class="org-ol">
+<li>関数 <code>reftex-cleveref-cref</code> を利用する．</li>
+<li>カスタム変数 <code>reftex-ref-style-default-list</code> を <code>("Cleveref")</code> に変更する．</li>
 </ol>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-feature</span> reftex
+  <span class="org-builtin">:hook</span> <span class="org-rainbow-delimiters-depth-2">(</span>yatex-mode . reftex-mode<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:bind</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-builtin">:map</span> reftex-mode-map
+              <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-c )"</span> . nil<span class="org-rainbow-delimiters-depth-3">)</span>
+              <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-c ("</span> . reftex-reference<span class="org-rainbow-delimiters-depth-3">)</span>
+              <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-c {"</span> . reftex-cleveref-cref<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>reftex-ref-style-default-list '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"Cleveref"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>reftex-label-alist '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-rainbow-delimiters-depth-4">(</span>nil ?e nil <span class="org-string">"~\\ref{%s}"</span> nil nil<span class="org-rainbow-delimiters-depth-4">)</span> <span class="org-comment-delimiter">; </span><span class="org-comment">omit parens surrounding eq-like reference</span>
+                        <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"definition"</span>  ?d <span class="org-string">"def:"</span>  <span class="org-string">"~\\ref{%s}"</span> nil <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"definiton"</span><span class="org-rainbow-delimiters-depth-5">)</span>   nil<span class="org-rainbow-delimiters-depth-4">)</span>
+                        <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"proposition"</span> ?p <span class="org-string">"prop:"</span> <span class="org-string">"~\\ref{%s}"</span> nil <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"proposition"</span><span class="org-rainbow-delimiters-depth-5">)</span> nil<span class="org-rainbow-delimiters-depth-4">)</span>
+                        <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"theorem"</span>     ?p <span class="org-string">"thm:"</span>  <span class="org-string">"~\\ref{%s}"</span> nil <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"theorem"</span><span class="org-rainbow-delimiters-depth-5">)</span>     nil<span class="org-rainbow-delimiters-depth-4">)</span>
+                        <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"lemma"</span>       ?p <span class="org-string">"lem:"</span>  <span class="org-string">"~\\ref{%s}"</span> nil <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"lemma"</span><span class="org-rainbow-delimiters-depth-5">)</span>       nil<span class="org-rainbow-delimiters-depth-4">)</span>
+                        <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"corollary"</span>   ?p <span class="org-string">"cor:"</span>  <span class="org-string">"~\\ref{%s}"</span> nil <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"corollary"</span><span class="org-rainbow-delimiters-depth-5">)</span>   nil<span class="org-rainbow-delimiters-depth-4">)</span>
+                        <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"remark"</span>      ?r <span class="org-string">"rem:"</span>  <span class="org-string">"~\\ref{%s}"</span> nil <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"remark"</span><span class="org-rainbow-delimiters-depth-5">)</span>      nil<span class="org-rainbow-delimiters-depth-4">)</span>
+                        <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"example"</span>     ?x <span class="org-string">"ex:"</span>   <span class="org-string">"~\\ref{%s}"</span> nil <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"example"</span><span class="org-rainbow-delimiters-depth-5">)</span>     nil<span class="org-rainbow-delimiters-depth-4">)</span>
+                        <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"conjecture"</span>  ?c <span class="org-string">"conj:"</span> <span class="org-string">"~\\ref{%s}"</span> nil <span class="org-rainbow-delimiters-depth-5">(</span><span class="org-string">"conjecture"</span><span class="org-rainbow-delimiters-depth-5">)</span>  nil<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>reftex-bibpath-environment-varibales '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"!kpsewhich -show-path=.bib"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>reftex-bibliography-commands '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"bibliography"</span>
+                                  <span class="org-string">"nobibliography"</span>
+                                  <span class="org-string">"addbibresource"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org1b5f841"></a>BibTeX<br />
+<div class="outline-text-4" id="text-5-2-3">
+<p>
+BibTeX データベースの簡単な編集，および後述の Ebib が利用する設定を記述します．
+</p>
+
+<p>
+特に citation key を <code>&lt;第一著者の姓&gt;&lt;出版年&gt;:&lt;論文タイトルの最初の1語&gt;</code> の形に自動作成するため，
+<code>bibtex-autokey-*</code> を適当に設定します．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-feature</span> bibtex
+  <span class="org-builtin">:mode</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"\\.bib\\'"</span> . bibtex-mode<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:bind</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-builtin">:map</span> bibtex-mode-map
+              <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-j"</span> . nil<span class="org-rainbow-delimiters-depth-3">)</span>
+              <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-&lt;return&gt;"</span> . bibtex-next-field<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-user-optional-fields '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"yomi"</span> <span class="org-string">"Yomigana"</span><span class="org-rainbow-delimiters-depth-4">)</span>
+                                 <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"MRNUMBER"</span> <span class="org-string">"Math. Rev. Number"</span><span class="org-rainbow-delimiters-depth-4">)</span>
+                                 <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"archivePrefix"</span> <span class="org-string">"name of preprint server"</span> <span class="org-string">"arXiv"</span><span class="org-rainbow-delimiters-depth-4">)</span>
+                                 <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"eprint"</span> <span class="org-string">"Electric Print"</span><span class="org-rainbow-delimiters-depth-4">)</span>
+                                 <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"primaryClass"</span> <span class="org-string">"Primary class used by arXiv"</span><span class="org-rainbow-delimiters-depth-4">)</span>
+                                 <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-string">"shortjournal"</span> <span class="org-string">"Journal Abbreviation"</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-autokey-name-case-convert 'capitalize<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-autokey-titleword-case-convert 'capitalize<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-autokey-titleword-separator <span class="org-string">""</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-autokey-titleword-length nil<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-autokey-titlewords 1<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-autokey-year-length 4<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-autokey-year-title-separator <span class="org-string">":"</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>bibtex-autokey-titleword-ignore '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"A"</span> <span class="org-string">"An"</span> <span class="org-string">"On"</span> <span class="org-string">"The"</span> <span class="org-string">"a"</span> <span class="org-string">"an"</span> <span class="org-string">"on"</span> <span class="org-string">"the"</span>
+                                     <span class="org-string">"Le"</span> <span class="org-string">"La"</span> <span class="org-string">"Les"</span> <span class="org-string">"le"</span> <span class="org-string">"la"</span> <span class="org-string">"les"</span>
+                                     <span class="org-string">"Zur"</span> <span class="org-string">"zur"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org3ae9b48"></a>Ebib<br />
+<div class="outline-text-4" id="text-5-2-4">
+<p>
+文献管理には <a href="https://github.com/joostkremers/ebib">Ebib</a> を利用します．
+基本的には <code>~/texmf/bibtex/bib</code> 以下の <code>.bib</code> ファイルに文献情報を記述していきます．
+論文の PDF は <code>~/BibFile</code> 以下に適切に配置し，Dropbox 等で同期します．
+</p>
+
+<p>
+Index buffer での基本操作は次の通りです．
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Key</th>
+<th scope="col" class="org-left">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>o</code></td>
+<td class="org-left">Open .bib file</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>f</code></td>
+<td class="org-left">Open file</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>u</code></td>
+<td class="org-left">Browse URL</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>a</code></td>
+<td class="org-left">Add entry</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>e</code></td>
+<td class="org-left">Edit entry</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>E</code></td>
+<td class="org-left">Edit entry-key</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>m</code></td>
+<td class="org-left">Mark current entry</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>M</code></td>
+<td class="org-left">Mark all entries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>x</code></td>
+<td class="org-left">Export marked entries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>!</code></td>
+<td class="org-left">Auto-generate entry-key</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>s</code></td>
+<td class="org-left">Save</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>z</code></td>
+<td class="org-left">Pause</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>q</code></td>
+<td class="org-left">Quit</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Entry buffer での基本操作は次のとおりです．
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Key</th>
+<th scope="col" class="org-left">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>a</code></td>
+<td class="org-left">Add field</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>e</code></td>
+<td class="org-left">Edit field</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>m</code></td>
+<td class="org-left">Edit multiline buffer</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>d</code></td>
+<td class="org-left">Delete field</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>q</code></td>
+<td class="org-left">Quit</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+PDF 閲覧のために次のような関数を定義しておきます．
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;;; </span><span class="org-comment">For Ebib</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defun</span> <span class="org-function-name">my-ebib-name-transform-function</span> <span class="org-rainbow-delimiters-depth-2">(</span>key<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-doc">"Serach file of the form</span>
+<span class="org-doc">       SEARCH-DIRS/FIRST-AUTHOR/ENTRY-KEY"</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>format <span class="org-string">"%s/%s"</span>
+          <span class="org-rainbow-delimiters-depth-3">(</span>substring key <span class="org-rainbow-delimiters-depth-4">(</span>string-match <span class="org-string">"[A-Za-z]+"</span> key<span class="org-rainbow-delimiters-depth-4">)</span> <span class="org-rainbow-delimiters-depth-4">(</span>match-end 0<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>
+          <span class="org-rainbow-delimiters-depth-3">(</span>replace-regexp-in-string <span class="org-string">":"</span> <span class="org-string">""</span> key<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">ebib</span>
+  <span class="org-builtin">:functions</span> <span class="org-rainbow-delimiters-depth-2">(</span>my-ebib-name-transform-function<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:preface</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-ebib-keywords-file</span> <span class="org-rainbow-delimiters-depth-3">(</span>expand-file-name <span class="org-string">"~/texmf/emacs/ebib-keywords.txt"</span><span class="org-rainbow-delimiters-depth-3">)</span>
+    <span class="org-doc">"You put here `</span><span class="org-doc"><span class="org-constant">ebib-keywords.txt</span></span><span class="org-doc">'."</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:commands</span> <span class="org-rainbow-delimiters-depth-2">(</span>ebib<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:bind</span> <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-builtin">:map</span> ebib-multiline-mode-map
+              <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"C-c C-c"</span> . ebib-quit-multiline-buffer-and-save<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-builtin">:custom</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-bitex-dialect 'BibTeX<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Preload database</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-preload-bib-files '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"~/texmf/bibtex/bib/articles.bib"</span>
+                            <span class="org-string">"~/texmf/bibtex/bib/books.bib"</span>
+                            <span class="org-string">"~/texmf/bibtex/bib/others.bib"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>  
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Extra fields</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-extra-fields '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-rainbow-delimiters-depth-4">(</span>BibTeX <span class="org-string">"crossref"</span>
+                               <span class="org-string">"annote"</span>
+                               <span class="org-string">"keywords"</span>
+                               <span class="org-string">"doi"</span>
+                               <span class="org-string">"shortjournal"</span>
+                               <span class="org-string">"archivePrefix"</span> <span class="org-string">"eprint"</span> <span class="org-string">"primaryClass"</span>
+                               <span class="org-string">"MRCLASS"</span> <span class="org-string">"MRNUMBER"</span>
+                               <span class="org-string">"file"</span><span class="org-rainbow-delimiters-depth-4">)</span>
+                       <span class="org-rainbow-delimiters-depth-4">(</span>biblatex <span class="org-string">"crossref"</span>
+                                 <span class="org-string">"annotation"</span>
+                                 <span class="org-string">"keywords"</span>
+                                 <span class="org-string">"shortjournal"</span>
+                                 <span class="org-string">"archivePrefix"</span> <span class="org-string">"primaryClass"</span>
+                                 <span class="org-string">"MRCLASS"</span> <span class="org-string">"MRNUMBER"</span>
+                                 <span class="org-string">"file"</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Files</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-file-search-dirs '<span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">"~/BibFile/Papers"</span>
+                           <span class="org-string">"~/BibFile/Books"</span>
+                           <span class="org-string">"~/BibFile/Proceedings"</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-name-transform-function #'my-ebib-name-transform-function<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-file-associations <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-keyword">cond</span> <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-rainbow-delimiters-depth-5">(</span>eq system-type 'darwin<span class="org-rainbow-delimiters-depth-5">)</span> '<span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span><span class="org-string">"pdf"</span> . <span class="org-string">"open"</span><span class="org-rainbow-delimiters-depth-6">)</span> <span class="org-rainbow-delimiters-depth-6">(</span><span class="org-string">"ps"</span> . <span class="org-string">"open"</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span>
+                                <span class="org-rainbow-delimiters-depth-4">(</span>t '<span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">(</span><span class="org-string">"pdf"</span> . <span class="org-string">"xpdf"</span><span class="org-rainbow-delimiters-depth-6">)</span> <span class="org-rainbow-delimiters-depth-6">(</span><span class="org-string">"ps"</span> . <span class="org-string">"gv"</span><span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">Keywords</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-keywords-use-only-file t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-keywords-field-keep-sorted t<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-keywords-file-save-on-exit 'always<span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>ebib-keywords-file my-ebib-keywords-file<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-orge1de00f" class="outline-3">
+<h3 id="orge1de00f"><span class="section-number-3">5.3</span> Markdown</h3>
 </div>
 </div>
 
-<div id="outline-container-org4408f54" class="outline-2">
-<h2 id="org4408f54"><span class="section-number-2">6</span> Programming Languages</h2>
+<div id="outline-container-org0a4fec3" class="outline-2">
+<h2 id="org0a4fec3"><span class="section-number-2">6</span> Programming Languages</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org56035b7" class="outline-3">
-<h3 id="org56035b7"><span class="section-number-3">6.1</span> C/C++</h3>
+<div id="outline-container-org8ebf399" class="outline-3">
+<h3 id="org8ebf399"><span class="section-number-3">6.1</span> C/C++</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Language Server として <a href="https://github.com/MaskRay/ccls">ccls</a> を利用します．
@@ -1449,16 +1979,16 @@ brew install ccls
 </div>
 </div>
 
-<div id="outline-container-org35c5bd6" class="outline-3">
-<h3 id="org35c5bd6"><span class="section-number-3">6.2</span> Emacs Lisp</h3>
+<div id="outline-container-org0e90c0f" class="outline-3">
+<h3 id="org0e90c0f"><span class="section-number-3">6.2</span> Emacs Lisp</h3>
 </div>
 
-<div id="outline-container-orge7aef38" class="outline-3">
-<h3 id="orge7aef38"><span class="section-number-3">6.3</span> Ocaml</h3>
+<div id="outline-container-org7ed0dc2" class="outline-3">
+<h3 id="org7ed0dc2"><span class="section-number-3">6.3</span> Ocaml</h3>
 </div>
 
-<div id="outline-container-orgaa5fed1" class="outline-3">
-<h3 id="orgaa5fed1"><span class="section-number-3">6.4</span> Python</h3>
+<div id="outline-container-org6c25bcb" class="outline-3">
+<h3 id="org6c25bcb"><span class="section-number-3">6.4</span> Python</h3>
 <div class="outline-text-3" id="text-6-4">
 <p>
 Emacs 同梱の <code>python.el</code> を利用します．
@@ -1502,12 +2032,12 @@ LSP (<a href="https://github.com/palantir/python-language-server">pyls</a>) を�
 </div>
 </div>
 
-<div id="outline-container-org47ab12a" class="outline-2">
-<h2 id="org47ab12a"><span class="section-number-2">7</span> Appearance</h2>
+<div id="outline-container-org8d9ca36" class="outline-2">
+<h2 id="org8d9ca36"><span class="section-number-2">7</span> Appearance</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-orgcbdd49e" class="outline-3">
-<h3 id="orgcbdd49e"><span class="section-number-3">7.1</span> Color theme</h3>
+<div id="outline-container-org8490131" class="outline-3">
+<h3 id="org8490131"><span class="section-number-3">7.1</span> Color theme</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 <a href="https://github.com/hlissner/emacs-doom-themes">doom-themes</a> の <code>doom-dracula</code> テーマを利用します．
@@ -1548,8 +2078,8 @@ LSP (<a href="https://github.com/palantir/python-language-server">pyls</a>) を�
 </div>
 </div>
 
-<div id="outline-container-org705f819" class="outline-3">
-<h3 id="org705f819"><span class="section-number-3">7.2</span> Frame</h3>
+<div id="outline-container-orgdbb2e9b" class="outline-3">
+<h3 id="orgdbb2e9b"><span class="section-number-3">7.2</span> Frame</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 ツールバー等，特に必要のないものは表示しないようにします．
@@ -1585,8 +2115,8 @@ Emacs 起動時にフレームを最大化します．
 </div>
 </div>
 
-<div id="outline-container-orgdb34b22" class="outline-3">
-<h3 id="orgdb34b22"><span class="section-number-3">7.3</span> Font</h3>
+<div id="outline-container-org6495c3a" class="outline-3">
+<h3 id="org6495c3a"><span class="section-number-3">7.3</span> Font</h3>
 <div class="outline-text-3" id="text-7-3">
 <p>
 フォントに関しては，次のように記述した <code>.el</code> ファイルを <code>local/</code> 以下に配置します．
@@ -1601,8 +2131,8 @@ Emacs 起動時にフレームを最大化します．
 </div>
 </div>
 </div>
-<div id="outline-container-org94a6566" class="outline-2">
-<h2 id="org94a6566"><span class="section-number-2">8</span> Global keybindings</h2>
+<div id="outline-container-orgda76967" class="outline-2">
+<h2 id="orgda76967"><span class="section-number-2">8</span> Global keybindings</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 global-map のキーバインドを次のように変更します．
@@ -1628,8 +2158,8 @@ global-map のキーバインドを次のように変更します．
 </div>
 </div>
 </div>
-<div id="outline-container-orgebb8086" class="outline-2">
-<h2 id="orgebb8086"><span class="section-number-2">9</span> Local configuration</h2>
+<div id="outline-container-org857d409" class="outline-2">
+<h2 id="org857d409"><span class="section-number-2">9</span> Local configuration</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 <code>.emacs.d/local</code> 以下にマシン・環境ごとの設定を記述した <code>.el</code> ファイルを配置します．
@@ -1659,8 +2189,8 @@ global-map のキーバインドを次のように変更します．
 </div>
 </div>
 
-<div id="outline-container-org386b9aa" class="outline-2">
-<h2 id="org386b9aa"><span class="section-number-2">10</span> License</h2>
+<div id="outline-container-org1f35b95" class="outline-2">
+<h2 id="org1f35b95"><span class="section-number-2">10</span> License</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 本設定ファイルは <a href="https://www.gnu.org/licenses/gpl.html">GNU 一般公衆ライセンス</a> (バージョン 3 または以降の任意のバージョン) で公開しています．
@@ -1682,7 +2212,7 @@ global-map のキーバインドを次のように変更します．
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Mahito TANNO</p>
-<p class="date">Created: 2019-04-04 Thu 22:20</p>
+<p class="date">Created: 2019-04-05 Fri 22:24</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
