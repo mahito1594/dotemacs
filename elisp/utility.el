@@ -30,7 +30,7 @@
 (defvar my-locate-utility (expand-file-name "elisp/utility.el" user-emacs-directory)
   "Place where `utility.el' should be.")
 
-(defvar my-locate-document (expand-file-name "doc/index.html" user-emacs-directory)
+(defvar my-locate-document (expand-file-name "docs/index.html" user-emacs-directory)
   "Place where `index.html' should be.")
 
 (defun my-open-document ()
