@@ -343,6 +343,19 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :demand t
   :after (ox))
 
+(use-feature outline
+  :bind (:map outline-minor-mode-map
+              ("M-<left>" . outline-promote)
+              ("M-<right>" . outline-demote)
+              ("M-<up>" . outline-move-subtree-up)
+              ("M-<down>" . outline-move-subtree-down))
+  :blackout t)
+
+(use-package outline-magic
+  :commands (outline-cycle)
+  :bind (:map outline-minor-mode-map
+              ("<C-tab>" . outline-cycle)))
+
 (use-package yatex
   :functions (my-YaTeX-with-outline)
   :preface
@@ -481,6 +494,9 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :commands (modern-c++-font-lock-mode)
   :hook (c++-mode-hook . modern-c++-font-lock-mode)
   :blackout t)
+
+(use-package tuareg
+  :hook (tuareg-mode . lsp))
 
 (use-feature python
   :mode ("\\.py\\'" . python-mode)

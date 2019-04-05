@@ -165,9 +165,6 @@
                               (mapcar #'car my-YaTeX-section-alist))
                       t)))
 
-(defvar my-YaTeX-outline-promotion-headings
-  '("\\chapter" "\\section" "\\subsection" "\\subsubsection"))
-
 (defun my-YaTeX-outline-level ()
   (if (looking-at my-YaTeX-outline-regexp)
       (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
@@ -176,8 +173,7 @@
 (defun my-YaTeX-with-outline ()
   (outline-minor-mode 1)
   (setq-local outline-regexp my-YaTeX-outline-regexp)
-  (setq-local outline-level #'my-YaTeX-outline-level)
-  (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
+  (setq-local outline-level #'my-YaTeX-outline-level))
 
 ;;; For Ebib
 (defun my-ebib-name-transform-function (key)

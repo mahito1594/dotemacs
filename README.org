@@ -101,7 +101,7 @@ Emacs バージョン 25.4 以降での利用を想定しています．
   (require 'utility)
 #+end_src
 
-* Fundamental 
+* Fundamental
 ** Variables
 *** Init file and its document
 #+begin_src emacs-lisp :tangle ./elisp/utility.el
@@ -818,6 +818,28 @@ HTML へのエクスポートの際，コードハイライトに [[https://gith
     :after (ox))
 #+end_src
 
+*** outline-minor-mode
+outline-minor-mode でも ~M-矢印~ でサブツリーの移動ができるように再バインドします．
+
+#+begin_src emacs-lisp
+  (use-feature outline
+    :bind (:map outline-minor-mode-map
+                ("M-<left>" . outline-promote)
+                ("M-<right>" . outline-demote)
+                ("M-<up>" . outline-move-subtree-up)
+                ("M-<down>" . outline-move-subtree-down))
+    :blackout t)
+#+end_src
+
+[[https://github.com/tj64/outline-magic][outline-magic]] を用いて outline-minor-mode を使いやすくします．
+
+#+begin_src emacs-lisp
+  (use-package outline-magic
+    :commands (outline-cycle)
+    :bind (:map outline-minor-mode-map
+                ("<C-tab>" . outline-cycle)))
+#+end_src
+
 ** TeX/LaTeX
 *** YaTeX
 TeX/LaTeX 文書の編集には [[http://yatex.org/][YaTeX: Yet Another TeX mode for Emacs]] を利用します．
@@ -868,9 +890,6 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
                                 (mapcar #'car my-YaTeX-section-alist))
                         t)))
 
-  (defvar my-YaTeX-outline-promotion-headings
-    '("\\chapter" "\\section" "\\subsection" "\\subsubsection"))
-
   (defun my-YaTeX-outline-level ()
     (if (looking-at my-YaTeX-outline-regexp)
         (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
@@ -879,8 +898,7 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
   (defun my-YaTeX-with-outline ()
     (outline-minor-mode 1)
     (setq-local outline-regexp my-YaTeX-outline-regexp)
-    (setq-local outline-level #'my-YaTeX-outline-level)
-    (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
+    (setq-local outline-level #'my-YaTeX-outline-level))
 #+end_src
 
 YaTeX の読み込み前に ~YaTeX-inhibit-prefix-letter~ を t に設定することで，
@@ -1136,6 +1154,24 @@ macOS の場合は homebrew からインストールできます．
 ** Emacs Lisp
 
 ** Ocaml
+OCaml の編集には [[https://github.com/ocaml/tuareg][tuareg-mode]] を利用します．
+[[https://github.com/freebroccolo/ocaml-language-server][ocaml-language-server]] と lsp-mode を利用して補完等を行います．
+インストールは
+
+ #+begin_src sh :tangle no
+   ~$ npm install -g ocaml-language-server
+   ~$ opam install merlin		# if needed
+ #+end_src
+
+とします．
+キチンと使っていないので後で加筆するかもしれません．
+
+[[https://khady.info/emacs-ocaml-lsp.html][このブログ]]によれば merlin と language server が統合されたようなので近々設定を書き換えるかもしれません．
+
+#+begin_src emacs-lisp
+  (use-package tuareg
+    :hook (tuareg-mode . lsp))
+#+end_src
 
 ** Python
 Emacs 同梱の ~python.el~ を利用します．
