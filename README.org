@@ -2,7 +2,7 @@
 #+TITLE: My configuration file for Emacs
 #+AUTHOR: Mahito TANNO
 #+DATE:
-#+EXPORT_FILE_NAME: ./doc/index.html
+#+EXPORT_FILE_NAME: ./docs/index.html
 #+OPTIONS: H:2
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="worg.css"/>
 
