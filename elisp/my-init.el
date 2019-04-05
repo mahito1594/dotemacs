@@ -295,7 +295,10 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :blackout t)
 
 (use-package flycheck
-  :hook (after-init . global-flycheck-mode))
+  :commands (flycheck-disable-checker)
+  :hook (after-init . global-flycheck-mode)
+  :custom
+  (flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
 (use-package flycheck-popup-tip
   :hook (flycheck-mode . flycheck-popup-tip-mode))
@@ -494,6 +497,9 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :commands (modern-c++-font-lock-mode)
   :hook (c++-mode-hook . modern-c++-font-lock-mode)
   :blackout t)
+
+(use-feature elisp-mode
+  :blackout (lisp-interaction-mode . "Lisp-Interaction"))
 
 (use-package tuareg
   :hook (tuareg-mode . lsp))
