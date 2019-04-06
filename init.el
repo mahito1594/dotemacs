@@ -52,10 +52,11 @@ its original one."
 
 ;;; Load `my-init.el'.
 (if (version< emacs-version my-minimum-emacs-version)
-    (error (concat "Strich requires Emacs ver. %s or later, "
-                   "but you use Emacs ver. %s!")
+    (error (concat "Emacs of ver. %s or later is required, "
+                   "but you use Emacs of ver. %s!")
            my-minimum-emacs-version emacs-version)
   (add-to-list 'load-path my-elisp-directory)
+  (require 'utility)
   (require 'my-init))
 
 (provide 'init)

@@ -106,10 +106,6 @@ Emacs バージョン 25.4 以降での利用を想定しています．
   ;;; Code:
 #+end_src
 
-#+begin_src emacs-lisp
-  (require 'utility)
-#+end_src
-
 ** site-lisp/
 いくつかのパッケージは ~site-lisp/~ 以下に配置して =require= します．
 ~site-lisp~ に配置するのは次の通り．
@@ -226,31 +222,6 @@ Issue [[https://github.com/purcell/exec-path-from-shell/issues/36][#36]] [[https
     (interactive)
     (with-current-buffer (find-file-noselect my-locate-readme)
       (org-html-export-to-html)))
-#+end_src
-
-*** Load local configuration
-=(my-load-config-files re dir)= は ~dir~ 内の，正規表現 ~re~ とマッチする ~.el~ ファイルを全てロードします．
-詳しくは [[Local configuration]] を参照してください．
-
-#+begin_src emacs-lisp :tangle ./elisp/utility.el
-  (defun my-load-config-files (re dir)
-    "Load files which match to regular expression RE in DIR."
-    (when (file-directory-p dir)
-      (add-to-list 'load-path dir)
-      (dolist (file (my--pickup-config-files re dir))
-        (condition-case err-var
-            (load file)
-          (error (message "%s" err-var))))))
-
-  (defun my--pickup-config-files (re dir)
-    "Pick up files which match to regular expression RE in DIR."
-    (let ((files (directory-files dir))
-          (targets '()))
-      (dolist (file files)
-        (when (and (string-match re file)
-                   (string-match "\\.el\\'" file))
-          (push file targets)))
-      (sort targets 'string<)))
 #+end_src
 
 ** Package manager
@@ -482,7 +453,7 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
     (ivy-count-format "(%d/%d) ")
     (ivy-wrap t)
     (ivy-format-function 'ivy-format-function-arrow)
-    (counsel-yank-pop "\n---------\n")
+    (counsel-yank-pop-separator "\n---------\n")
     (ivy-initial-inputs-alist nil)
     :blackout t)
 #+end_src
@@ -867,25 +838,19 @@ HTML へのエクスポートの際，コードハイライトに [[https://gith
 #+end_src
 
 *** outline-minor-mode
+[[https://github.com/tj64/outline-magic][outline-magic]] を用いて outline-minor-mode を使いやすくします．
 outline-minor-mode でも ~M-矢印~ でサブツリーの移動ができるように再バインドします．
 
 #+begin_src emacs-lisp
-  (use-feature outline
+  (use-package outline-magic
     :bind (:map outline-minor-mode-map
+                ("C-<tab>" . outline-cycle)
                 ("M-<left>" . outline-promote)
                 ("M-<right>" . outline-demote)
                 ("M-<up>" . outline-move-subtree-up)
                 ("M-<down>" . outline-move-subtree-down))
-    :blackout t)
-#+end_src
-
-[[https://github.com/tj64/outline-magic][outline-magic]] を用いて outline-minor-mode を使いやすくします．
-
-#+begin_src emacs-lisp
-  (use-package outline-magic
-    :commands (outline-cycle)
-    :bind (:map outline-minor-mode-map
-                ("<C-tab>" . outline-cycle)))
+    :demand t
+    :after (outline))
 #+end_src
 
 ** TeX/LaTeX
@@ -911,6 +876,8 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
 これらの定義は GNU Emacs 同梱の tex-mode.el でのそれとほぼ同等です．
 変数 ~ouline-promotion-headings~ は outline-magic のためのものです．
 
+~outline-{promote, demote}~ は使いすぎるとアウトライン構造が変になるので注意が必要です．
+
 #+begin_src emacs-lisp :tangle ./elisp/utility.el
   ;;; For YaTeX: integrate with outline-minor-mode
   ;; The following code is a modification a part of `tex-mode.el'
@@ -925,7 +892,8 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
       ("section" . 2)
       ("subsection" . 3)
       ("subsubsection" . 4)
-      ("paragraph" . 5)))
+      ("paragraph" . 5)
+      ("subparagraph" . 6)))
 
   (defvar my-YaTeX-metasection-list
     '("documentclass"
@@ -938,6 +906,10 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
                                 (mapcar #'car my-YaTeX-section-alist))
                         t)))
 
+  (defvar my-YaTeX-outline-promotion-headings
+    '("\\chapter" "\\section" "\\subsection"
+      "\\subsubsection" "\\paragraph" "\\subparagraph"))
+
   (defun my-YaTeX-outline-level ()
     (if (looking-at my-YaTeX-outline-regexp)
         (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
@@ -946,7 +918,8 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
   (defun my-YaTeX-with-outline ()
     (outline-minor-mode 1)
     (setq-local outline-regexp my-YaTeX-outline-regexp)
-    (setq-local outline-level #'my-YaTeX-outline-level))
+    (setq-local outline-level #'my-YaTeX-outline-level)
+    (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
 #+end_src
 
 YaTeX の読み込み前に ~YaTeX-inhibit-prefix-letter~ を t に設定することで，

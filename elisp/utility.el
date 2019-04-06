@@ -62,25 +62,6 @@
   (with-current-buffer (find-file-noselect my-locate-readme)
     (org-html-export-to-html)))
 
-(defun my-load-config-files (re dir)
-  "Load files which match to regular expression RE in DIR."
-  (when (file-directory-p dir)
-    (add-to-list 'load-path dir)
-    (dolist (file (my--pickup-config-files re dir))
-      (condition-case err-var
-          (load file)
-        (error (message "%s" err-var))))))
-
-(defun my--pickup-config-files (re dir)
-  "Pick up files which match to regular expression RE in DIR."
-  (let ((files (directory-files dir))
-        (targets '()))
-    (dolist (file files)
-      (when (and (string-match re file)
-                 (string-match "\\.el\\'" file))
-        (push file targets)))
-    (sort targets 'string<)))
-
 ;;; for ivy-rich: show icons
 (defun my-ivy-rich-buffer-icon (candidate)
   "Show buffer isons in `ivy-rich', only on GUI."
@@ -152,7 +133,8 @@
     ("section" . 2)
     ("subsection" . 3)
     ("subsubsection" . 4)
-    ("paragraph" . 5)))
+    ("paragraph" . 5)
+    ("subparagraph" . 6)))
 
 (defvar my-YaTeX-metasection-list
   '("documentclass"
@@ -165,6 +147,10 @@
                               (mapcar #'car my-YaTeX-section-alist))
                       t)))
 
+(defvar my-YaTeX-outline-promotion-headings
+  '("\\chapter" "\\section" "\\subsection"
+    "\\subsubsection" "\\paragraph" "\\subparagraph"))
+
 (defun my-YaTeX-outline-level ()
   (if (looking-at my-YaTeX-outline-regexp)
       (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
@@ -173,7 +159,8 @@
 (defun my-YaTeX-with-outline ()
   (outline-minor-mode 1)
   (setq-local outline-regexp my-YaTeX-outline-regexp)
-  (setq-local outline-level #'my-YaTeX-outline-level))
+  (setq-local outline-level #'my-YaTeX-outline-level)
+  (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
 
 ;;; For Ebib
 (defun my-ebib-name-transform-function (key)

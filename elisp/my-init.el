@@ -25,8 +25,6 @@
 
 ;;; Code:
 
-(require 'utility)
-
 (defconst my-site-lisp-directory
   (expand-file-name "site-lisp" user-emacs-directory)
   "We should put here packages.")
@@ -146,7 +144,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   (ivy-count-format "(%d/%d) ")
   (ivy-wrap t)
   (ivy-format-function 'ivy-format-function-arrow)
-  (counsel-yank-pop "\n---------\n")
+  (counsel-yank-pop-separator "\n---------\n")
   (ivy-initial-inputs-alist nil)
   :blackout t)
 
@@ -357,18 +355,15 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :demand t
   :after (ox))
 
-(use-feature outline
+(use-package outline-magic
   :bind (:map outline-minor-mode-map
+              ("C-<tab>" . outline-cycle)
               ("M-<left>" . outline-promote)
               ("M-<right>" . outline-demote)
               ("M-<up>" . outline-move-subtree-up)
               ("M-<down>" . outline-move-subtree-down))
-  :blackout t)
-
-(use-package outline-magic
-  :commands (outline-cycle)
-  :bind (:map outline-minor-mode-map
-              ("<C-tab>" . outline-cycle)))
+  :demand t
+  :after (outline))
 
 (use-package yatex
   :functions (my-YaTeX-with-outline)
