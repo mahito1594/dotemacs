@@ -38,6 +38,7 @@
 
 (when (memq window-system '(mac ns x))
   (require 'exec-path-from-shell)
+  (delete "-i" exec-path-from-shell-arguments) ; drop "-i" from option
   (exec-path-from-shell-initialize))
 
 (defvar my-backup-directory (expand-file-name "backups/" user-emacs-directory)

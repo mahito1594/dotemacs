@@ -132,10 +132,13 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 #+end_src
 
 ログインシェルの環境変数を引き継ぎます．
+変数 ~exec-path-from-shell-arguments~ から ~"-i"~ を取り除くと処理が早くなるようです．
+Issue [[https://github.com/purcell/exec-path-from-shell/issues/36][#36]] [[https://github.com/purcell/exec-path-from-shell/issues/50][#50]] [[https://github.com/purcell/exec-path-from-shell/issues/75][#75]] を参照してください．
 
 #+begin_src emacs-lisp
   (when (memq window-system '(mac ns x))
     (require 'exec-path-from-shell)
+    (delete "-i" exec-path-from-shell-arguments) ; drop "-i" from option
     (exec-path-from-shell-initialize))
 #+end_src
 
