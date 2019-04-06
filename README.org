@@ -7,6 +7,32 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="worg.css"/>
 
 * Introduction
+** init.el
+~init.el~ は ~elisp~ を =load-path= に追加し， ~utility.el~ と ~my-init.el~ を読み込みます．
+ただし Emacs のバージョンが古い場合はこれらは読み込まれません．
+
+また Customize で設定したカスタム変数は ~.emacs.d/custom-file.el~ に保存されます．
+ローカルに設定したい事柄は ~.emacs.d/local-conf.el~ に記述します．
+これらは Git によって追跡されません．
+
+起動時にガベージコレクタが走らないように閾値を下げます．
+ただし，起動後には元々の値に戻すようにします．
+
+#+begin_src emacs-lisp :tangle no
+  (defvar my--orig-gc-cons-threshold gc-cons-threshold
+    "Original value of `gc-cons-threshold'.")
+
+  (setq gc-cons-threshold (* 8 1000 1000))
+
+  (defun my--reset-gc-cons-threshold ()
+    "Reset the value of `gc-cons-threshold' to
+  its original one."
+    (setq gc-cons-threshold my--orig-gc-cons-threshold))
+
+  (add-hook 'emacs-startup-hook
+            #'my--reset-gc-cons-threshold)
+#+end_src
+
 ** my-init.el
 ~my-init.el~ に個人的な Emacs の設定をまとめてあります．
 Emacs バージョン 25.4 以降での利用を想定しています．
@@ -51,21 +77,6 @@ Emacs バージョン 25.4 以降での利用を想定しています．
   ;;; Code:
 #+end_src
 
-起動時にガベージコレクタが走らないように閾値を下げます．
-また，ガベージコレクタが走ったときはエコーエリアにメッセージを出すようにします．
-
-#+begin_src emacs-lisp
-  (setq gc-cons-threshold (* 8 1000 1000))
-  (setq garbage-collection-messages t)
-#+end_src
-
-** init.el
-~init.el~ は ~elisp/~ と， ~site-lisp/~ およびその以下のサブディレクトリを =load-path= に追加し， ~my-init.el~ を読み込みます．
-ただし Emacs のバージョンが古い場合は ~my-init.el~ は読み込まれません．
-
-また Customize で設定したカスタム変数は ~.emacs.d/custom-file.el~ に保存されます．
-これは git によって追跡されません．
-
 ** utility.el
 変数・定数・関数のうち，いくつかは ~elisp/utility.el~ に抜き出します．
 必要に応じてバイトコンパイルを行います．
@@ -99,6 +110,38 @@ Emacs バージョン 25.4 以降での利用を想定しています．
   (require 'utility)
 #+end_src
 
+** site-lisp/
+いくつかのパッケージは ~site-lisp/~ 以下に配置して =require= します．
+~site-lisp~ に配置するのは次の通り．
+
+- [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
+
+これらは git submodule で管理します．
+
+まず ~site-lisp/~ 以下の全てのサブディレクトリを load-path に追加します．
+
+#+begin_src emacs-lisp
+  (defconst my-site-lisp-directory
+    (expand-file-name "site-lisp" user-emacs-directory)
+    "We should put here packages.")
+
+  (let ((default-directory my-site-lisp-directory))
+    (add-to-list 'load-path default-directory)
+    (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+        (normal-top-level-add-subdirs-to-load-path)))
+#+end_src
+
+ログインシェルの環境変数を引き継ぎます．
+変数 ~exec-path-from-shell-arguments~ から ~"-i"~ を取り除くと処理が早くなるようです．
+Issue [[https://github.com/purcell/exec-path-from-shell/issues/36][#36]] [[https://github.com/purcell/exec-path-from-shell/issues/50][#50]] [[https://github.com/purcell/exec-path-from-shell/issues/75][#75]] を参照してください．
+
+#+begin_src emacs-lisp
+  (when (memq window-system '(mac ns x))
+    (require 'exec-path-from-shell)
+    (delete "-i" exec-path-from-shell-arguments) ; drop "-i" from option
+    (exec-path-from-shell-initialize))
+#+end_src
+
 * Fundamental
 ** Variables
 *** Init file and its document
@@ -126,11 +169,11 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 #+end_src
 
 *** Local configuration directory
-環境・マシンごとの設定を ~.emacs.d/local~ 以下に配置します．
-
+環境・マシンごとの設定を ~.emacs.d/local-conf.el~ に記述します．
+詳細は [[Local configuration][Local configuration]] を参照してください．
 
 #+begin_src emacs-lisp
-  (defvar my-local-config-directory (expand-file-name "local" user-emacs-directory)
+  (defvar my-local-config-file (expand-file-name "local-conf.el" user-emacs-directory)
     "You put Emacs Lisp files here for local config.")
 #+end_src
 
@@ -222,12 +265,18 @@ next-generation, purely functional package manager for the Emacs hacker.
 
 ~develop~ ブランチの ~straight.el~ をインストールします．
 
-デフォルトのままでは Emacs の起動が遅くなるので ~straight-check-for-modifications~ を ~live-with-find~ に設定しておきます．
-~live-with-find~ は ~(check-on-save find-when-checking)~ と等価です．
+デフォルトのままでは Emacs の起動が遅くなるので ~straight-check-for-modifications~ を適当に設定しておきます．
+現在のところ ~(watch-files find-when-checking)~ に設定するのがベストなようです．
+そのためには Python3 と [[https://github.com/watchexec/watchexec][watchexec]] がインストールされている必要があります．
+これら 2 つがインストールされていない場合は ~(check-on-save find-when-checking)~ に設定します．
 
 #+begin_src emacs-lisp
   (setq straight-repository-branch "develop") ; use the develop branch of straight.el
-  (setq straight-check-for-modifications 'live-with-find) ; => '(check-on-save find-when-checking)
+  (if (and (executable-find "watchexec")
+           (executable-find "python3"))
+      (setq straight-check-for-modifications '(watch-files find-when-checking))
+    (setq straight-check-for-modifications '(check-on-save find-when-checking)))
+
   (defvar bootstrap-version)
   (let ((bootstrap-file
          (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -305,6 +354,15 @@ build-in の機能を用いるため ~use-feature~ マクロを定めます．
   (straight-use-package 'org)
 #+end_src
 
+*** flymake
+lsp-mode が flymake に依存しており，古いバージョンの flymake を読み込んでしまう恐れがあるようです．
+回避策として lsp-mode を読み込む前に最新の flymake をインストールします．
+詳細は [[https://github.com/raxod502/straight.el#faq][straight.el/FAQ]] か [[https://github.com/raxod502/straight.el/issues/355][straight.el/Issue#355]] を参照してください
+
+#+begin_src emacs-lisp
+  (straight-use-package 'flymake)
+#+end_src
+
 *** blackout
 [[https://github.com/raxod502/blackout][blackout]] は deminish や delight のように，メジャー・マイナーモードのモードラインの表示をカスタマイズできます．
 
@@ -355,17 +413,6 @@ macOS 使用時はファイル名の文字コードの問題があります．
     :config
     (set-file-name-coding-system 'utf-8-hfs)
     (setq locale-coding-system 'utf-8-hfs))
-#+end_src
-
-** Exec path
-ログインシェルの環境変数を引き継ぎます．
-
-#+begin_src emacs-lisp
-  (use-package exec-path-from-shell
-    :if (memq window-system '(mac ns))
-    :demand t
-    :config
-    (exec-path-from-shell-initialize))
 #+end_src
 
 ** Server
@@ -924,7 +971,7 @@ macOS では ~TEXMFHOME~ は ~~/Library/texmf~ のようなので適宜ホーム
            ("\\.ltx\\'" . yatex-mode))
     :hook (yatex-mode . my-YaTeX-with-outline)
     :config
-    (setq YaTeX-kanji-code 4)		; use UTF-8
+    (setq YaTeX-kanji-code 4)             ; use UTF-8
     (setq YaTeX-use-AMS-LaTeX t)
     (setq tex-command "latexmk")
     (setq YaTeX-user-completion-table my-YaTeX-user-completion-table)
@@ -1168,7 +1215,7 @@ OCaml の編集には [[https://github.com/ocaml/tuareg][tuareg-mode]] を利用
 
  #+begin_src sh :tangle no
    ~$ npm install -g ocaml-language-server
-   ~$ opam install merlin		# if needed
+   ~$ opam install merlin               # if needed
  #+end_src
 
 とします．
@@ -1294,24 +1341,21 @@ global-map のキーバインドを次のように変更します．
   (define-key global-map (kbd "C-x ?") 'help-for-help)
 #+end_src
 * Local configuration
-~.emacs.d/local~ 以下にマシン・環境ごとの設定を記述した ~.el~ ファイルを配置します．
-~my-load-local-config-files~ は ~.el~ ファイルを辞書式順序で読み込みます．
-バイトコンパイルした同名の ~.elc~ ファイルがあると，そちらを優先して読み込みます．
-ただし ~.elc~ ファイルはあるが ~.el~ ファイルがない場合，その ~.elc~ ファイルは *読み込まれません* ．
-シンボリックリンクがある場合，読み込みが失敗するかもしれません．
+** Overview
+~.emacs.d/local-conf.el~ にマシン・環境ごとの設定を記述します．
 
 #+begin_src emacs-lisp
-  (my-load-config-files ".*" my-local-config-directory)
+  (when (file-exists-p my-local-config-file)
+    (load my-local-config-file))
 #+end_src
 
-~init-loader.el~ のように数字 2 桁のプレフィックスをつけたファイルに限定したい場合，
-次のように定義すれば良いと思います (未検証)．
+また Customize で設定したカスタム変数は ~.emacs.d/custom-file.el~ に記述されます．
 
-#+begin_src emacs-lisp :tangle no
-  (defvar my-local-config-default-regexp "\\(?:\\`[[:digit:]]\\{2\\}\\)"
-    "Regular expression determining valid configuration file names.")
-
-  (my-load-config-files my-local-config-default-regexp my-local-config-directory)
+#+begin_src emacs-lisp
+  (setq custom-file (expand-file-name "custom-file.el"
+                                      user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (load custom-file))
 #+end_src
 
 * License

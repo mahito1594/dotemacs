@@ -25,20 +25,35 @@
 
 ;;; Code:
 
-(setq gc-cons-threshold (* 8 1000 1000))
-(setq garbage-collection-messages t)
-
 (require 'utility)
+
+(defconst my-site-lisp-directory
+  (expand-file-name "site-lisp" user-emacs-directory)
+  "We should put here packages.")
+
+(let ((default-directory my-site-lisp-directory))
+  (add-to-list 'load-path default-directory)
+  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+      (normal-top-level-add-subdirs-to-load-path)))
+
+(when (memq window-system '(mac ns x))
+  (require 'exec-path-from-shell)
+  (delete "-i" exec-path-from-shell-arguments) ; drop "-i" from option
+  (exec-path-from-shell-initialize))
 
 (defvar my-backup-directory (expand-file-name "backups/" user-emacs-directory)
   "We save automatically files into the directory:
 We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-backup-directory'.")
 
-(defvar my-local-config-directory (expand-file-name "local" user-emacs-directory)
+(defvar my-local-config-file (expand-file-name "local-conf.el" user-emacs-directory)
   "You put Emacs Lisp files here for local config.")
 
 (setq straight-repository-branch "develop") ; use the develop branch of straight.el
-(setq straight-check-for-modifications 'live-with-find) ; => '(check-on-save find-when-checking)
+(if (and (executable-find "watchexec")
+         (executable-find "python3"))
+    (setq straight-check-for-modifications '(watch-files find-when-checking))
+  (setq straight-check-for-modifications '(check-on-save find-when-checking)))
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -66,6 +81,8 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
 
 (straight-use-package 'org)
 
+(straight-use-package 'flymake)
+
 (use-package blackout
   :straight (:host github :repo "raxod502/blackout")
   :demand t)
@@ -91,12 +108,6 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :config
   (set-file-name-coding-system 'utf-8-hfs)
   (setq locale-coding-system 'utf-8-hfs))
-
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
-  :demand t
-  :config
-  (exec-path-from-shell-initialize))
 
 (use-feature server
   :hook (after-init . server-mode))
@@ -373,7 +384,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
          ("\\.ltx\\'" . yatex-mode))
   :hook (yatex-mode . my-YaTeX-with-outline)
   :config
-  (setq YaTeX-kanji-code 4)		; use UTF-8
+  (setq YaTeX-kanji-code 4)             ; use UTF-8
   (setq YaTeX-use-AMS-LaTeX t)
   (setq tex-command "latexmk")
   (setq YaTeX-user-completion-table my-YaTeX-user-completion-table)
@@ -558,7 +569,13 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
 (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 (define-key global-map (kbd "C-x ?") 'help-for-help)
 
-(my-load-config-files ".*" my-local-config-directory)
+(when (file-exists-p my-local-config-file)
+  (load my-local-config-file))
+
+(setq custom-file (expand-file-name "custom-file.el"
+                                    user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 (provide 'my-init)
 ;;; my-init.el ends here

@@ -21,6 +21,20 @@
 
 ;;; Code:
 
+;;; Prevent GC to run in start-up
+(defvar my--orig-gc-cons-threshold gc-cons-threshold
+  "Original value of `gc-cons-threshold'.")
+
+(setq gc-cons-threshold (* 8 1000 1000))
+
+(defun my--reset-gc-cons-threshold ()
+  "Reset the value of `gc-cons-threshold' to
+its original one."
+  (setq gc-cons-threshold my--orig-gc-cons-threshold))
+
+(add-hook 'emacs-startup-hook
+	  #'my--reset-gc-cons-threshold)
+
 ;;; Debugging
 (setq debug-on-error t)
 (setq init-file-debug t)
@@ -35,29 +49,14 @@
 (defconst my-elisp-directory
   (expand-file-name "elisp" user-emacs-directory)
   "We should put here your self-made Emacs Lisp files.")
-(defconst my-site-lisp-directory
-  (expand-file-name "site-lisp" user-emacs-directory)
-  "We should put here packages.")
-
-;;; Load path
-(add-to-list 'load-path my-elisp-directory) ; add `.emacs.d/elisp' to load-path
-;; Add all subdirectories in `site-lisp' to load-path
-(let ((default-directory my-site-lisp-directory))
-  (add-to-list 'load-path default-directory)
-  (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-      (normal-top-level-add-subdirs-to-load-path)))
 
 ;;; Load `my-init.el'.
 (if (version< emacs-version my-minimum-emacs-version)
     (error (concat "Strich requires Emacs ver. %s or later, "
                    "but you use Emacs ver. %s!")
            my-minimum-emacs-version emacs-version)
+  (add-to-list 'load-path my-elisp-directory)
   (require 'my-init))
-
-;;; Set and load `custom-file'.
-(setq custom-file (locate-user-emacs-file "custom-file.el"))
-(when (file-exists-p custom-file)
-  (load custom-file))
 
 (provide 'init)
 ;;; init.el ends here

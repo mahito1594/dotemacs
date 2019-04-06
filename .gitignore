@@ -1,7 +1,7 @@
 ### Added by the user ###
 # config files
+local-conf.el
 custom-file.el
-local/
 
 # recentf
 recentf
