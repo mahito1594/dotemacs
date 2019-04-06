@@ -351,6 +351,15 @@ build-in の機能を用いるため ~use-feature~ マクロを定めます．
   (straight-use-package 'org)
 #+end_src
 
+*** flymake
+lsp-mode が flymake に依存しており，古いバージョンの flymake を読み込んでしまう恐れがあるようです．
+回避策として lsp-mode を読み込む前に最新の flymake をインストールします．
+詳細は [[https://github.com/raxod502/straight.el#faq][straight.el/FAQ]] か [[https://github.com/raxod502/straight.el/issues/355][straight.el/Issue#355]] を参照してください
+
+#+begin_src emacs-lisp
+  (straight-use-package 'flymake)
+#+end_src
+
 *** blackout
 [[https://github.com/raxod502/blackout][blackout]] は deminish や delight のように，メジャー・マイナーモードのモードラインの表示をカスタマイズできます．
 

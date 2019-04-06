@@ -80,6 +80,8 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
 
 (straight-use-package 'org)
 
+(straight-use-package 'flymake)
+
 (use-package blackout
   :straight (:host github :repo "raxod502/blackout")
   :demand t)
@@ -381,7 +383,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
          ("\\.ltx\\'" . yatex-mode))
   :hook (yatex-mode . my-YaTeX-with-outline)
   :config
-  (setq YaTeX-kanji-code 4)		; use UTF-8
+  (setq YaTeX-kanji-code 4)             ; use UTF-8
   (setq YaTeX-use-AMS-LaTeX t)
   (setq tex-command "latexmk")
   (setq YaTeX-user-completion-table my-YaTeX-user-completion-table)
