@@ -91,6 +91,8 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   (unless (member "all-the-icons" (font-family-list))
     (all-the-icons-install-fonts t)))
 
+(use-package hydra)
+
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
 
@@ -130,9 +132,38 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
                'arrow)))
 
 (use-package counsel
+  :preface
+  (defhydra hydra-navi
+    (:hint nil)
+    "
+  ^Navigate^              ^ ^                 ^Action
+  ^^^^^^-----------------------------------------------------------
+  _f_: foward char        _n_: next line      _s_: search
+  _F_: foward word        _p_: previous line  _r_: replace
+  _b_: backward char      _v_: scroll down
+  _B_: backward word      _V_: scroll up      _k_: kill buffer
+  _a_: beginning of line  ^ ^
+  _e_: end of line        ^ ^                 _x_: execute command
+  "
+    ("n" next-line)
+    ("p" previous-line)
+    ("f" forward-char)
+    ("F" forward-word)
+    ("b" backward-char)
+    ("B" backward-word)
+    ("a" beginning-of-line)
+    ("e" move-end-of-line)
+    ("v" scroll-up-command)
+    ("V" scroll-down-command)
+    ("s" swiper)
+    ("r" query-replece)
+    ("x" counsel-M-x)
+    ("k" kill-buffer)
+    ("q" nil "quit"))
   :hook ((after-init . ivy-mode)
          (ivy-mode . counsel-mode))
-  :bind (("C-s" . swiper)
+  :bind (("C-v" . hydra-navi/body)
+         ("C-s" . swiper)
          ("C-r" . swiper)
          ("C-S-s" . swiper-all)
          ("C-c C-r" . ivy-resume)
@@ -144,9 +175,13 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   (ivy-count-format "(%d/%d) ")
   (ivy-wrap t)
   (ivy-format-function 'ivy-format-function-arrow)
-  (counsel-yank-pop-separator "\n---------\n")
+  (counsel-yank-pop-separator "\n<--------->\n")
   (ivy-initial-inputs-alist nil)
   :blackout t)
+
+(use-package ivy-hydra
+  :bind (:map ivy-minibuffer-map
+              ("C-o" . hydra-ivy/body)))
 
 (use-package ivy-rich
   :functions (my-ivy-rich-buffer-icon my-ivy-rich-file-icon)

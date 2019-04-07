@@ -355,6 +355,13 @@ lsp-mode が flymake に依存しており，古いバージョンの flymake �
       (all-the-icons-install-fonts t)))
 #+end_src
 
+*** Hydra
+[[https://github.com/abo-abo/hydra][Hydra]] を利用してキーバインドを使いやすくします．
+
+#+begin_src emacs-lisp
+  (use-package hydra)
+#+end_src
+
 * Utilities
 ** Language, Codings
 日本語かつ UTF8 を使用するようにします．
@@ -437,11 +444,42 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 補完インターフェイスとして [[https://github.com/abo-abo/swiper][Ivy/Counsel]] を利用します．
 詳しい使い方は[[https://oremacs.com/swiper/][ユーザマニュアル]]を参照してください．
 
+~C-v~ で hydra-navi による移動ができるようになります．
+
 #+begin_src emacs-lisp
   (use-package counsel
+    :preface
+    (defhydra hydra-navi
+      (:hint nil)
+      "
+    ^Navigate^              ^ ^                 ^Action
+    ^^^^^^-----------------------------------------------------------
+    _f_: foward char        _n_: next line      _s_: search
+    _F_: foward word        _p_: previous line  _r_: replace
+    _b_: backward char      _v_: scroll down
+    _B_: backward word      _V_: scroll up      _k_: kill buffer
+    _a_: beginning of line  ^ ^
+    _e_: end of line        ^ ^                 _x_: execute command
+    "
+      ("n" next-line)
+      ("p" previous-line)
+      ("f" forward-char)
+      ("F" forward-word)
+      ("b" backward-char)
+      ("B" backward-word)
+      ("a" beginning-of-line)
+      ("e" move-end-of-line)
+      ("v" scroll-up-command)
+      ("V" scroll-down-command)
+      ("s" swiper)
+      ("r" query-replece)
+      ("x" counsel-M-x)
+      ("k" kill-buffer)
+      ("q" nil "quit"))
     :hook ((after-init . ivy-mode)
            (ivy-mode . counsel-mode))
-    :bind (("C-s" . swiper)
+    :bind (("C-v" . hydra-navi/body)
+           ("C-s" . swiper)
            ("C-r" . swiper)
            ("C-S-s" . swiper-all)
            ("C-c C-r" . ivy-resume)
@@ -453,9 +491,17 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
     (ivy-count-format "(%d/%d) ")
     (ivy-wrap t)
     (ivy-format-function 'ivy-format-function-arrow)
-    (counsel-yank-pop-separator "\n---------\n")
+    (counsel-yank-pop-separator "\n<--------->\n")
     (ivy-initial-inputs-alist nil)
     :blackout t)
+#+end_src
+
+ivy-hydra を利用して minibuffer での操作性を向上させます．
+
+#+begin_src emacs-lisp
+  (use-package ivy-hydra
+    :bind (:map ivy-minibuffer-map
+                ("C-o" . hydra-ivy/body)))
 #+end_src
 
 [[https://github.com/Yevgnen/ivy-rich][ivy-rich]] を用いてバッファ切り替えの際などにアイコンを表示するようにします．
@@ -570,6 +616,7 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
     :blackout t)
 #+end_src
 
+** Edit
 ** Others
 *** Parenthesis
 対応する括弧類は自動的に挿入し，また強調するようにします．
