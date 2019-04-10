@@ -1289,7 +1289,7 @@ Emacs 起動時にフレームを最大化します．
 #+end_src
 
 ** Font
-フォントに関しては，次のように記述した ~.el~ ファイルを ~local/~ 以下に配置します．
+フォントに関しては，例えば，次のように ~local-conf.el~ に記述します．
 
 #+begin_src emacs-lisp :tangle no
   (set-face-attribute 'default nil
@@ -1316,19 +1316,43 @@ global-map のキーバインドを次のように変更します．
 * Local configuration
 ** Overview
 ~.emacs.d/local-conf.el~ にマシン・環境ごとの設定を記述します．
+また Customize で設定したカスタム変数等も ~local-conf.el~ に記述されます．
 
 #+begin_src emacs-lisp
-  (when (file-exists-p my-local-config-file)
-    (load my-local-config-file))
+  (setq custom-file my-local-config-file)
+  (load my-local-config-file t)
 #+end_src
 
-また Customize で設定したカスタム変数は ~.emacs.d/custom-file.el~ に記述されます．
+** SINGULAR
+[[https://www.singular.uni-kl.de/][SINGULAR]] は代数計算ソフトの一つです．
+SINGULAR を Emacs 上で利用するには，インストール後に次のような記述を追加します．
+ここで ~<singular-emacs-home-directory>~ は，例えば macOS に Homebrew を利用してバージョン 4.1.1_5 を
+インストールした場合 ~/usr/local/Cellar/singular/4.1.1_5/share/singular/emacs~ になります．
 
-#+begin_src emacs-lisp
-  (setq custom-file (expand-file-name "custom-file.el"
-                                      user-emacs-directory))
-  (when (file-exists-p custom-file)
-    (load custom-file))
+記述を追加後 =M-x singular= で Emacs 上で SINGULAR が利用できます．
+詳しくは [[https://www.singular.uni-kl.de/Manual/latest/sing_23.htm#SEC30][Online Manual - 3.2.2 Running SINGULAR under Emacs]] を参照してください．
+
+#+begin_src emacs-lisp :tangle no
+  (add-to-list 'load-path "<singular-emacs-home-directory>")
+  (autoload 'singular "singular"
+    "Start Singular using default value." t)
+  (autoload 'singular-other "singular"
+    "Ask for arguments and start Singular." t)
+#+end_src
+
+** Macaulay2
+[[http://www2.macaulay2.com/Macaulay2/][Macaulay2]] は主に代数幾何学および可換環論のための代数計算ソフトの一つです．
+
+=setup()= あるいは =setupEmacs()= を =Macaulay2= 内で実行すると PATH の追加および Emacs 関連のファイルの生成が行われます．
+特にホームディレクトリ直下に ~.emacs-Macaulay2~ ができるはずです．
+
+Macaulay2 を Emacs で使うにはこのファイルをロードすれば良いです．
+また M2-comint-mode で ~C-<return>~ で，式を実行せず改行できるようにしておきます．
+
+#+begin_src emacs-lisp :tangle no
+  (load "~/.emacs-Macaulay2" t)
+  (with-eval-after-load "M2"
+    (define-key M2-comint-mode-map (kbd "C-<return>") #'M2-newline-and-indent))
 #+end_src
 
 * License
