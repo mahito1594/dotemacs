@@ -892,20 +892,52 @@ HTML へのエクスポートの際，コードハイライトに [[https://gith
     :after (ox))
 #+end_src
 
-** outline-minor-mode
-[[https://github.com/tj64/outline-magic][outline-magic]] を用いて outline-minor-mode を使いやすくします．
-outline-minor-mode でも ~M-矢印~ でサブツリーの移動ができるように再バインドします．
+** Outline
+Hydra を用いて outline-minor-mode を使いやすくします．
 
 #+begin_src emacs-lisp
-  (use-package outline-magic
+  (use-feature outline
+    :hydra
+    (hydra-outline
+     (:hint nil)
+     "
+  ^Navigate^                ^Hide^         ^Show^         ^Edit^
+  ^^^^^^^^^^------------------------------------------------------------------------------
+  _u_: up                   _l_: leaves    _a_: all       _↑_: move up
+  _n_: next visible         _t_: body      _e_: entry     _↓_: move down
+  _p_: previous visible     _c_: entry     _k_: branches  _←_: promote
+  _f_: forward same level   _d_: subtree   _i_: children  _→_: demote
+  _b_: backward same level  _q_: sublevel  _s_: subtree
+  ^^                        _o_: other     ^ ^            _z_: quit
+  "
+     ;; Navigate
+     ("u" outline-up-heading)
+     ("n" outline-next-visible-heading)
+     ("p" outline-previous-visible-heading)
+     ("f" outline-forward-same-level)
+     ("b" outline-backward-same-level)
+     ;; Hide
+     ("l" hide-leaves)
+     ("t" hide-body)
+     ("c" hide-entry)
+     ("d" hide-subtree)
+     ("q" hide-sublevel)
+     ("o" hide-other)
+     ;; Show
+     ("a" show-all)
+     ("e" show-entry)
+     ("k" show-branches)
+     ("i" show-children)
+     ("s" show-subtree)
+     ;; Edit
+     ("<up>" outline-move-subtree-up)
+     ("<down>" outline-move-subtree-down)
+     ("<left>" outline-promote)
+     ("<right>" outline-demote)
+     ;; quit
+     ("z" nil))
     :bind (:map outline-minor-mode-map
-                ("C-<tab>" . outline-cycle)
-                ("M-<left>" . outline-promote)
-                ("M-<right>" . outline-demote)
-                ("M-<up>" . outline-move-subtree-up)
-                ("M-<down>" . outline-move-subtree-down))
-    :demand t
-    :after (outline))
+                ("C-c #" . hydra-outline/body)))
 #+end_src
 
 ** TeX/LaTeX
@@ -961,10 +993,6 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
                                 (mapcar #'car my-YaTeX-section-alist))
                         t)))
 
-  (defvar my-YaTeX-outline-promotion-headings
-    '("\\chapter" "\\section" "\\subsection"
-      "\\subsubsection" "\\paragraph" "\\subparagraph"))
-
   (defun my-YaTeX-outline-level ()
     (if (looking-at my-YaTeX-outline-regexp)
         (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
@@ -973,8 +1001,7 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
   (defun my-YaTeX-with-outline ()
     (outline-minor-mode 1)
     (setq-local outline-regexp my-YaTeX-outline-regexp)
-    (setq-local outline-level #'my-YaTeX-outline-level)
-    (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
+    (setq-local outline-level #'my-YaTeX-outline-level))
 #+end_src
 
 YaTeX の読み込み前に ~YaTeX-inhibit-prefix-letter~ を t に設定することで，

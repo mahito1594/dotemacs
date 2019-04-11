@@ -394,15 +394,48 @@ _e_: end of line        ^ ^                 _x_: execute command
   :demand t
   :after (ox))
 
-(use-package outline-magic
+(use-feature outline
+  :hydra
+  (hydra-outline
+   (:hint nil)
+   "
+^Navigate^                ^Hide^         ^Show^         ^Edit^
+^^^^^^^^^^------------------------------------------------------------------------------
+_u_: up                   _l_: leaves    _a_: all       _↑_: move up
+_n_: next visible         _t_: body      _e_: entry     _↓_: move down
+_p_: previous visible     _c_: entry     _k_: branches  _←_: promote
+_f_: forward same level   _d_: subtree   _i_: children  _→_: demote
+_b_: backward same level  _q_: sublevel  _s_: subtree
+^^                        _o_: other     ^ ^            _z_: quit
+"
+   ;; Navigate
+   ("u" outline-up-heading)
+   ("n" outline-next-visible-heading)
+   ("p" outline-previous-visible-heading)
+   ("f" outline-forward-same-level)
+   ("b" outline-backward-same-level)
+   ;; Hide
+   ("l" hide-leaves)
+   ("t" hide-body)
+   ("c" hide-entry)
+   ("d" hide-subtree)
+   ("q" hide-sublevel)
+   ("o" hide-other)
+   ;; Show
+   ("a" show-all)
+   ("e" show-entry)
+   ("k" show-branches)
+   ("i" show-children)
+   ("s" show-subtree)
+   ;; Edit
+   ("<up>" outline-move-subtree-up)
+   ("<down>" outline-move-subtree-down)
+   ("<left>" outline-promote)
+   ("<right>" outline-demote)
+   ;; quit
+   ("z" nil))
   :bind (:map outline-minor-mode-map
-              ("C-<tab>" . outline-cycle)
-              ("M-<left>" . outline-promote)
-              ("M-<right>" . outline-demote)
-              ("M-<up>" . outline-move-subtree-up)
-              ("M-<down>" . outline-move-subtree-down))
-  :demand t
-  :after (outline))
+              ("C-c #" . hydra-outline/body)))
 
 (use-package yatex
   :functions (my-YaTeX-with-outline)
