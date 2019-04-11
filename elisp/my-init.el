@@ -91,7 +91,12 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   (unless (member "all-the-icons" (font-family-list))
     (all-the-icons-install-fonts t)))
 
-(use-package hydra)
+(use-package hydra
+  :demand t)
+
+(use-package use-package-hydra
+  :demand t
+  :after (hydra))
 
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
@@ -132,38 +137,9 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
                'arrow)))
 
 (use-package counsel
-  :preface
-  (defhydra hydra-navi
-    (:hint nil)
-    "
-  ^Navigate^              ^ ^                 ^Action
-  ^^^^^^-----------------------------------------------------------
-  _f_: foward char        _n_: next line      _s_: search
-  _F_: foward word        _p_: previous line  _r_: replace
-  _b_: backward char      _v_: scroll down
-  _B_: backward word      _V_: scroll up      _k_: kill buffer
-  _a_: beginning of line  ^ ^
-  _e_: end of line        ^ ^                 _x_: execute command
-  "
-    ("n" next-line)
-    ("p" previous-line)
-    ("f" forward-char)
-    ("F" forward-word)
-    ("b" backward-char)
-    ("B" backward-word)
-    ("a" beginning-of-line)
-    ("e" move-end-of-line)
-    ("v" scroll-up-command)
-    ("V" scroll-down-command)
-    ("s" swiper)
-    ("r" query-replece)
-    ("x" counsel-M-x)
-    ("k" kill-buffer)
-    ("q" nil "quit"))
   :hook ((after-init . ivy-mode)
          (ivy-mode . counsel-mode))
-  :bind (("C-v" . hydra-navi/body)
-         ("C-s" . swiper)
+  :bind (("C-s" . swiper)
          ("C-r" . swiper)
          ("C-S-s" . swiper-all)
          ("C-c C-r" . ivy-resume)
@@ -238,6 +214,34 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   (which-key-popup-type 'side-window)
   (which-key-side-window-location 'bottom)
   :blackout t)
+
+(defhydra hydra-navi
+  (:hint nil)
+  "
+^Navigate^              ^ ^                 ^Action
+^^^^^^-----------------------------------------------------------
+_f_: foward char        _n_: next line      _s_: search
+_F_: foward word        _p_: previous line  _r_: replace
+_b_: backward char      _v_: scroll down
+_B_: backward word      _V_: scroll up      _k_: kill buffer
+_a_: beginning of line  ^ ^
+_e_: end of line        ^ ^                 _x_: execute command
+"
+  ("n" next-line)
+  ("p" previous-line)
+  ("f" forward-char)
+  ("F" forward-word)
+  ("b" backward-char)
+  ("B" backward-word)
+  ("a" beginning-of-line)
+  ("e" move-end-of-line)
+  ("v" scroll-up-command)
+  ("V" scroll-down-command)
+  ("s" swiper)
+  ("r" query-replace)
+  ("x" counsel-M-x)
+  ("k" kill-buffer)
+  ("q" nil "quit"))
 
 (use-feature elec-pair
   :hook (after-init . electric-pair-mode))
@@ -591,10 +595,11 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
 
 (set-frame-parameter nil 'fullscreen 'maximized)
 
-(define-key global-map (kbd "C-m") 'newline-and-indent)
-(define-key global-map (kbd "C-2") 'set-mark-command)
-(define-key global-map (kbd "C-t") 'other-window)
-(define-key global-map (kbd "C-;") 'comment-line)
+(define-key global-map (kbd "C-m") #'newline-and-indent)
+(define-key global-map (kbd "C-2") #'set-mark-command)
+(define-key global-map (kbd "C-t") #'other-window)
+(define-key global-map (kbd "C-;") #'comment-line)
+(define-key global-map (kbd "C-v") #'hydra-navi/body)
 
 (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 (define-key global-map (kbd "C-x ?") 'help-for-help)

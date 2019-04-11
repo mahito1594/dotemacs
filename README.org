@@ -282,6 +282,7 @@ keywords は次の順序で書くようにします:
 - =:mode=
 - =:interpreter=
 - =:hook=
+- =:hydra=
 - =:bind=
 - =:demand=
 - =:after=
@@ -357,9 +358,15 @@ lsp-mode が flymake に依存しており，古いバージョンの flymake �
 
 *** Hydra
 [[https://github.com/abo-abo/hydra][Hydra]] を利用してキーバインドを使いやすくします．
+また [[https://gitlab.com/to1ne/use-package-hydra][use-package-hydra]] を用いて use-package のキーワードを追加します．
 
 #+begin_src emacs-lisp
-  (use-package hydra)
+  (use-package hydra
+    :demand t)
+
+  (use-package use-package-hydra
+    :demand t
+    :after (hydra))
 #+end_src
 
 * Utilities
@@ -444,42 +451,11 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 補完インターフェイスとして [[https://github.com/abo-abo/swiper][Ivy/Counsel]] を利用します．
 詳しい使い方は[[https://oremacs.com/swiper/][ユーザマニュアル]]を参照してください．
 
-~C-v~ で hydra-navi による移動ができるようになります．
-
 #+begin_src emacs-lisp
   (use-package counsel
-    :preface
-    (defhydra hydra-navi
-      (:hint nil)
-      "
-    ^Navigate^              ^ ^                 ^Action
-    ^^^^^^-----------------------------------------------------------
-    _f_: foward char        _n_: next line      _s_: search
-    _F_: foward word        _p_: previous line  _r_: replace
-    _b_: backward char      _v_: scroll down
-    _B_: backward word      _V_: scroll up      _k_: kill buffer
-    _a_: beginning of line  ^ ^
-    _e_: end of line        ^ ^                 _x_: execute command
-    "
-      ("n" next-line)
-      ("p" previous-line)
-      ("f" forward-char)
-      ("F" forward-word)
-      ("b" backward-char)
-      ("B" backward-word)
-      ("a" beginning-of-line)
-      ("e" move-end-of-line)
-      ("v" scroll-up-command)
-      ("V" scroll-down-command)
-      ("s" swiper)
-      ("r" query-replece)
-      ("x" counsel-M-x)
-      ("k" kill-buffer)
-      ("q" nil "quit"))
     :hook ((after-init . ivy-mode)
            (ivy-mode . counsel-mode))
-    :bind (("C-v" . hydra-navi/body)
-           ("C-s" . swiper)
+    :bind (("C-s" . swiper)
            ("C-r" . swiper)
            ("C-S-s" . swiper-all)
            ("C-c C-r" . ivy-resume)
@@ -616,7 +592,39 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     :blackout t)
 #+end_src
 
-** Edit
+** Navigation
+=C-v= で =hydra-navi= による移動ができるようになります．
+
+#+begin_src emacs-lisp
+  (defhydra hydra-navi
+    (:hint nil)
+    "
+  ^Navigate^              ^ ^                 ^Action
+  ^^^^^^-----------------------------------------------------------
+  _f_: foward char        _n_: next line      _s_: search
+  _F_: foward word        _p_: previous line  _r_: replace
+  _b_: backward char      _v_: scroll down
+  _B_: backward word      _V_: scroll up      _k_: kill buffer
+  _a_: beginning of line  ^ ^
+  _e_: end of line        ^ ^                 _x_: execute command
+  "
+    ("n" next-line)
+    ("p" previous-line)
+    ("f" forward-char)
+    ("F" forward-word)
+    ("b" backward-char)
+    ("B" backward-word)
+    ("a" beginning-of-line)
+    ("e" move-end-of-line)
+    ("v" scroll-up-command)
+    ("V" scroll-down-command)
+    ("s" swiper)
+    ("r" query-replace)
+    ("x" counsel-M-x)
+    ("k" kill-buffer)
+    ("q" nil "quit"))
+#+end_src
+
 ** Others
 *** Parenthesis
 対応する括弧類は自動的に挿入し，また強調するようにします．
@@ -884,7 +892,7 @@ HTML へのエクスポートの際，コードハイライトに [[https://gith
     :after (ox))
 #+end_src
 
-*** outline-minor-mode
+** outline-minor-mode
 [[https://github.com/tj64/outline-magic][outline-magic]] を用いて outline-minor-mode を使いやすくします．
 outline-minor-mode でも ~M-矢印~ でサブツリーの移動ができるように再バインドします．
 
@@ -1347,10 +1355,11 @@ Emacs 起動時にフレームを最大化します．
 global-map のキーバインドを次のように変更します．
 
 #+begin_src emacs-lisp
-  (define-key global-map (kbd "C-m") 'newline-and-indent)
-  (define-key global-map (kbd "C-2") 'set-mark-command)
-  (define-key global-map (kbd "C-t") 'other-window)
-  (define-key global-map (kbd "C-;") 'comment-line)
+  (define-key global-map (kbd "C-m") #'newline-and-indent)
+  (define-key global-map (kbd "C-2") #'set-mark-command)
+  (define-key global-map (kbd "C-t") #'other-window)
+  (define-key global-map (kbd "C-;") #'comment-line)
+  (define-key global-map (kbd "C-v") #'hydra-navi/body)
 #+end_src
 
 また ~C-h~ を ~DEL~ と入れ替えます．
