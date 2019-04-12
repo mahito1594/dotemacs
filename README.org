@@ -282,6 +282,7 @@ keywords は次の順序で書くようにします:
 - =:mode=
 - =:interpreter=
 - =:hook=
+- =:hydra=
 - =:bind=
 - =:demand=
 - =:after=
@@ -355,6 +356,19 @@ lsp-mode が flymake に依存しており，古いバージョンの flymake �
       (all-the-icons-install-fonts t)))
 #+end_src
 
+*** Hydra
+[[https://github.com/abo-abo/hydra][Hydra]] を利用してキーバインドを使いやすくします．
+また [[https://gitlab.com/to1ne/use-package-hydra][use-package-hydra]] を用いて use-package のキーワードを追加します．
+
+#+begin_src emacs-lisp
+  (use-package hydra
+    :demand t)
+
+  (use-package use-package-hydra
+    :demand t
+    :after (hydra))
+#+end_src
+
 * Utilities
 ** Language, Codings
 日本語かつ UTF8 を使用するようにします．
@@ -410,6 +424,73 @@ Emacs 起動後に =server-start= します．
 
 ** Directories
 *** dired
+~.~ を押下することで Hydra を用いた ~dired-mode~ の操作をできるようにします．
+
+#+begin_src emacs-lisp
+  (use-feature dired
+    :custom
+    (dired-recursive-copies 'always)
+    :config
+    (put 'dired-find-alternate-file 'disabled nil))
+
+  (use-feature dired-x
+    :hydra
+    (hydra-dired
+     (:hint nil)
+     "
+  ^Navigate^          ^Edit^            ^Mark^               ^Command^           ^Misc^
+  ^^^^^^^^^^-----------------------------------------------------------------------------------------
+  _n_: next           _+_: mkdir        _m_: mark            _z_: compress file  _(_: details
+  _p_: previous       _C_: copy         _u_: unmark          _Z_: compress       _)_: hide some files
+  _J_: up directory   _R_: rename       _U_: unmark all      ^ ^                 _g_: refresh
+  ^ ^                 _D_: delete       _t_: toggle marks    _M_: chmod
+  _f_: open file      ^ ^               _E_: extension mark  _G_: chgrp          _q_: quit window
+  _v_: view file      _Y_: rel symlink  _F_: find marked     _O_: chown
+  _a_: open in        _S_: symlink
+  ^ ^    current buf  ^ ^               ^ ^                  _!_: shell command  _._: toggle Hydra
+  "
+     ;; Navigate
+     ("n" dired-next-line)
+     ("p" dired-previous-line)
+     ("g" revert-buffer)
+     ("J" dired-up-directory)
+     ("f" dired-find-file)
+     ("v" dired-view-file)
+     ("a" dired-find-alternate-file)
+     ;; Edit
+     ("+" dired-create-directory)
+     ("C" dired-do-copy)
+     ("R" dired-do-rename)
+     ("D" dired-do-delete)
+     ("Y" dired-do-relsymlink)
+     ("S" dired-do-symlink)
+     ;; Mark
+     ("m" dired-mark)
+     ("u" dired-unmark)
+     ("U" dired-unmark-all)
+     ("t" dired-toggle-marks)
+     ("E" dired-mark-extension)
+     ("F" dired-do-find-marked-files)
+     ("z" diredp-compress-this-file)
+     ("Z" dired-do-compress)
+     ("M" dired-do-chmod)
+     ("G" dired-do-chgrp)
+     ("O" dired-do-chown)
+     ("!" dired-do-shell-command)
+     ;; Misc
+     ("(" dired-hide-details-mode)
+     (")" dired-omit-mode)
+     ("g" revert-buffer)
+     ("q" quit-window)
+     ("." nil))
+    :bind (:map dired-mode-map
+                ("." . hydra-dired/body))
+    :demand t
+    :after (dired)
+    :custom
+    (dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$"))
+#+end_src
+
 ~dired-mode~ の際，ファイルのアイコンを表示するようにします．
 
 #+begin_src emacs-lisp
@@ -453,9 +534,17 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
     (ivy-count-format "(%d/%d) ")
     (ivy-wrap t)
     (ivy-format-function 'ivy-format-function-arrow)
-    (counsel-yank-pop-separator "\n---------\n")
+    (counsel-yank-pop-separator "\n<--------->\n")
     (ivy-initial-inputs-alist nil)
     :blackout t)
+#+end_src
+
+ivy-hydra を利用して minibuffer での操作性を向上させます．
+
+#+begin_src emacs-lisp
+  (use-package ivy-hydra
+    :bind (:map ivy-minibuffer-map
+                ("C-o" . hydra-ivy/body)))
 #+end_src
 
 [[https://github.com/Yevgnen/ivy-rich][ivy-rich]] を用いてバッファ切り替えの際などにアイコンを表示するようにします．
@@ -568,6 +657,39 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
     (which-key-popup-type 'side-window)
     (which-key-side-window-location 'bottom)
     :blackout t)
+#+end_src
+
+** Navigation
+=C-v= で =hydra-navi= による移動ができるようになります．
+
+#+begin_src emacs-lisp
+  (defhydra hydra-navi
+    (:hint nil)
+    "
+  ^Navigate^              ^ ^                 ^Action
+  ^^^^^^-----------------------------------------------------------
+  _f_: foward char        _n_: next line      _s_: search
+  _F_: foward word        _p_: previous line  _r_: replace
+  _b_: backward char      _v_: scroll down
+  _B_: backward word      _V_: scroll up      _k_: kill buffer
+  _a_: beginning of line  ^ ^
+  _e_: end of line        ^ ^                 _x_: execute command
+  "
+    ("n" next-line)
+    ("p" previous-line)
+    ("f" forward-char)
+    ("F" forward-word)
+    ("b" backward-char)
+    ("B" backward-word)
+    ("a" beginning-of-line)
+    ("e" move-end-of-line)
+    ("v" scroll-up-command)
+    ("V" scroll-down-command)
+    ("s" swiper)
+    ("r" query-replace)
+    ("x" counsel-M-x)
+    ("k" kill-buffer)
+    ("q" nil "quit"))
 #+end_src
 
 ** Others
@@ -837,20 +959,52 @@ HTML へのエクスポートの際，コードハイライトに [[https://gith
     :after (ox))
 #+end_src
 
-*** outline-minor-mode
-[[https://github.com/tj64/outline-magic][outline-magic]] を用いて outline-minor-mode を使いやすくします．
-outline-minor-mode でも ~M-矢印~ でサブツリーの移動ができるように再バインドします．
+** Outline
+Hydra を用いて outline-minor-mode を使いやすくします．
 
 #+begin_src emacs-lisp
-  (use-package outline-magic
+  (use-feature outline
+    :hydra
+    (hydra-outline
+     (:hint nil)
+     "
+  ^Navigate^                ^Hide^         ^Show^         ^Edit^
+  ^^^^^^^^^^------------------------------------------------------------------------------
+  _u_: up                   _l_: leaves    _a_: all       _↑_: move up
+  _n_: next visible         _t_: body      _e_: entry     _↓_: move down
+  _p_: previous visible     _c_: entry     _k_: branches  _←_: promote
+  _f_: forward same level   _d_: subtree   _i_: children  _→_: demote
+  _b_: backward same level  _q_: sublevel  _s_: subtree
+  ^^                        _o_: other     ^ ^            _z_: quit
+  "
+     ;; Navigate
+     ("u" outline-up-heading)
+     ("n" outline-next-visible-heading)
+     ("p" outline-previous-visible-heading)
+     ("f" outline-forward-same-level)
+     ("b" outline-backward-same-level)
+     ;; Hide
+     ("l" outline-hide-leaves)
+     ("t" outline-hide-body)
+     ("c" outline-hide-entry)
+     ("d" outline-hide-subtree)
+     ("q" outline-hide-sublevel)
+     ("o" outline-hide-other)
+     ;; Show
+     ("a" outline-show-all)
+     ("e" outline-show-entry)
+     ("k" outline-show-branches)
+     ("i" outline-show-children)
+     ("s" outline-show-subtree)
+     ;; Edit
+     ("<up>" outline-move-subtree-up)
+     ("<down>" outline-move-subtree-down)
+     ("<left>" outline-promote)
+     ("<right>" outline-demote)
+     ;; quit
+     ("z" nil))
     :bind (:map outline-minor-mode-map
-                ("C-<tab>" . outline-cycle)
-                ("M-<left>" . outline-promote)
-                ("M-<right>" . outline-demote)
-                ("M-<up>" . outline-move-subtree-up)
-                ("M-<down>" . outline-move-subtree-down))
-    :demand t
-    :after (outline))
+                ("C-c #" . hydra-outline/body)))
 #+end_src
 
 ** TeX/LaTeX
@@ -906,10 +1060,6 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
                                 (mapcar #'car my-YaTeX-section-alist))
                         t)))
 
-  (defvar my-YaTeX-outline-promotion-headings
-    '("\\chapter" "\\section" "\\subsection"
-      "\\subsubsection" "\\paragraph" "\\subparagraph"))
-
   (defun my-YaTeX-outline-level ()
     (if (looking-at my-YaTeX-outline-regexp)
         (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
@@ -918,8 +1068,7 @@ outline-minor-mode と併用するためにいくつかの変数や関数を定�
   (defun my-YaTeX-with-outline ()
     (outline-minor-mode 1)
     (setq-local outline-regexp my-YaTeX-outline-regexp)
-    (setq-local outline-level #'my-YaTeX-outline-level)
-    (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
+    (setq-local outline-level #'my-YaTeX-outline-level))
 #+end_src
 
 YaTeX の読み込み前に ~YaTeX-inhibit-prefix-letter~ を t に設定することで，
@@ -1300,10 +1449,11 @@ Emacs 起動時にフレームを最大化します．
 global-map のキーバインドを次のように変更します．
 
 #+begin_src emacs-lisp
-  (define-key global-map (kbd "C-m") 'newline-and-indent)
-  (define-key global-map (kbd "C-2") 'set-mark-command)
-  (define-key global-map (kbd "C-t") 'other-window)
-  (define-key global-map (kbd "C-;") 'comment-line)
+  (define-key global-map (kbd "C-m") #'newline-and-indent)
+  (define-key global-map (kbd "C-2") #'set-mark-command)
+  (define-key global-map (kbd "C-t") #'other-window)
+  (define-key global-map (kbd "C-;") #'comment-line)
+  (define-key global-map (kbd "C-v") #'hydra-navi/body)
 #+end_src
 
 また ~C-h~ を ~DEL~ と入れ替えます．

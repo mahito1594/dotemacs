@@ -91,6 +91,13 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   (unless (member "all-the-icons" (font-family-list))
     (all-the-icons-install-fonts t)))
 
+(use-package hydra
+  :demand t)
+
+(use-package use-package-hydra
+  :demand t
+  :after (hydra))
+
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
 
@@ -118,6 +125,69 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
       (concat my-backup-directory
               "/.saves-"))
 
+(use-feature dired
+  :custom
+  (dired-recursive-copies 'always)
+  :config
+  (put 'dired-find-alternate-file 'disabled nil))
+
+(use-feature dired-x
+  :hydra
+  (hydra-dired
+   (:hint nil)
+   "
+^Navigate^          ^Edit^            ^Mark^               ^Command^           ^Misc^
+^^^^^^^^^^-----------------------------------------------------------------------------------------
+_n_: next           _+_: mkdir        _m_: mark            _z_: compress file  _(_: details
+_p_: previous       _C_: copy         _u_: unmark          _Z_: compress       _)_: hide some files
+_J_: up directory   _R_: rename       _U_: unmark all      ^ ^                 _g_: refresh
+^ ^                 _D_: delete       _t_: toggle marks    _M_: chmod
+_f_: open file      ^ ^               _E_: extension mark  _G_: chgrp          _q_: quit window
+_v_: view file      _Y_: rel symlink  _F_: find marked     _O_: chown
+_a_: open in        _S_: symlink
+^ ^    current buf  ^ ^               ^ ^                  _!_: shell command  _._: toggle Hydra
+"
+   ;; Navigate
+   ("n" dired-next-line)
+   ("p" dired-previous-line)
+   ("g" revert-buffer)
+   ("J" dired-up-directory)
+   ("f" dired-find-file)
+   ("v" dired-view-file)
+   ("a" dired-find-alternate-file)
+   ;; Edit
+   ("+" dired-create-directory)
+   ("C" dired-do-copy)
+   ("R" dired-do-rename)
+   ("D" dired-do-delete)
+   ("Y" dired-do-relsymlink)
+   ("S" dired-do-symlink)
+   ;; Mark
+   ("m" dired-mark)
+   ("u" dired-unmark)
+   ("U" dired-unmark-all)
+   ("t" dired-toggle-marks)
+   ("E" dired-mark-extension)
+   ("F" dired-do-find-marked-files)
+   ("z" diredp-compress-this-file)
+   ("Z" dired-do-compress)
+   ("M" dired-do-chmod)
+   ("G" dired-do-chgrp)
+   ("O" dired-do-chown)
+   ("!" dired-do-shell-command)
+   ;; Misc
+   ("(" dired-hide-details-mode)
+   (")" dired-omit-mode)
+   ("g" revert-buffer)
+   ("q" quit-window)
+   ("." nil))
+  :bind (:map dired-mode-map
+              ("." . hydra-dired/body))
+  :demand t
+  :after (dired)
+  :custom
+  (dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$"))
+
 (use-package all-the-icons-dired
   :if (window-system)
   :hook (dired-mode . all-the-icons-dired-mode))
@@ -144,9 +214,13 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   (ivy-count-format "(%d/%d) ")
   (ivy-wrap t)
   (ivy-format-function 'ivy-format-function-arrow)
-  (counsel-yank-pop-separator "\n---------\n")
+  (counsel-yank-pop-separator "\n<--------->\n")
   (ivy-initial-inputs-alist nil)
   :blackout t)
+
+(use-package ivy-hydra
+  :bind (:map ivy-minibuffer-map
+              ("C-o" . hydra-ivy/body)))
 
 (use-package ivy-rich
   :functions (my-ivy-rich-buffer-icon my-ivy-rich-file-icon)
@@ -203,6 +277,34 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   (which-key-popup-type 'side-window)
   (which-key-side-window-location 'bottom)
   :blackout t)
+
+(defhydra hydra-navi
+  (:hint nil)
+  "
+^Navigate^              ^ ^                 ^Action
+^^^^^^-----------------------------------------------------------
+_f_: foward char        _n_: next line      _s_: search
+_F_: foward word        _p_: previous line  _r_: replace
+_b_: backward char      _v_: scroll down
+_B_: backward word      _V_: scroll up      _k_: kill buffer
+_a_: beginning of line  ^ ^
+_e_: end of line        ^ ^                 _x_: execute command
+"
+  ("n" next-line)
+  ("p" previous-line)
+  ("f" forward-char)
+  ("F" forward-word)
+  ("b" backward-char)
+  ("B" backward-word)
+  ("a" beginning-of-line)
+  ("e" move-end-of-line)
+  ("v" scroll-up-command)
+  ("V" scroll-down-command)
+  ("s" swiper)
+  ("r" query-replace)
+  ("x" counsel-M-x)
+  ("k" kill-buffer)
+  ("q" nil "quit"))
 
 (use-feature elec-pair
   :hook (after-init . electric-pair-mode))
@@ -355,15 +457,48 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :demand t
   :after (ox))
 
-(use-package outline-magic
+(use-feature outline
+  :hydra
+  (hydra-outline
+   (:hint nil)
+   "
+^Navigate^                ^Hide^         ^Show^         ^Edit^
+^^^^^^^^^^------------------------------------------------------------------------------
+_u_: up                   _l_: leaves    _a_: all       _↑_: move up
+_n_: next visible         _t_: body      _e_: entry     _↓_: move down
+_p_: previous visible     _c_: entry     _k_: branches  _←_: promote
+_f_: forward same level   _d_: subtree   _i_: children  _→_: demote
+_b_: backward same level  _q_: sublevel  _s_: subtree
+^^                        _o_: other     ^ ^            _z_: quit
+"
+   ;; Navigate
+   ("u" outline-up-heading)
+   ("n" outline-next-visible-heading)
+   ("p" outline-previous-visible-heading)
+   ("f" outline-forward-same-level)
+   ("b" outline-backward-same-level)
+   ;; Hide
+   ("l" outline-hide-leaves)
+   ("t" outline-hide-body)
+   ("c" outline-hide-entry)
+   ("d" outline-hide-subtree)
+   ("q" outline-hide-sublevel)
+   ("o" outline-hide-other)
+   ;; Show
+   ("a" outline-show-all)
+   ("e" outline-show-entry)
+   ("k" outline-show-branches)
+   ("i" outline-show-children)
+   ("s" outline-show-subtree)
+   ;; Edit
+   ("<up>" outline-move-subtree-up)
+   ("<down>" outline-move-subtree-down)
+   ("<left>" outline-promote)
+   ("<right>" outline-demote)
+   ;; quit
+   ("z" nil))
   :bind (:map outline-minor-mode-map
-              ("C-<tab>" . outline-cycle)
-              ("M-<left>" . outline-promote)
-              ("M-<right>" . outline-demote)
-              ("M-<up>" . outline-move-subtree-up)
-              ("M-<down>" . outline-move-subtree-down))
-  :demand t
-  :after (outline))
+              ("C-c #" . hydra-outline/body)))
 
 (use-package yatex
   :functions (my-YaTeX-with-outline)
@@ -556,10 +691,11 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
 
 (set-frame-parameter nil 'fullscreen 'maximized)
 
-(define-key global-map (kbd "C-m") 'newline-and-indent)
-(define-key global-map (kbd "C-2") 'set-mark-command)
-(define-key global-map (kbd "C-t") 'other-window)
-(define-key global-map (kbd "C-;") 'comment-line)
+(define-key global-map (kbd "C-m") #'newline-and-indent)
+(define-key global-map (kbd "C-2") #'set-mark-command)
+(define-key global-map (kbd "C-t") #'other-window)
+(define-key global-map (kbd "C-;") #'comment-line)
+(define-key global-map (kbd "C-v") #'hydra-navi/body)
 
 (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 (define-key global-map (kbd "C-x ?") 'help-for-help)
