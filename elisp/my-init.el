@@ -125,6 +125,69 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
       (concat my-backup-directory
               "/.saves-"))
 
+(use-feature dired
+  :custom
+  (dired-recursive-copies 'always)
+  :config
+  (put 'dired-find-alternate-file 'disabled nil))
+
+(use-feature dired-x
+  :hydra
+  (hydra-dired
+   (:hint nil)
+   "
+^Navigate^          ^Edit^            ^Mark^               ^Command^           ^Misc^
+^^^^^^^^^^-----------------------------------------------------------------------------------------
+_n_: next           _+_: mkdir        _m_: mark            _z_: compress file  _(_: details
+_p_: previous       _C_: copy         _u_: unmark          _Z_: compress       _)_: hide some files
+_J_: up directory   _R_: rename       _U_: unmark all      ^ ^                 _g_: refresh
+^ ^                 _D_: delete       _t_: toggle marks    _M_: chmod
+_f_: open file      ^ ^               _E_: extension mark  _G_: chgrp          _q_: quit window
+_v_: view file      _Y_: rel symlink  _F_: find marked     _O_: chown
+_a_: open in        _S_: symlink
+^ ^    current buf  ^ ^               ^ ^                  _!_: shell command  _._: toggle Hydra
+"
+   ;; Navigate
+   ("n" dired-next-line)
+   ("p" dired-previous-line)
+   ("g" revert-buffer)
+   ("J" dired-up-directory)
+   ("f" dired-find-file)
+   ("v" dired-view-file)
+   ("a" dired-find-alternate-file)
+   ;; Edit
+   ("+" dired-create-directory)
+   ("C" dired-do-copy)
+   ("R" dired-do-rename)
+   ("D" dired-do-delete)
+   ("Y" dired-do-relsymlink)
+   ("S" dired-do-symlink)
+   ;; Mark
+   ("m" dired-mark)
+   ("u" dired-unmark)
+   ("U" dired-unmark-all)
+   ("t" dired-toggle-marks)
+   ("E" dired-mark-extension)
+   ("F" dired-do-find-marked-files)
+   ("z" diredp-compress-this-file)
+   ("Z" dired-do-compress)
+   ("M" dired-do-chmod)
+   ("G" dired-do-chgrp)
+   ("O" dired-do-chown)
+   ("!" dired-do-shell-command)
+   ;; Misc
+   ("(" dired-hide-details-mode)
+   (")" dired-omit-mode)
+   ("g" revert-buffer)
+   ("q" quit-window)
+   ("." nil))
+  :bind (:map dired-mode-map
+              ("." . hydra-dired/body))
+  :demand t
+  :after (dired)
+  :custom
+  (dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$"))
+
 (use-package all-the-icons-dired
   :if (window-system)
   :hook (dired-mode . all-the-icons-dired-mode))
