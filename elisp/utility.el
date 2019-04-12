@@ -120,6 +120,44 @@
                                                my-org-electric-pair-pairs))
   (setq-local electric-pair-inhibit-predicate #'my-org-electric-pair-inhibit))
 
+(defun my--outline-move-subtree-down (&optional arg)
+  "Move the currrent subtree down past ARG headlines of the same level.
+If the current subtree is folded, call `outline-hide-subtree' after move down."
+  (interactive "p")
+  (let* ((headers (or arg 1))
+         (movfunc (if (> headers 0) 'outline-get-next-sibling
+                    'outline-get-last-sibling))
+         (ins-point (make-marker))
+         (cnt (abs headers))
+         (folded (save-match-data
+                   (outline-end-of-heading)
+                   (outline-invisible-p)))
+         beg end txt)
+    ;; Select the tree
+    (outline-back-to-heading)
+    (setq beg (point))
+    (outline-end-of-subtree)
+    (if (= (char-after) ?\n) (forward-char 1))
+    (setq end (point))
+    ;; Find insertion point, with error handling
+    (goto-char beg)
+    (while (> cnt 0)
+      (or (funcall movfunc)
+          (progn (goto-char beg)
+                 (error "Cannot move past superior level")))
+      (setq cnt (1- cnt)))
+    (if (> headers 0)
+        ;; Moving forward - still need to move over subtree
+        (progn (outline-end-of-subtree)
+               (if (= (char-after) ?\n) (forward-char 1))))
+    (move-marker ins-point (point))
+    (setq txt (buffer-substring beg end))
+    (delete-region beg end)
+    (insert txt)
+    (goto-char ins-point)
+    (if folded (outline-hide-subtree))
+    (move-marker ins-point nil)))
+
 ;;; For YaTeX: integrate with outline-minor-mode
 ;; The following code is a modification a part of `tex-mode.el'
 ;; which is bundled with GNU Emacs.
@@ -147,6 +185,10 @@
                               (mapcar #'car my-YaTeX-section-alist))
                       t)))
 
+(defvar my-YaTeX-outline-promotion-headings
+  '("\\chapter" "\\section" "\\subsection"
+    "\\subsubsection" "\\paragraph" "\\subparagraph"))
+
 (defun my-YaTeX-outline-level ()
   (if (looking-at my-YaTeX-outline-regexp)
       (1+ (or (cdr (assoc (match-string 1) my-YaTeX-section-alist)) -1))
@@ -155,7 +197,8 @@
 (defun my-YaTeX-with-outline ()
   (outline-minor-mode 1)
   (setq-local outline-regexp my-YaTeX-outline-regexp)
-  (setq-local outline-level #'my-YaTeX-outline-level))
+  (setq-local outline-level #'my-YaTeX-outline-level)
+  (setq-local outline-promotion-headings my-YaTeX-outline-promotion-headings))
 
 ;;; For Ebib
 (defun my-ebib-name-transform-function (key)
