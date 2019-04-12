@@ -965,6 +965,7 @@ outline-magic が再定義する =outline-move-subtree-down= は移動後にサ�
 移動後に折りたたむように advice-add します．
 
 #+begin_src emacs-lisp :tangle ./elisp/utility.el
+  ;;; For outline-magic
   (defun my--outline-move-subtree-down (&optional arg)
     "Move the currrent subtree down past ARG headlines of the same level.
   If the current subtree is folded, call `outline-hide-subtree' after move down."

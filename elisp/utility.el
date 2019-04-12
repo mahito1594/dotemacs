@@ -120,6 +120,7 @@
                                                my-org-electric-pair-pairs))
   (setq-local electric-pair-inhibit-predicate #'my-org-electric-pair-inhibit))
 
+;;; For outline-magic
 (defun my--outline-move-subtree-down (&optional arg)
   "Move the currrent subtree down past ARG headlines of the same level.
 If the current subtree is folded, call `outline-hide-subtree' after move down."
