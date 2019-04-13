@@ -317,6 +317,8 @@ _e_: end of line        ^ ^                 _x_: execute command
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(setq-default indent-tabs-mode nil)
+
 (use-feature whitespace
   :commands (whitespace-mode)
   :bind (("C-c w" . whitespace-mode))

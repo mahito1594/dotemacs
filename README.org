@@ -710,6 +710,12 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 #+end_src
 
 *** Whitespace
+基本的に，インデントにはタブ文字ではなく空白文字を利用します．
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+end_src
+
 ~C-c w~ で空白文字を可視化します．
 
 #+begin_src emacs-lisp
