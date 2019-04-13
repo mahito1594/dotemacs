@@ -457,19 +457,20 @@ _e_: end of line        ^ ^                 _x_: execute command
   :demand t
   :after (ox))
 
-(use-feature outline
+(use-package outline-magic
+  :functions (my--outline-move-subtree-down)
   :hydra
   (hydra-outline
    (:hint nil)
    "
-^Navigate^                ^Hide^         ^Show^         ^Edit^
-^^^^^^^^^^------------------------------------------------------------------------------
-_u_: up                   _l_: leaves    _a_: all       _↑_: move up
-_n_: next visible         _t_: body      _e_: entry     _↓_: move down
-_p_: previous visible     _c_: entry     _k_: branches  _←_: promote
-_f_: forward same level   _d_: subtree   _i_: children  _→_: demote
+^Navigate^                ^Hide^         ^Show^         ^   ^         ^Edit^
+^^^^^^^^^^^^------------------------------------------------------------------------------
+_u_: up                   _l_: leaves    _a_: all       _TAB_: cycle  _↑_: move up
+_n_: next visible         _t_: body      _e_: entry     ^   ^         _↓_: move down
+_p_: previous visible     _c_: entry     _k_: branches  ^   ^         _←_: promote
+_f_: forward same level   _d_: subtree   _i_: children  ^   ^         _→_: demote
 _b_: backward same level  _q_: sublevel  _s_: subtree
-^^                        _o_: other     ^ ^            _z_: quit
+^ ^                       _o_: other     ^ ^            ^   ^         _z_: quit
 "
    ;; Navigate
    ("u" outline-up-heading)
@@ -490,6 +491,9 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
    ("k" outline-show-branches)
    ("i" outline-show-children)
    ("s" outline-show-subtree)
+   ;; Cycle
+   ("TAB" outline-cycle)
+   ("<tab>" outline-cycle)
    ;; Edit
    ("<up>" outline-move-subtree-up)
    ("<down>" outline-move-subtree-down)
@@ -498,7 +502,11 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
    ;; quit
    ("z" nil))
   :bind (:map outline-minor-mode-map
-              ("C-c #" . hydra-outline/body)))
+              ("C-c #" . hydra-outline/body))
+  :demand t
+  :after (outline)
+  :config
+  (advice-add 'outline-move-subtree-down :override #'my--outline-move-subtree-down))
 
 (use-package yatex
   :functions (my-YaTeX-with-outline)
@@ -700,13 +708,8 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
 (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 (define-key global-map (kbd "C-x ?") 'help-for-help)
 
-(when (file-exists-p my-local-config-file)
-  (load my-local-config-file))
-
-(setq custom-file (expand-file-name "custom-file.el"
-                                    user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
+(setq custom-file my-local-config-file)
+(load my-local-config-file t)
 
 (provide 'my-init)
 ;;; my-init.el ends here
