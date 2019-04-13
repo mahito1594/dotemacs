@@ -1490,7 +1490,7 @@ Emacs 26 以上を使用している場合 ~display-line-numbers-mode~ を利用
 
 #+begin_src emacs-lisp
   (when (version<= "26.0.50" emacs-version)
-    (add-hook 'after-init-hook #'global-display-line-numbers-mode))
+    (add-hook 'prog-mode-hook #'display-line-numbers-mode))
 #+end_src
 
 Emacs 起動時にフレームを最大化します．

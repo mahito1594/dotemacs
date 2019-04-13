@@ -697,7 +697,7 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
 (setq frame-title-format "%f")
 
 (when (version<= "26.0.50" emacs-version)
-  (add-hook 'after-init-hook #'global-display-line-numbers-mode))
+  (add-hook 'prog-mode-hook #'display-line-numbers-mode))
 
 (set-frame-parameter nil 'fullscreen 'maximized)
 
