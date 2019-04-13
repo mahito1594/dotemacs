@@ -516,46 +516,14 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
   :config
   (advice-add 'outline-move-subtree-down :override #'my--outline-move-subtree-down))
 
-(use-package yatex
-  :functions (my-YaTeX-with-outline)
-  :preface
-  (defvar my-YaTeX-user-completion-table
-    (expand-file-name "~/texmf/emacs/yatexrc")
-    "You put here your own completion table.")
-  :commands (yatex-mode)
-  :init
-  (setq YaTeX-inhibit-prefix-letter t)
-  :mode (("\\.tex\\'" . yatex-mode)
-         ("\\.sty\\'" . yatex-mode)
-         ("\\.ltx\\'" . yatex-mode))
-  :hook (yatex-mode . my-YaTeX-with-outline)
-  :config
-  (setq YaTeX-kanji-code 4)             ; use UTF-8
-  (setq YaTeX-use-AMS-LaTeX t)
-  (setq tex-command "latexmk")
-  (setq YaTeX-user-completion-table my-YaTeX-user-completion-table)
-  (add-hook 'align-load-hook
-            #'(lambda ()
-                (add-to-list 'align-rules-list '(yatex-table
-                                                 (regexp . "\\(\\s-*\\)&")
-                                                 (repeat . t)
-                                                 (mode . '(yatex-mode))))))
-  )
+(straight-use-package 'auctex)
 
-(use-package company-math
-  :demand t
-  :after (company yatex)
+(use-feature tex
   :config
-  (push 'company-math-symbols-latex company-backends)
-  (push 'company-latex-commands company-backends))
-
-(use-package flycheck-yatex
-  :straight (:host github :repo "mahito1594/flycheck-yatex")
-  :demand t
-  :after (flycheck yatex))
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t))
 
 (use-feature reftex
-  :hook (yatex-mode . reftex-mode)
   :bind (:map reftex-mode-map
               ("C-c )" . nil)
               ("C-c (" . reftex-reference)
