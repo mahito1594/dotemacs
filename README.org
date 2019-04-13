@@ -408,6 +408,21 @@ Emacs 起動後に =server-start= します．
   :hook (after-init . server-mode))
 #+end_src
 
+** Restart
+=M-x restart-emacs= で Emacs を再起動できるようにします．
+
+#+begin_src emacs-lisp
+  (use-package restart-emacs
+    :commands (restart-emacs))
+#+end_src
+
+また [[https://github.com/jschaf/esup][esup]] を用いて Emacs 起動時間等の計測ができます．
+
+#+begin_src emacs-lisp
+  (use-package esup
+    :commands (esup))
+#+end_src
+
 ** Backup files
 自動バックアップとオートセーブファイルを ~.emacs.d/backups~ に集めます．
 ~.emacs.d/backups~ は変数 =my-backup-directory= で変更できます．

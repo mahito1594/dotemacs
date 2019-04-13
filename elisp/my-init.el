@@ -117,6 +117,12 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
 (use-feature server
   :hook (after-init . server-mode))
 
+(use-package restart-emacs
+  :commands (restart-emacs))
+
+(use-package esup
+  :commands (esup))
+
 (setq backup-directory-alist
       `((".*" . ,my-backup-directory)))
 (setq auto-save-file-name-transforms
