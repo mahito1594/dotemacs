@@ -26,7 +26,7 @@
 ;;; Code:
 
 (defconst my-site-lisp-directory
-  (expand-file-name "site-lisp" user-emacs-directory)
+  (expand-file-name "site-lisp/" user-emacs-directory)
   "We should put here packages.")
 
 (let ((default-directory my-site-lisp-directory))
