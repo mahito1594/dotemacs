@@ -455,8 +455,8 @@ Emacs 起動後に =server-start= します．
      "
   ^Navigate^          ^Edit^            ^Mark^               ^Command^           ^Misc^
   ^^^^^^^^^^-----------------------------------------------------------------------------------------
-  _n_: next           _+_: mkdir        _m_: mark            _z_: compress file  _(_: details
-  _p_: previous       _C_: copy         _u_: unmark          _Z_: compress       _)_: hide some files
+  _n_: next           _+_: mkdir        _m_: mark            _Z_: compress file  _(_: details
+  _p_: previous       _C_: copy         _u_: unmark          ^ ^                 _)_: hide some files
   _J_: up directory   _R_: rename       _U_: unmark all      ^ ^                 _g_: refresh
   ^ ^                 _D_: delete       _t_: toggle marks    _M_: chmod
   _f_: open file      ^ ^               _E_: extension mark  _G_: chgrp          _q_: quit window
@@ -482,11 +482,10 @@ Emacs 起動後に =server-start= します．
      ;; Mark
      ("m" dired-mark)
      ("u" dired-unmark)
-     ("U" dired-unmark-all)
+     ("U" dired-unmark-all-marks)
      ("t" dired-toggle-marks)
      ("E" dired-mark-extension)
      ("F" dired-do-find-marked-files)
-     ("z" diredp-compress-this-file)
      ("Z" dired-do-compress)
      ("M" dired-do-chmod)
      ("G" dired-do-chgrp)
@@ -1053,7 +1052,7 @@ outline-magic が再定義する =outline-move-subtree-down= は移動後にサ�
      ("t" outline-hide-body)
      ("c" outline-hide-entry)
      ("d" outline-hide-subtree)
-     ("q" outline-hide-sublevel)
+     ("q" outline-hide-sublevels)
      ("o" outline-hide-other)
      ;; Show
      ("a" outline-show-all)
