@@ -27,13 +27,11 @@
 
 (setq gc-cons-threshold (* 8 1000 1000))
 
-(defun my--reset-gc-cons-threshold ()
-  "Reset the value of `gc-cons-threshold' to
-its original one."
-  (setq gc-cons-threshold my--orig-gc-cons-threshold))
-
-(add-hook 'emacs-startup-hook
-	  #'my--reset-gc-cons-threshold)
+;; reset `gc-cons-threshold' after start up
+(run-with-idle-timer 5 nil
+                     (lambda ()
+                       (setq gc-cons-threshold my--orig-gc-cons-threshold)
+                       (message "The value of gc-cons-threshold is restored.")))
 
 ;;; Debugging
 (setq debug-on-error t)
