@@ -18,21 +18,6 @@
 起動時にガベージコレクタが走らないように閾値を下げます．
 ただし，起動後には元々の値に戻すようにします．
 
-#+begin_src emacs-lisp :tangle no
-  (defvar my--orig-gc-cons-threshold gc-cons-threshold
-    "Original value of `gc-cons-threshold'.")
-
-  (setq gc-cons-threshold (* 8 1000 1000))
-
-  (defun my--reset-gc-cons-threshold ()
-    "Reset the value of `gc-cons-threshold' to
-  its original one."
-    (setq gc-cons-threshold my--orig-gc-cons-threshold))
-
-  (add-hook 'emacs-startup-hook
-            #'my--reset-gc-cons-threshold)
-#+end_src
-
 ** my-init.el
 ~my-init.el~ に個人的な Emacs の設定をまとめてあります．
 Emacs バージョン 25.4 以降での利用を想定しています．
