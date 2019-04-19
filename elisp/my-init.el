@@ -416,7 +416,10 @@ _e_: end of line        ^ ^                 _x_: execute command
   :commands (flycheck-disable-checker)
   :hook (after-init . global-flycheck-mode)
   :custom
-  (flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+  (flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  :config
+  (flycheck-add-mode 'tex-chktex 'yatex-mode)
+  (flycheck-add-mode 'tex-lacheck 'yatex-mode))
 
 (use-package flycheck-popup-tip
   :hook (flycheck-mode . flycheck-popup-tip-mode))
@@ -547,11 +550,6 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
   :config
   (push 'company-math-symbols-latex company-backends)
   (push 'company-latex-commands company-backends))
-
-(use-package flycheck-yatex
-  :straight (:host github :repo "mahito1594/flycheck-yatex")
-  :demand t
-  :after (flycheck yatex))
 
 (use-feature reftex
   :hook (yatex-mode . reftex-mode)

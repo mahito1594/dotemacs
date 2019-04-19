@@ -846,12 +846,17 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 文法チェックには [[https://www.flycheck.org/en/latest/][Flycheck]] を利用します．
 後述の [[LSP][LSP]] を用いる場合には暴走するという情報があるので要確認です．
 
+YaTeX でも flycheck を用いるために =flycheck-add-mode= 関数を呼びます．
+
 #+begin_src emacs-lisp
   (use-package flycheck
     :commands (flycheck-disable-checker)
     :hook (after-init . global-flycheck-mode)
     :custom
-    (flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+    (flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+    :config
+    (flycheck-add-mode 'tex-chktex 'yatex-mode)
+    (flycheck-add-mode 'tex-lacheck 'yatex-mode))
 #+end_src
 
 エラー内容の表示に [[https://github.com/flycheck/flycheck-popup-tip][flycheck-popup-tip]] を利用します．
@@ -1178,14 +1183,19 @@ macOS では ~TEXMFHOME~ は ~~/Library/texmf~ のようなので適宜ホーム
     (push 'company-latex-commands company-backends))
 #+end_src
 
-文法チェッカである chktex や lacheck を flycheck を通して利用できるようにします．
+chktex と lacheck を flycheck を通して利用します．
+chktex について， =~/.chktexrc= に設定を記述します．
+例えば Warning No. 8 を無視したい場合
 
-#+begin_src emacs-lisp
-  (use-package flycheck-yatex
-    :straight (:host github :repo "mahito1594/flycheck-yatex")
-    :demand t
-    :after (flycheck yatex))
+#+begin_src sh :tangle no
+  CmdLine
+  {
+      -n8
+  }
 #+end_src
+
+と記述します．
+この設定は =chktex -n8 FILE= と等価です．
 
 *** RefTeX
 参考文献や相互参照のために [[https://www.gnu.org/software/auctex/reftex.html][RefTeX]] を利用します．
