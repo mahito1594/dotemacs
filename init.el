@@ -25,7 +25,7 @@
 (defvar my--orig-gc-cons-threshold gc-cons-threshold
   "Original value of `gc-cons-threshold'.")
 
-(setq gc-cons-threshold (* 8 1000 1000))
+(setq gc-cons-threshold (* 10 1000 1000))
 
 ;; reset `gc-cons-threshold' after start up
 (run-with-idle-timer 5 nil
