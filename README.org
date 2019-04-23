@@ -1318,6 +1318,10 @@ PDF 閲覧のために次のような関数を定義しておきます．
             (replace-regexp-in-string ":" "" key)))
 #+end_src
 
+index buffer で ~K a~ を押下することで直接 keywords を追加できます．
+マークした enrtry 全てに keywords を追加することも可能です．
+~RET~ では keyword の補完になるので， ~C-M-j~ (=ivy-immediate-done= ?) で編集画面から抜け出すことができます．
+
 #+begin_src emacs-lisp
   (use-package ebib
     :functions (my-ebib-name-transform-function)
