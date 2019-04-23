@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-04-20 土 21:32 -->
+<!-- 2019-05-07 Tue 23:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>My configuration file for Emacs</title>
@@ -270,84 +270,84 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge4c7c38">1. Introduction</a>
+<li><a href="#org3b3ea0f">1. Introduction</a>
 <ul>
-<li><a href="#orgfbce814">1.1. init.el</a></li>
-<li><a href="#org8146db9">1.2. my-init.el</a></li>
-<li><a href="#org1e7bd8a">1.3. utility.el</a></li>
-<li><a href="#org0f8b81d">1.4. site-lisp/</a></li>
+<li><a href="#orged0d31e">1.1. init.el</a></li>
+<li><a href="#org097c941">1.2. my-init.el</a></li>
+<li><a href="#orga43ca3d">1.3. utility.el</a></li>
+<li><a href="#org54b0f80">1.4. site-lisp/</a></li>
 </ul>
 </li>
-<li><a href="#orge52f554">2. Fundamental</a>
+<li><a href="#orgba9232e">2. Fundamental</a>
 <ul>
-<li><a href="#org77d6ee4">2.1. Variables</a></li>
-<li><a href="#org1b24c63">2.2. Functions</a></li>
-<li><a href="#orgd7fefde">2.3. Package manager</a></li>
-<li><a href="#orgd2e1d9a">2.4. Some package</a></li>
+<li><a href="#orgba07548">2.1. Variables</a></li>
+<li><a href="#orgd33812b">2.2. Functions</a></li>
+<li><a href="#org5378892">2.3. Package manager</a></li>
+<li><a href="#org64f1ea3">2.4. Some package</a></li>
 </ul>
 </li>
-<li><a href="#org737c89e">3. Utilities</a>
+<li><a href="#org2baef79">3. Utilities</a>
 <ul>
-<li><a href="#orgf37af31">3.1. Language, Codings</a></li>
-<li><a href="#orgabfa786">3.2. Server</a></li>
-<li><a href="#org734873d">3.3. Restart</a></li>
-<li><a href="#orgf9ad3c9">3.4. Backup files</a></li>
-<li><a href="#org213dde7">3.5. Directories</a></li>
-<li><a href="#orgcf87415">3.6. Candidates</a></li>
-<li><a href="#org08030a0">3.7. Navigation</a></li>
-<li><a href="#orgfd6572d">3.8. Others</a></li>
+<li><a href="#orgd14cde9">3.1. Language, Codings</a></li>
+<li><a href="#org1f1c5f9">3.2. Server</a></li>
+<li><a href="#org62f966a">3.3. Restart</a></li>
+<li><a href="#org057c318">3.4. Backup files</a></li>
+<li><a href="#org42cd4ea">3.5. Directories</a></li>
+<li><a href="#orga71b44e">3.6. Candidates</a></li>
+<li><a href="#orgfb110be">3.7. Navigation</a></li>
+<li><a href="#org2f1f1b7">3.8. Others</a></li>
 </ul>
 </li>
-<li><a href="#orgb744795">4. Completion and syntax checking</a>
+<li><a href="#org0734bb1">4. Completion and syntax checking</a>
 <ul>
-<li><a href="#org2109d94">4.1. Yasnippet</a></li>
-<li><a href="#org557ef93">4.2. Company</a></li>
-<li><a href="#org8d93da1">4.3. Flycheck</a></li>
-<li><a href="#org9bf21c9">4.4. LSP</a></li>
+<li><a href="#orgd8798a0">4.1. Yasnippet</a></li>
+<li><a href="#orgc0b129f">4.2. Company</a></li>
+<li><a href="#org2da7d3b">4.3. Flycheck</a></li>
+<li><a href="#orga28a21c">4.4. LSP</a></li>
 </ul>
 </li>
-<li><a href="#orgd78d163">5. Documents</a>
+<li><a href="#orgd7c03cb">5. Documents</a>
 <ul>
-<li><a href="#org7764842">5.1. Org-mode</a></li>
-<li><a href="#orga49728e">5.2. Outline</a></li>
-<li><a href="#orgc895fa9">5.3. TeX/LaTeX</a></li>
-<li><a href="#org40ca94a">5.4. Markdown</a></li>
+<li><a href="#orgd3e81d8">5.1. Org-mode</a></li>
+<li><a href="#orga5b20d7">5.2. Outline</a></li>
+<li><a href="#orgdf397df">5.3. TeX/LaTeX</a></li>
+<li><a href="#orgebbed30">5.4. Markdown</a></li>
 </ul>
 </li>
-<li><a href="#org4c062b4">6. Programming Languages</a>
+<li><a href="#orgbd8d0bf">6. Programming Languages</a>
 <ul>
-<li><a href="#orga00694b">6.1. C/C++</a></li>
-<li><a href="#org2c47024">6.2. Emacs Lisp</a></li>
-<li><a href="#orge89bed5">6.3. Ocaml</a></li>
-<li><a href="#orgcc81de1">6.4. Python</a></li>
+<li><a href="#orgb109d15">6.1. C/C++</a></li>
+<li><a href="#orgc67f361">6.2. Emacs Lisp</a></li>
+<li><a href="#org81d01a1">6.3. Ocaml</a></li>
+<li><a href="#org6321c80">6.4. Python</a></li>
 </ul>
 </li>
-<li><a href="#org41ca749">7. Appearance</a>
+<li><a href="#org51e66b0">7. Appearance</a>
 <ul>
-<li><a href="#org3819ed6">7.1. Color theme</a></li>
-<li><a href="#org648f046">7.2. Frame</a></li>
-<li><a href="#org22e6142">7.3. Font</a></li>
+<li><a href="#org1de114e">7.1. Color theme</a></li>
+<li><a href="#orgb52336b">7.2. Frame</a></li>
+<li><a href="#org1dd337c">7.3. Font</a></li>
 </ul>
 </li>
-<li><a href="#orgbcaa39f">8. Global keybindings</a></li>
-<li><a href="#org1cfcf3c">9. Local configuration</a>
+<li><a href="#orgdaf65f9">8. Global keybindings</a></li>
+<li><a href="#org8e8bba9">9. Local configuration</a>
 <ul>
-<li><a href="#org39f3fe7">9.1. Overview</a></li>
-<li><a href="#org3e4030f">9.2. SINGULAR</a></li>
-<li><a href="#org69df6f4">9.3. Macaulay2</a></li>
+<li><a href="#orgd9dd746">9.1. Overview</a></li>
+<li><a href="#org02e835e">9.2. SINGULAR</a></li>
+<li><a href="#org570a1f7">9.3. Macaulay2</a></li>
 </ul>
 </li>
-<li><a href="#orgabc4764">10. License</a></li>
+<li><a href="#org5e57503">10. License</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge4c7c38" class="outline-2">
-<h2 id="orge4c7c38"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org3b3ea0f" class="outline-2">
+<h2 id="org3b3ea0f"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgfbce814" class="outline-3">
-<h3 id="orgfbce814"><span class="section-number-3">1.1</span> init.el</h3>
+<div id="outline-container-orged0d31e" class="outline-3">
+<h3 id="orged0d31e"><span class="section-number-3">1.1</span> init.el</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 <code>init.el</code> は <code>elisp</code> を <code>load-path</code> に追加し， <code>utility.el</code> と <code>my-init.el</code> を読み込みます．
@@ -367,8 +367,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org8146db9" class="outline-3">
-<h3 id="org8146db9"><span class="section-number-3">1.2</span> my-init.el</h3>
+<div id="outline-container-org097c941" class="outline-3">
+<h3 id="org097c941"><span class="section-number-3">1.2</span> my-init.el</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 <code>my-init.el</code> に個人的な Emacs の設定をまとめてあります．
@@ -396,8 +396,8 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 </div>
 
-<div id="outline-container-org1e7bd8a" class="outline-3">
-<h3 id="org1e7bd8a"><span class="section-number-3">1.3</span> utility.el</h3>
+<div id="outline-container-orga43ca3d" class="outline-3">
+<h3 id="orga43ca3d"><span class="section-number-3">1.3</span> utility.el</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 変数・定数・関数のうち，いくつかは <code>elisp/utility.el</code> に抜き出します．
@@ -406,8 +406,8 @@ Emacs バージョン 25.4 以降での利用を想定しています．
 </div>
 </div>
 
-<div id="outline-container-org0f8b81d" class="outline-3">
-<h3 id="org0f8b81d"><span class="section-number-3">1.4</span> site-lisp/</h3>
+<div id="outline-container-org54b0f80" class="outline-3">
+<h3 id="org54b0f80"><span class="section-number-3">1.4</span> site-lisp/</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 いくつかのパッケージは <code>site-lisp/</code> 以下に配置して <code>require</code> します．
@@ -455,16 +455,16 @@ Issue <a href="https://github.com/purcell/exec-path-from-shell/issues/36">#36</a
 </div>
 </div>
 
-<div id="outline-container-orge52f554" class="outline-2">
-<h2 id="orge52f554"><span class="section-number-2">2</span> Fundamental</h2>
+<div id="outline-container-orgba9232e" class="outline-2">
+<h2 id="orgba9232e"><span class="section-number-2">2</span> Fundamental</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org77d6ee4" class="outline-3">
-<h3 id="org77d6ee4"><span class="section-number-3">2.1</span> Variables</h3>
+<div id="outline-container-orgba07548" class="outline-3">
+<h3 id="orgba07548"><span class="section-number-3">2.1</span> Variables</h3>
 <div class="outline-text-3" id="text-2-1">
 </div>
 <ol class="org-ol">
-<li><a id="orgda7df6f"></a>Init file and its document<br />
+<li><a id="org5fe9351"></a>Init file and its document<br />
 <div class="outline-text-4" id="text-2-1-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defvar</span> <span class="org-variable-name">my-locate-readme</span> <span class="org-rainbow-delimiters-depth-2">(</span>expand-file-name <span class="org-string">"README.org"</span> user-emacs-directory<span class="org-rainbow-delimiters-depth-2">)</span>
@@ -483,7 +483,7 @@ Issue <a href="https://github.com/purcell/exec-path-from-shell/issues/36">#36</a
 </div>
 </li>
 
-<li><a id="org338094a"></a>Backup file<br />
+<li><a id="orga845b21"></a>Backup file<br />
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 ファイルを <code>.emacs.d/backups</code> 以下に自動保存します．
@@ -498,11 +498,11 @@ Issue <a href="https://github.com/purcell/exec-path-from-shell/issues/36">#36</a
 </div>
 </li>
 
-<li><a id="org188a2f4"></a>Local configuration directory<br />
+<li><a id="org080121c"></a>Local configuration directory<br />
 <div class="outline-text-4" id="text-2-1-3">
 <p>
 環境・マシンごとの設定を <code>.emacs.d/local-conf.el</code> に記述します．
-詳細は <a href="#org1cfcf3c">Local configuration</a> を参照してください．
+詳細は <a href="#org8e8bba9">Local configuration</a> を参照してください．
 </p>
 
 <div class="org-src-container">
@@ -515,12 +515,12 @@ Issue <a href="https://github.com/purcell/exec-path-from-shell/issues/36">#36</a
 </ol>
 </div>
 
-<div id="outline-container-org1b24c63" class="outline-3">
-<h3 id="org1b24c63"><span class="section-number-3">2.2</span> Functions</h3>
+<div id="outline-container-orgd33812b" class="outline-3">
+<h3 id="orgd33812b"><span class="section-number-3">2.2</span> Functions</h3>
 <div class="outline-text-3" id="text-2-2">
 </div>
 <ol class="org-ol">
-<li><a id="org8a35723"></a>Open document<br />
+<li><a id="orgd6a74e1"></a>Open document<br />
 <div class="outline-text-4" id="text-2-2-1">
 <p>
 <code>M-x my-open-document</code> で本設定ファイルを HTML にエクスポートしたものをブラウザで開きます．
@@ -536,7 +536,7 @@ Issue <a href="https://github.com/purcell/exec-path-from-shell/issues/36">#36</a
 </div>
 </li>
 
-<li><a id="org4ef2793"></a>Edit init file<br />
+<li><a id="orgaa5b654"></a>Edit init file<br />
 <div class="outline-text-4" id="text-2-2-2">
 <p>
 <code>README.org</code> を編集するには <code>C-x C-f</code> で開くか <code>M-x my-edit-init</code> とします．
@@ -591,8 +591,8 @@ Issue <a href="https://github.com/purcell/exec-path-from-shell/issues/36">#36</a
 </ol>
 </div>
 
-<div id="outline-container-orgd7fefde" class="outline-3">
-<h3 id="orgd7fefde"><span class="section-number-3">2.3</span> Package manager</h3>
+<div id="outline-container-org5378892" class="outline-3">
+<h3 id="org5378892"><span class="section-number-3">2.3</span> Package manager</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 パッケージマネージャとして <code>straight.el</code> と <code>use-package.el</code> を利用します
@@ -600,7 +600,7 @@ Issue <a href="https://github.com/purcell/exec-path-from-shell/issues/36">#36</a
 </div>
 
 <ol class="org-ol">
-<li><a id="org97d3db2"></a>straight.el<br />
+<li><a id="org6ba02e5"></a>straight.el<br />
 <div class="outline-text-4" id="text-2-3-1">
 <p>
 <a href="https://github.com/raxod502/straight.el">straight.el</a> は Emacs のパッケージマネージャの 1 つです．
@@ -647,7 +647,7 @@ next-generation, purely functional package manager for the Emacs hacker.
 </div>
 </li>
 
-<li><a id="org789c331"></a>use-package.el<br />
+<li><a id="org708f5f0"></a>use-package.el<br />
 <div class="outline-text-4" id="text-2-3-2">
 <p>
 <a href="https://github.com/jwiegley/use-package">use-package</a> を用いてパッケージの設定を feature 単位で記述します．
@@ -718,8 +718,8 @@ build-in の機能を用いるため <code>use-feature</code> マクロを定め
 </ol>
 </div>
 
-<div id="outline-container-orgd2e1d9a" class="outline-3">
-<h3 id="orgd2e1d9a"><span class="section-number-3">2.4</span> Some package</h3>
+<div id="outline-container-org64f1ea3" class="outline-3">
+<h3 id="org64f1ea3"><span class="section-number-3">2.4</span> Some package</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 いくつかのパッケージを先にインストールします．
@@ -728,7 +728,7 @@ build-in の機能を用いるため <code>use-feature</code> マクロを定め
 </div>
 
 <ol class="org-ol">
-<li><a id="org7a26ce1"></a>Org-mode<br />
+<li><a id="orgd818385"></a>Org-mode<br />
 <div class="outline-text-4" id="text-2-4-1">
 <p>
 2019年3月現在の <code>straight.el</code> ではデフォルトで最新の Org-mode をインストールすることができます．
@@ -741,7 +741,7 @@ build-in の機能を用いるため <code>use-feature</code> マクロを定め
 </div>
 </li>
 
-<li><a id="orge0d0915"></a>flymake<br />
+<li><a id="org5236fa6"></a>flymake<br />
 <div class="outline-text-4" id="text-2-4-2">
 <p>
 lsp-mode が flymake に依存しており，古いバージョンの flymake を読み込んでしまう恐れがあるようです．
@@ -756,7 +756,7 @@ lsp-mode が flymake に依存しており，古いバージョンの flymake �
 </div>
 </li>
 
-<li><a id="org348ac16"></a>blackout<br />
+<li><a id="org373d42c"></a>blackout<br />
 <div class="outline-text-4" id="text-2-4-3">
 <p>
 <a href="https://github.com/raxod502/blackout">blackout</a> は deminish や delight のように，メジャー・マイナーモードのモードラインの表示をカスタマイズできます．
@@ -771,7 +771,7 @@ lsp-mode が flymake に依存しており，古いバージョンの flymake �
 </div>
 </li>
 
-<li><a id="org925ddea"></a>all-the-icons<br />
+<li><a id="org99353cc"></a>all-the-icons<br />
 <div class="outline-text-4" id="text-2-4-4">
 <p>
 いくつかのパッケージで <code>all-the-icons</code> のフォントを使用します．
@@ -789,7 +789,7 @@ lsp-mode が flymake に依存しており，古いバージョンの flymake �
 </div>
 </li>
 
-<li><a id="org37c32d7"></a>Hydra<br />
+<li><a id="org909b47e"></a>Hydra<br />
 <div class="outline-text-4" id="text-2-4-5">
 <p>
 <a href="https://github.com/abo-abo/hydra">Hydra</a> を利用してキーバインドを使いやすくします．
@@ -811,12 +811,12 @@ lsp-mode が flymake に依存しており，古いバージョンの flymake �
 </div>
 </div>
 
-<div id="outline-container-org737c89e" class="outline-2">
-<h2 id="org737c89e"><span class="section-number-2">3</span> Utilities</h2>
+<div id="outline-container-org2baef79" class="outline-2">
+<h2 id="org2baef79"><span class="section-number-2">3</span> Utilities</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgf37af31" class="outline-3">
-<h3 id="orgf37af31"><span class="section-number-3">3.1</span> Language, Codings</h3>
+<div id="outline-container-orgd14cde9" class="outline-3">
+<h3 id="orgd14cde9"><span class="section-number-3">3.1</span> Language, Codings</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 日本語かつ UTF8 を使用するようにします．
@@ -858,8 +858,8 @@ macOS 使用時はファイル名の文字コードの問題があります．
 </div>
 </div>
 
-<div id="outline-container-orgabfa786" class="outline-3">
-<h3 id="orgabfa786"><span class="section-number-3">3.2</span> Server</h3>
+<div id="outline-container-org1f1c5f9" class="outline-3">
+<h3 id="org1f1c5f9"><span class="section-number-3">3.2</span> Server</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 Emacs 起動後に <code>server-start</code> します．
@@ -873,8 +873,8 @@ Emacs 起動後に <code>server-start</code> します．
 </div>
 </div>
 
-<div id="outline-container-org734873d" class="outline-3">
-<h3 id="org734873d"><span class="section-number-3">3.3</span> Restart</h3>
+<div id="outline-container-org62f966a" class="outline-3">
+<h3 id="org62f966a"><span class="section-number-3">3.3</span> Restart</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 <code>M-x restart-emacs</code> で Emacs を再起動できるようにします．
@@ -898,8 +898,8 @@ Emacs 起動後に <code>server-start</code> します．
 </div>
 </div>
 
-<div id="outline-container-orgf9ad3c9" class="outline-3">
-<h3 id="orgf9ad3c9"><span class="section-number-3">3.4</span> Backup files</h3>
+<div id="outline-container-org057c318" class="outline-3">
+<h3 id="org057c318"><span class="section-number-3">3.4</span> Backup files</h3>
 <div class="outline-text-3" id="text-3-4">
 <p>
 自動バックアップとオートセーブファイルを <code>.emacs.d/backups</code> に集めます．
@@ -919,12 +919,12 @@ Emacs 起動後に <code>server-start</code> します．
 </div>
 </div>
 
-<div id="outline-container-org213dde7" class="outline-3">
-<h3 id="org213dde7"><span class="section-number-3">3.5</span> Directories</h3>
+<div id="outline-container-org42cd4ea" class="outline-3">
+<h3 id="org42cd4ea"><span class="section-number-3">3.5</span> Directories</h3>
 <div class="outline-text-3" id="text-3-5">
 </div>
 <ol class="org-ol">
-<li><a id="org2bf4ec1"></a>dired<br />
+<li><a id="org6e0e17f"></a>dired<br />
 <div class="outline-text-4" id="text-3-5-1">
 <p>
 <code>.</code> を押下することで Hydra を用いた <code>dired-mode</code> の操作をできるようにします．
@@ -1008,7 +1008,7 @@ Emacs 起動後に <code>server-start</code> します．
 </div>
 </li>
 
-<li><a id="org0a9eda9"></a>neotree<br />
+<li><a id="org56bea5d"></a>neotree<br />
 <div class="outline-text-4" id="text-3-5-2">
 <p>
 ツリープラグインとして <a href="https://github.com/jaypei/emacs-neotree">neotree</a> を用います．
@@ -1030,12 +1030,12 @@ GUI での使用の際，all-the-icons を用いてアイコンを表示する�
 </ol>
 </div>
 
-<div id="outline-container-orgcf87415" class="outline-3">
-<h3 id="orgcf87415"><span class="section-number-3">3.6</span> Candidates</h3>
+<div id="outline-container-orga71b44e" class="outline-3">
+<h3 id="orga71b44e"><span class="section-number-3">3.6</span> Candidates</h3>
 <div class="outline-text-3" id="text-3-6">
 </div>
 <ol class="org-ol">
-<li><a id="orgb665ee4"></a>Ivy, Counsel and swiper<br />
+<li><a id="org8506d88"></a>Ivy, Counsel and swiper<br />
 <div class="outline-text-4" id="text-3-6-1">
 <p>
 補完インターフェイスとして <a href="https://github.com/abo-abo/swiper">Ivy/Counsel</a> を利用します．
@@ -1181,7 +1181,7 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </li>
 
-<li><a id="org40718db"></a>emacs-which-key<br />
+<li><a id="org6fed21f"></a>emacs-which-key<br />
 <div class="outline-text-4" id="text-3-6-2">
 <p>
 <a href="https://github.com/justbur/emacs-which-key">which-key</a> を用いてキーバインドを表示させます．
@@ -1204,8 +1204,8 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </ol>
 </div>
 
-<div id="outline-container-org08030a0" class="outline-3">
-<h3 id="org08030a0"><span class="section-number-3">3.7</span> Navigation</h3>
+<div id="outline-container-orgfb110be" class="outline-3">
+<h3 id="orgfb110be"><span class="section-number-3">3.7</span> Navigation</h3>
 <div class="outline-text-3" id="text-3-7">
 <p>
 <code>C-v</code> で <code>hydra-navi</code> による移動ができるようになります．
@@ -1244,12 +1244,12 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </div>
 
-<div id="outline-container-orgfd6572d" class="outline-3">
-<h3 id="orgfd6572d"><span class="section-number-3">3.8</span> Others</h3>
+<div id="outline-container-org2f1f1b7" class="outline-3">
+<h3 id="org2f1f1b7"><span class="section-number-3">3.8</span> Others</h3>
 <div class="outline-text-3" id="text-3-8">
 </div>
 <ol class="org-ol">
-<li><a id="orgb9f425a"></a>Parenthesis<br />
+<li><a id="orgcbcdbc6"></a>Parenthesis<br />
 <div class="outline-text-4" id="text-3-8-1">
 <p>
 対応する括弧類は自動的に挿入し，また強調するようにします．
@@ -1271,7 +1271,7 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </li>
 
-<li><a id="org1a4982a"></a>Whitespace<br />
+<li><a id="org7c1e231"></a>Whitespace<br />
 <div class="outline-text-4" id="text-3-8-2">
 <p>
 基本的に，インデントにはタブ文字ではなく空白文字を利用します．
@@ -1306,7 +1306,7 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </li>
 
-<li><a id="orgc6cd913"></a>Cursor<br />
+<li><a id="org5e267b6"></a>Cursor<br />
 <div class="outline-text-4" id="text-3-8-3">
 <p>
 <a href="https://github.com/Malabarba/beacon">beacon</a> を用いてカーソルを目立たせます．
@@ -1322,7 +1322,7 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </li>
 
-<li><a id="orge531848"></a>Region<br />
+<li><a id="org330de00"></a>Region<br />
 <div class="outline-text-4" id="text-3-8-4">
 <p>
 選択中のリージョンをハイライトします．
@@ -1335,7 +1335,7 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </li>
 
-<li><a id="orgf9760b1"></a>Ring bell<br />
+<li><a id="org388ddb1"></a>Ring bell<br />
 <div class="outline-text-4" id="text-3-8-5">
 <p>
 エラー時のベル音を消します．
@@ -1351,12 +1351,12 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </div>
 
-<div id="outline-container-orgb744795" class="outline-2">
-<h2 id="orgb744795"><span class="section-number-2">4</span> Completion and syntax checking</h2>
+<div id="outline-container-org0734bb1" class="outline-2">
+<h2 id="org0734bb1"><span class="section-number-2">4</span> Completion and syntax checking</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org2109d94" class="outline-3">
-<h3 id="org2109d94"><span class="section-number-3">4.1</span> Yasnippet</h3>
+<div id="outline-container-orgd8798a0" class="outline-3">
+<h3 id="orgd8798a0"><span class="section-number-3">4.1</span> Yasnippet</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">yasnippet</span>
@@ -1366,8 +1366,8 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </div>
 
-<div id="outline-container-org557ef93" class="outline-3">
-<h3 id="org557ef93"><span class="section-number-3">4.2</span> Company</h3>
+<div id="outline-container-orgc0b129f" class="outline-3">
+<h3 id="orgc0b129f"><span class="section-number-3">4.2</span> Company</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 補完には <a href="https://github.com/company-mode/company-mode">company-mode</a> を用います．
@@ -1456,12 +1456,12 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </div>
 
-<div id="outline-container-org8d93da1" class="outline-3">
-<h3 id="org8d93da1"><span class="section-number-3">4.3</span> Flycheck</h3>
+<div id="outline-container-org2da7d3b" class="outline-3">
+<h3 id="org2da7d3b"><span class="section-number-3">4.3</span> Flycheck</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 文法チェックには <a href="https://www.flycheck.org/en/latest/">Flycheck</a> を利用します．
-後述の <a href="#org9bf21c9">LSP</a> を用いる場合には暴走するという情報があるので要確認です．
+後述の <a href="#orga28a21c">LSP</a> を用いる場合には暴走するという情報があるので要確認です．
 </p>
 
 <div class="org-src-container">
@@ -1485,8 +1485,8 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 </div>
 </div>
 
-<div id="outline-container-org9bf21c9" class="outline-3">
-<h3 id="org9bf21c9"><span class="section-number-3">4.4</span> LSP</h3>
+<div id="outline-container-orga28a21c" class="outline-3">
+<h3 id="orga28a21c"><span class="section-number-3">4.4</span> LSP</h3>
 <div class="outline-text-3" id="text-4-4">
 <p>
 いくつかの言語では Language Server Protocol を用いて補完・文法チェックを行います．
@@ -1535,12 +1535,12 @@ lsp-mode と flycheck を併用するにはカスタム変数 <code>lsp-prefer-f
 </div>
 </div>
 
-<div id="outline-container-orgd78d163" class="outline-2">
-<h2 id="orgd78d163"><span class="section-number-2">5</span> Documents</h2>
+<div id="outline-container-orgd7c03cb" class="outline-2">
+<h2 id="orgd7c03cb"><span class="section-number-2">5</span> Documents</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org7764842" class="outline-3">
-<h3 id="org7764842"><span class="section-number-3">5.1</span> Org-mode</h3>
+<div id="outline-container-orgd3e81d8" class="outline-3">
+<h3 id="orgd3e81d8"><span class="section-number-3">5.1</span> Org-mode</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 <a href="https://orgmode.org/">Org-mode</a> の設定を行います．
@@ -1624,8 +1624,8 @@ HTML へのエクスポートの際，コードハイライトに <a href="https
 </div>
 </div>
 
-<div id="outline-container-orga49728e" class="outline-3">
-<h3 id="orga49728e"><span class="section-number-3">5.2</span> Outline</h3>
+<div id="outline-container-orga5b20d7" class="outline-3">
+<h3 id="orga5b20d7"><span class="section-number-3">5.2</span> Outline</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 <a href="https://github.com/tj64/outline-magic/tree/2a5f07417b696cf7541d435c43bafcc64817636b">outline-magic</a> と Hydra を用いて outline-minor-mode を使いやすくします．
@@ -1731,12 +1731,12 @@ outline-magic が再定義する <code>outline-move-subtree-down</code> は移�
 </div>
 </div>
 
-<div id="outline-container-orgc895fa9" class="outline-3">
-<h3 id="orgc895fa9"><span class="section-number-3">5.3</span> TeX/LaTeX</h3>
+<div id="outline-container-orgdf397df" class="outline-3">
+<h3 id="orgdf397df"><span class="section-number-3">5.3</span> TeX/LaTeX</h3>
 <div class="outline-text-3" id="text-5-3">
 </div>
 <ol class="org-ol">
-<li><a id="orgd176d1b"></a>AUCTeX<br />
+<li><a id="org8588238"></a>AUCTeX<br />
 <div class="outline-text-4" id="text-5-3-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span>straight-use-package 'auctex<span class="org-rainbow-delimiters-depth-1">)</span>
@@ -1753,7 +1753,7 @@ outline-magic が再定義する <code>outline-move-subtree-down</code> は移�
 </div>
 </li>
 
-<li><a id="orgaee0c57"></a>RefTeX<br />
+<li><a id="org6b8efe9"></a>RefTeX<br />
 <div class="outline-text-4" id="text-5-3-2">
 <p>
 参考文献や相互参照のために <a href="https://www.gnu.org/software/auctex/reftex.html">RefTeX</a> を利用します．
@@ -1827,7 +1827,7 @@ YaTeX の <code>YaTeX-insert-paren-region</code> と併用するために <code>
 </div>
 </li>
 
-<li><a id="org66d9611"></a>BibTeX<br />
+<li><a id="org69c51d7"></a>BibTeX<br />
 <div class="outline-text-4" id="text-5-3-3">
 <p>
 BibTeX データベースの簡単な編集，および後述の Ebib が利用する設定を記述します．
@@ -1866,7 +1866,7 @@ BibTeX データベースの簡単な編集，および後述の Ebib が利用�
 </div>
 </li>
 
-<li><a id="org5a32805"></a>Ebib<br />
+<li><a id="org80f4723"></a>Ebib<br />
 <div class="outline-text-4" id="text-5-3-4">
 <p>
 文献管理には <a href="https://github.com/joostkremers/ebib">Ebib</a> を利用します．
@@ -2021,6 +2021,12 @@ PDF 閲覧のために次のような関数を定義しておきます．
 </pre>
 </div>
 
+<p>
+index buffer で <code>K a</code> を押下することで直接 keywords を追加できます．
+マークした enrtry 全てに keywords を追加することも可能です．
+<code>RET</code> では keyword の補完になるので， <code>C-M-j</code> (<code>ivy-immediate-done</code> ?) で編集画面から抜け出すことができます．
+</p>
+
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">use-package</span> <span class="org-constant">ebib</span>
   <span class="org-builtin">:functions</span> <span class="org-rainbow-delimiters-depth-2">(</span>my-ebib-name-transform-function<span class="org-rainbow-delimiters-depth-2">)</span>
@@ -2071,17 +2077,17 @@ PDF 閲覧のために次のような関数を定義しておきます．
 </ol>
 </div>
 
-<div id="outline-container-org40ca94a" class="outline-3">
-<h3 id="org40ca94a"><span class="section-number-3">5.4</span> Markdown</h3>
+<div id="outline-container-orgebbed30" class="outline-3">
+<h3 id="orgebbed30"><span class="section-number-3">5.4</span> Markdown</h3>
 </div>
 </div>
 
-<div id="outline-container-org4c062b4" class="outline-2">
-<h2 id="org4c062b4"><span class="section-number-2">6</span> Programming Languages</h2>
+<div id="outline-container-orgbd8d0bf" class="outline-2">
+<h2 id="orgbd8d0bf"><span class="section-number-2">6</span> Programming Languages</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-orga00694b" class="outline-3">
-<h3 id="orga00694b"><span class="section-number-3">6.1</span> C/C++</h3>
+<div id="outline-container-orgb109d15" class="outline-3">
+<h3 id="orgb109d15"><span class="section-number-3">6.1</span> C/C++</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Language Server として <a href="https://github.com/MaskRay/ccls">ccls</a> を利用します．
@@ -2116,8 +2122,8 @@ brew install ccls
 </div>
 </div>
 
-<div id="outline-container-org2c47024" class="outline-3">
-<h3 id="org2c47024"><span class="section-number-3">6.2</span> Emacs Lisp</h3>
+<div id="outline-container-orgc67f361" class="outline-3">
+<h3 id="orgc67f361"><span class="section-number-3">6.2</span> Emacs Lisp</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 flycheck の emacs-lisp-checkdoc の警告はあまり有益に思えないため無効化しています．
@@ -2132,8 +2138,8 @@ flycheck の emacs-lisp-checkdoc の警告はあまり有益に思えないた�
 </div>
 </div>
 
-<div id="outline-container-orge89bed5" class="outline-3">
-<h3 id="orge89bed5"><span class="section-number-3">6.3</span> Ocaml</h3>
+<div id="outline-container-org81d01a1" class="outline-3">
+<h3 id="org81d01a1"><span class="section-number-3">6.3</span> Ocaml</h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 OCaml の編集には <a href="https://github.com/ocaml/tuareg">tuareg-mode</a> を利用します．
@@ -2164,8 +2170,8 @@ OCaml の編集には <a href="https://github.com/ocaml/tuareg">tuareg-mode</a> 
 </div>
 </div>
 
-<div id="outline-container-orgcc81de1" class="outline-3">
-<h3 id="orgcc81de1"><span class="section-number-3">6.4</span> Python</h3>
+<div id="outline-container-org6321c80" class="outline-3">
+<h3 id="org6321c80"><span class="section-number-3">6.4</span> Python</h3>
 <div class="outline-text-3" id="text-6-4">
 <p>
 Emacs 同梱の <code>python.el</code> を利用します．
@@ -2209,12 +2215,12 @@ LSP (<a href="https://github.com/palantir/python-language-server">pyls</a>) を�
 </div>
 </div>
 
-<div id="outline-container-org41ca749" class="outline-2">
-<h2 id="org41ca749"><span class="section-number-2">7</span> Appearance</h2>
+<div id="outline-container-org51e66b0" class="outline-2">
+<h2 id="org51e66b0"><span class="section-number-2">7</span> Appearance</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-org3819ed6" class="outline-3">
-<h3 id="org3819ed6"><span class="section-number-3">7.1</span> Color theme</h3>
+<div id="outline-container-org1de114e" class="outline-3">
+<h3 id="org1de114e"><span class="section-number-3">7.1</span> Color theme</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 <a href="https://github.com/hlissner/emacs-doom-themes">doom-themes</a> の <code>doom-dracula</code> テーマを利用します．
@@ -2255,8 +2261,8 @@ LSP (<a href="https://github.com/palantir/python-language-server">pyls</a>) を�
 </div>
 </div>
 
-<div id="outline-container-org648f046" class="outline-3">
-<h3 id="org648f046"><span class="section-number-3">7.2</span> Frame</h3>
+<div id="outline-container-orgb52336b" class="outline-3">
+<h3 id="orgb52336b"><span class="section-number-3">7.2</span> Frame</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 ツールバー等，特に必要のないものは表示しないようにします．
@@ -2292,8 +2298,8 @@ Emacs 起動時にフレームを最大化します．
 </div>
 </div>
 
-<div id="outline-container-org22e6142" class="outline-3">
-<h3 id="org22e6142"><span class="section-number-3">7.3</span> Font</h3>
+<div id="outline-container-org1dd337c" class="outline-3">
+<h3 id="org1dd337c"><span class="section-number-3">7.3</span> Font</h3>
 <div class="outline-text-3" id="text-7-3">
 <p>
 フォントに関しては，例えば，次のように <code>local-conf.el</code> に記述します．
@@ -2308,8 +2314,8 @@ Emacs 起動時にフレームを最大化します．
 </div>
 </div>
 </div>
-<div id="outline-container-orgbcaa39f" class="outline-2">
-<h2 id="orgbcaa39f"><span class="section-number-2">8</span> Global keybindings</h2>
+<div id="outline-container-orgdaf65f9" class="outline-2">
+<h2 id="orgdaf65f9"><span class="section-number-2">8</span> Global keybindings</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 global-map のキーバインドを次のように変更します．
@@ -2336,12 +2342,12 @@ global-map のキーバインドを次のように変更します．
 </div>
 </div>
 </div>
-<div id="outline-container-org1cfcf3c" class="outline-2">
-<h2 id="org1cfcf3c"><span class="section-number-2">9</span> Local configuration</h2>
+<div id="outline-container-org8e8bba9" class="outline-2">
+<h2 id="org8e8bba9"><span class="section-number-2">9</span> Local configuration</h2>
 <div class="outline-text-2" id="text-9">
 </div>
-<div id="outline-container-org39f3fe7" class="outline-3">
-<h3 id="org39f3fe7"><span class="section-number-3">9.1</span> Overview</h3>
+<div id="outline-container-orgd9dd746" class="outline-3">
+<h3 id="orgd9dd746"><span class="section-number-3">9.1</span> Overview</h3>
 <div class="outline-text-3" id="text-9-1">
 <p>
 <code>.emacs.d/local-conf.el</code> にマシン・環境ごとの設定を記述します．
@@ -2356,8 +2362,8 @@ global-map のキーバインドを次のように変更します．
 </div>
 </div>
 
-<div id="outline-container-org3e4030f" class="outline-3">
-<h3 id="org3e4030f"><span class="section-number-3">9.2</span> SINGULAR</h3>
+<div id="outline-container-org02e835e" class="outline-3">
+<h3 id="org02e835e"><span class="section-number-3">9.2</span> SINGULAR</h3>
 <div class="outline-text-3" id="text-9-2">
 <p>
 <a href="https://www.singular.uni-kl.de/">SINGULAR</a> は代数計算ソフトの一つです．
@@ -2382,8 +2388,8 @@ SINGULAR を Emacs 上で利用するには，インストール後に次のよ�
 </div>
 </div>
 
-<div id="outline-container-org69df6f4" class="outline-3">
-<h3 id="org69df6f4"><span class="section-number-3">9.3</span> Macaulay2</h3>
+<div id="outline-container-org570a1f7" class="outline-3">
+<h3 id="org570a1f7"><span class="section-number-3">9.3</span> Macaulay2</h3>
 <div class="outline-text-3" id="text-9-3">
 <p>
 <a href="http://www2.macaulay2.com/Macaulay2/">Macaulay2</a> は主に代数幾何学および可換環論のための代数計算ソフトの一つです．
@@ -2409,8 +2415,8 @@ Macaulay2 を Emacs で使うにはこのファイルをロードすれば良い
 </div>
 </div>
 
-<div id="outline-container-orgabc4764" class="outline-2">
-<h2 id="orgabc4764"><span class="section-number-2">10</span> License</h2>
+<div id="outline-container-org5e57503" class="outline-2">
+<h2 id="org5e57503"><span class="section-number-2">10</span> License</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 本設定ファイルは <a href="https://www.gnu.org/licenses/gpl.html">GNU 一般公衆ライセンス</a> (バージョン 3 または以降の任意のバージョン) で公開しています．
@@ -2432,7 +2438,7 @@ Macaulay2 を Emacs で使うにはこのファイルをロードすれば良い
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Mahito TANNO</p>
-<p class="date">Created: 2019-04-20 土 21:32</p>
+<p class="date">Created: 2019-05-07 Tue 23:01</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
