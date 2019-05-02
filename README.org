@@ -1427,6 +1427,14 @@ global-map のキーバインドを次のように変更します．
   (load my-local-config-file t)
 #+end_src
 
+** For EMP (Emacs Mac Port)
+[[https://github.com/railwaycat/homebrew-emacsmacport][EMP 版の Emacs]] では NS 版のものと挙動が異なります．
+オプションキーをメタキーとして使うために次を記述します．
+
+#+begin_src emacs-lisp :tangle no
+  (setq mac-option-modifier 'meta)
+#+end_src
+
 ** SINGULAR
 [[https://www.singular.uni-kl.de/][SINGULAR]] は代数計算ソフトの一つです．
 SINGULAR を Emacs 上で利用するには，インストール後に次のような記述を追加します．
