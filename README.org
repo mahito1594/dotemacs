@@ -226,6 +226,9 @@ next-generation, purely functional package manager for the Emacs hacker.
 そのためには Python3 と [[https://github.com/watchexec/watchexec][watchexec]] がインストールされている必要があります．
 これら 2 つがインストールされていない場合は ~(check-on-save find-when-checking)~ に設定します．
 
+また git を用いてインストールするパッケージについて [[https://github.com/raxod502/straight.el#git-backend][shallow clone]] するようにします．
+ただしバージョンが固定されているパッケージについては shallow clone しません．
+
 #+begin_src emacs-lisp
   (setq straight-repository-branch "develop") ; use the develop branch of straight.el
   (if (and (executable-find "watchexec")
@@ -245,6 +248,8 @@ next-generation, purely functional package manager for the Emacs hacker.
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
+
+  (setq straight-vc-git-default-clone-depth 1) ; shallow clone
 #+end_src
 
 *** use-package.el
