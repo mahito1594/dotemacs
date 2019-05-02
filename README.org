@@ -6,12 +6,31 @@
 #+OPTIONS: H:2
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="worg.css"/>
 
+* Quick start
+#+begin_src sh :tangle no
+  $ git clone --recursive https://github.com/mahito1594/dotemacs.git ~/.emacs.d
+#+end_src
+
+あるいは
+
+#+begin_src sh :tangle no
+  $ git clone https://github.com/mahito1594/dotemacs.git ~/.emacs.d
+  $ cd ~/.emacs.d
+  $ git submodule init
+  $ git submodule update
+#+end_src
+
+とします．
+初回起動時のパッケージインストールに時間がかかりすぎるという場合は
+version lock file (~straight/versions/default.el~) を削除してから Emacs を起動してください．
+shallow clone でパッケージをダウンロードします．
+
 * Introduction
 ** init.el
 ~init.el~ は ~elisp~ を =load-path= に追加し， ~utility.el~ と ~my-init.el~ を読み込みます．
 ただし Emacs のバージョンが古い場合はこれらは読み込まれません．
 
-また Customize で設定したカスタム変数は ~.emacs.d/custom-file.el~ に保存されます．
+また Customize で設定したカスタム変数は ~.emacs.d/local-conf.el~ に保存されます．
 ローカルに設定したい事柄は ~.emacs.d/local-conf.el~ に記述します．
 これらは Git によって追跡されません．
 
