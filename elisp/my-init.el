@@ -65,6 +65,8 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq straight-vc-git-default-clone-depth 1) ; shallow clone
+
 (straight-use-package 'use-package)
 
 (setq straight-use-package-by-default t)
