@@ -1290,8 +1290,7 @@ macOS の場合は homebrew からインストールできます．
                                            (require 'ccls)
                                            (lsp)))
     :config
-    (setq ccls-sem-highlight-method 'font-lock)
-    (ccls-use-default-rainbow-sem-highlight))
+    (setq ccls-sem-highlight-method 'font-lock))
 
   (use-package modern-cpp-font-lock
     :commands (modern-c++-font-lock-mode)
