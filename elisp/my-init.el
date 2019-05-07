@@ -646,8 +646,7 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
                                          (require 'ccls)
                                          (lsp)))
   :config
-  (setq ccls-sem-highlight-method 'font-lock)
-  (ccls-use-default-rainbow-sem-highlight))
+  (setq ccls-sem-highlight-method 'font-lock))
 
 (use-package modern-cpp-font-lock
   :commands (modern-c++-font-lock-mode)
