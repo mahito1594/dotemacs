@@ -520,16 +520,57 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
 (straight-use-package 'auctex)
 
 (use-feature tex
+  :preface
+  (defun my-plain-TeX-mode-hook ()
+    (outline-minor-mode 1)
+    (setq-local TeX-electric-math
+                (cons "$" "$")))
+  :hook (plain-TeX-mode . my-plain-TeX-mode-hook)
+  :custom
+  (TeX-auto-save nil)
+  (TeX-parse-self t)
+  (TeX-electric-sub-and-superscript t)
+  (TeX-engine-alist '((ptex "pTeX" "ptex %(kanjiopt)" "platex %(kajiopt)" "eptex")
+                      (uptex "upTeX" "uptex" "uplatex" "euptex")))
   :config
-  (setq TeX-auto-save t)
-  (setq TeX-parse-self t))
+  (add-to-list 'TeX-command-list
+               '("LatexMk" "latexmk %t"
+                 TeX-run-TeX nil
+                 (latex-mode) :help "Run latexmk")))
+
+(use-feature latex
+  :preface
+  (defun my-LaTeX-mode-hook ()
+    (outline-minor-mode 1)
+    (electric-pair-local-mode -1)
+    (setq-local TeX-electric-math
+                (cons "\\(" "\\)")))
+  :hook (LaTeX-mode . my-LaTeX-mode-hook)
+  :custom
+  (LaTeX-electric-left-right-brace t)
+  :config
+  (setq LaTeX-font-list
+        (append '((?m "\\textmc{" "}")
+                  (?g "\\textgt{" "}"))
+                LaTeX-font-list)))
+
+(use-feature font-latex
+  :custom
+  (font-latex-fontify-script nil))
+
+(use-feature tex-jp
+  :custom
+  (japanese-TeX-engine-default 'uptex)
+  (japanese-LaTeX-default-style "jsarticle"))
 
 (use-feature reftex
-  :bind (:map reftex-mode-map
-              ("C-c )" . nil)
-              ("C-c (" . reftex-reference)
-              ("C-c {" . reftex-cleveref-cref))
+  :hook (LaTeX-mode . reftex-mode)
+  ;; :bind (:map reftex-mode-map
+              ;; ("C-c )" . nil)
+              ;; ("C-c (" . reftex-reference)
+              ;; ("C-c {" . reftex-cleveref-cref))
   :custom
+  (reftex-plug-into-AUCTeX t)
   (reftex-ref-style-default-list '("Cleveref"))
   (reftex-label-alist '((nil ?e nil "~\\ref{%s}" nil nil) ; omit parens surrounding eq-like reference
                         ("definition"  ?d "def:"  "~\\ref{%s}" nil ("definiton")   nil)

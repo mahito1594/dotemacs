@@ -1089,17 +1089,208 @@ outline-magic が再定義する =outline-move-subtree-down= は移動後にサ�
 
 ** TeX/LaTeX
 *** AUCTeX
+TeX 文書の作成には [[https://www.gnu.org/software/auctex/][AUCTeX]] を利用します．
 
 #+begin_src emacs-lisp
   (straight-use-package 'auctex)
 #+end_src
 
+**** Settings
+AUCTeX は ~tex.el~, ~latex.el~, ~tex-buf.el~ および ~font-latex.el~ などを提供します．
+変数 =TeX-parse-self= を =t= にすることで，TeX 文書内を解析して用いているパッケージを調べます．
+変数 =TeX-electric-sub-and-superscript= を =t= にすることで =^= または =_= を入力後に自動的に ={...}= が挿入されます．
+
+=C-c C-c= (=TeX-command-master=) から latexmk を呼べるように =TeX-command-list= に追加しておきます．
+
 #+begin_src emacs-lisp
   (use-feature tex
+    :preface
+    (defun my-plain-TeX-mode-hook ()
+      (outline-minor-mode 1)
+      (setq-local TeX-electric-math
+                  (cons "$" "$")))
+    :hook (plain-TeX-mode . my-plain-TeX-mode-hook)
+    :custom
+    (TeX-auto-save nil)
+    (TeX-parse-self t)
+    (TeX-electric-sub-and-superscript t)
+    (TeX-engine-alist '((ptex "pTeX" "ptex %(kanjiopt)" "platex %(kajiopt)" "eptex")
+                        (uptex "upTeX" "uptex" "uplatex" "euptex")))
     :config
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t))
+    (add-to-list 'TeX-command-list
+                 '("LatexMk" "latexmk %t"
+                   TeX-run-TeX nil
+                   (latex-mode) :help "Run latexmk")))
 #+end_src
+
+LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ を用います．
+変数 =LaTeX-electric-left-right-brace= を =t= に設定することで， =\left= と =\right= など対応する括弧類を自動的に挿入します．
+この機能は ~electric-pair-mode~ と相性が悪いので LaTeX-mode では ~electric-pair-mode~ を OFF にしておきます．
+
+=japanese-latex-mode= 以外でも =C-c C-f g= で =\textgt= が， =C-c C-f m= で =\textmc= が挿入されるように =LaTeX-font-list= を設定します．
+
+#+begin_src emacs-lisp
+  (use-feature latex
+    :preface
+    (defun my-LaTeX-mode-hook ()
+      (outline-minor-mode 1)
+      (electric-pair-local-mode -1)
+      (setq-local TeX-electric-math
+                  (cons "\\(" "\\)")))
+    :hook (LaTeX-mode . my-LaTeX-mode-hook)
+    :custom
+    (LaTeX-electric-left-right-brace t)
+    :config
+    (setq LaTeX-font-list
+          (append '((?m "\\textmc{" "}")
+                    (?g "\\textgt{" "}"))
+                  LaTeX-font-list)))
+#+end_src
+
+上付き・下付き文字の表示を plain にします．
+
+#+begin_src emacs-lisp
+  (use-feature font-latex
+    :custom
+    (font-latex-fontify-script nil))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-feature tex-jp
+    :custom
+    (japanese-TeX-engine-default 'uptex)
+    (japanese-LaTeX-default-style "jsarticle"))
+#+end_src
+
+**** Insertion of Quotes, Dollars and Braces
+引用符の挿入等の操作についてまとめます．
+
+| key     | action                |
+|---------+-----------------------|
+| ="=     | Insert ~``~ or ~''~   |
+| =$=     | Insert ~$$~ or ~\(\)~ |
+| =C-c {= | Insert ~{}~           |
+
+リージョン選択中に =$= を押下すると，選択範囲を =$...$= または =\(...\)= で囲みます．
+また続けて =$= を押下することで別行立て数式・非数式・インライン数式をトグルします．
+また，リージョン選択中に =C-c {= を押下することで選択範囲を ={...}= で囲みます．
+
+**** Font specifiers
+フォントに関する制御綴の挿入についてまとめます．
+prefix は ~C-c C-f~ です．
+
+| key            | action                          |
+|----------------+---------------------------------|
+| =[prefix] C-b= | Insert =\textbf{}=              |
+| =[prefix] C-i= | Insert =\textit{}=              |
+| =[prefix] C-e= | Insert =\emph{}=                |
+| =[prefix] C-s= | Insert =\textsl{}=              |
+| =[prefix] C-r= | Insert =\textrm{}=              |
+| =[prefix] C-f= | Insert =\textsf{}=              |
+| =[prefix] C-t= | Insert =\texttt{}=              |
+| =[prefix] C-c= | Insert =\textsc{}=              |
+| =[prefix] C-d= | Delete innermost font specifire |
+
+LaTeX-mode 中では以下のコマンドが利用可能なように設定しています．
+
+| key            | action             |
+|----------------+--------------------|
+| =[prefix] m=   | Insert =\textmc{}= |
+| =[prefix] g=   | Insert =\textgt{}= |
+
+**** Sectioning/Environment
+section 型命令や環境の挿入についてまとめます．
+
+| key       | action                         |
+|-----------+--------------------------------|
+| =C-c C-s= | Insert a sectioning command    |
+| =C-c C-e= | Insert a environment command   |
+| =C-c ]=   | Insert a suitable =\end{...}=  |
+| =C-M-a=   | Move to suitable =\begin{...}= |
+| =C-M-e=   | Move to suitable =\end{...}=   |
+
+**** Math
+=C-c ~= で =LaTeX-math-mode= に入ります．
+~LaTeX-math-mode~ 中で =`= を押下すると数式マクロが簡単に入力できるようになります．
+ユーザ辞書は =LaTeX-math-list= で設定できます．
+
+**** Mark region/Comment and Uncomment
+=C-c *= で現在いる section 全体をマークします．
+同様に =C-c .= は現在いる environment 全体をマークします．
+
+=C-c ;= は選択中のリージョンをコメントまたはアンコメントします．
+また =C-c %= は現在のパラグラフをコメントまたはアンコメントします．
+
+**** Compile
+TeX 文書をコンパイルするには =C-c C-c= (=TeX-command-master=) を用います．
+他にも選択中のリージョンや，現在のバッファをコンパイルするコマンドがあります．
+
+| key       | function              | action                                                   |
+|-----------+-----------------------+----------------------------------------------------------|
+| =C-c C-c= | =TeX-command-master=  | Compile the master file (See the variable =TeX-master=). |
+| =C-c C-r= | =TeX-command-region=  | Compile the selected region.                             |
+| =C-c C-b= | =TeX-command-buffer=  | Compile the current buffer.                              |
+| =C-c C-z= | =TeX-command-section= | Compile the current section.                             |
+
+コンパイル時のコマンドは =TeX-command-list= から選ぶことができます．
+利用する (La)TeX エンジンはカスタム変数 =TeX-engine= で指定できます．
+これはバッファローカル変数です．
+デフォルトで用意されているエンジンは 
+
+- default (=TeX-command=, =LaTeX-command=, =ConTeXt-engine= から決まる)
+- XeTeX
+- LuaTeX
+- Omega
+
+です．
+
+たとえばデフォルトの設定で =pdflatex= を利用するには
+
+- =TeX-PDF-mode= (=C-c C-t C-p=) であり，かつ変数 =TeX-PDF-from-DVI= が =nil=
+
+の状況で =C-c C-c LaTeX= とすれば良いはずです．
+また，たとえば LuaLaTeX で PDF を直接生成するためには
+
+- 変数 =TeX-engine= を =luatex= にセットし，かつ =TeX-PDF-mode= になっている
+
+状況で =C-c C-c LaTeX= とすれば良いはずです．
+ここで =TeX-PDF-mode= バッファローカルなマイナーモードで，デフォルトで有効になっています．
+
+カスタム変数 =TeX-engin-alist= を利用することで，エンジンの設定ができます．
+=TeX-engin-alist= には次の形のリスト
+
+#+begin_src emacs-lisp :tangle no
+  (SYMBOL "ENGINE NAME" "COMMAND FOR `plain TeX'" "COMMAND FOR `latex'" "COMMAND FOR `ConTeXt'")
+#+end_src
+
+を渡します．
+
+**** Enable =japanese-LaTeX-mode= in LuaTeX-ja classes
+あまりご利益が思いつかない．
+~tex.el~ の設定の =:init= キーワード内に次を追加すれば良さそう．
+
+#+begin_src emacs-lisp :tangle no
+  (setq TeX-format-list
+        '(("JLATEX" japanese-latex-mode
+           "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(u\\|lt\\)?\\(j[s-]?\\|t\\|jt\\)\
+  \\(article\\|report\\|book\\|slides\\)")
+          ("JTEX" japanese-plain-tex-mode
+           "-- string likely in Japanese TeX --")
+          ("AMSTEX" ams-tex-mode
+           "\\\\document\\b")
+          ("CONTEXT" context-mode
+           "\\\\\\(start\\(text\\|tekst\\|proje[ck]t\\|proiect\\|\
+  produ[ck]t\\|produs\\|environment\\|omgeving\\|umgebung\\|prostredi\\|mediu\\|\
+  component\\|onderdeel\\|komponent[ea]\\|componenta\\)\
+  \\|inizia\\(testo\\|progetto\\|prodotto\\|ambiente\\|componente\\)\
+  \\)\\|%.*?interface=")
+          ("LATEX" latex-mode
+           "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
+  documentclass\\)\\b")
+          ("TEX" plain-tex-mode ".")))
+#+end_src
+
+=TeX-engine= を自動的にセットするには ~tex-jp.el~ 内の =japanese-LaTeX-guess-engine= 関数も修正する必要がある？
 
 *** RefTeX
 参考文献や相互参照のために [[https://www.gnu.org/software/auctex/reftex.html][RefTeX]] を利用します．
@@ -1109,7 +1300,7 @@ YaTeX の =YaTeX-insert-paren-region= と併用するために ~C-c )~ を nil �
 | Key     | Action                 |
 |---------+------------------------|
 | ~C-c =~ | Show table of contents |
-| ~C-c (~ | Insert \ref            |
+| ~C-c )~ | Insert \ref            |
 | ~C-c [~ | Insert \cite           |
 |---------+------------------------|
 
@@ -1120,11 +1311,13 @@ YaTeX の =YaTeX-insert-paren-region= と併用するために ~C-c )~ を nil �
 
 #+begin_src emacs-lisp
   (use-feature reftex
-    :bind (:map reftex-mode-map
-                ("C-c )" . nil)
-                ("C-c (" . reftex-reference)
-                ("C-c {" . reftex-cleveref-cref))
+    :hook (LaTeX-mode . reftex-mode)
+    ;; :bind (:map reftex-mode-map
+                ;; ("C-c )" . nil)
+                ;; ("C-c (" . reftex-reference)
+                ;; ("C-c {" . reftex-cleveref-cref))
     :custom
+    (reftex-plug-into-AUCTeX t)
     (reftex-ref-style-default-list '("Cleveref"))
     (reftex-label-alist '((nil ?e nil "~\\ref{%s}" nil nil) ; omit parens surrounding eq-like reference
                           ("definition"  ?d "def:"  "~\\ref{%s}" nil ("definiton")   nil)
