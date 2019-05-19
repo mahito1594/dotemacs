@@ -989,66 +989,22 @@ HTML へのエクスポートの際，コードハイライトに [[https://gith
 #+end_src
 
 ** Outline
-[[https://github.com/tj64/outline-magic/tree/2a5f07417b696cf7541d435c43bafcc64817636b][outline-magic]] と Hydra を用いて outline-minor-mode を使いやすくします．
-outline-magic が再定義する =outline-move-subtree-down= は移動後にサブツリーを展開してしまうので，
-移動後に折りたたむように advice-add します．
-
-#+begin_src emacs-lisp :tangle ./elisp/utility.el
-  ;;; For outline-magic
-  (defun my--outline-move-subtree-down (&optional arg)
-    "Move the currrent subtree down past ARG headlines of the same level.
-  If the current subtree is folded, call `outline-hide-subtree' after move down."
-    (interactive "p")
-    (let* ((headers (or arg 1))
-           (movfunc (if (> headers 0) 'outline-get-next-sibling
-                      'outline-get-last-sibling))
-           (ins-point (make-marker))
-           (cnt (abs headers))
-           (folded (save-match-data
-                     (outline-end-of-heading)
-                     (outline-invisible-p)))
-           beg end txt)
-      ;; Select the tree
-      (outline-back-to-heading)
-      (setq beg (point))
-      (outline-end-of-subtree)
-      (if (= (char-after) ?\n) (forward-char 1))
-      (setq end (point))
-      ;; Find insertion point, with error handling
-      (goto-char beg)
-      (while (> cnt 0)
-        (or (funcall movfunc)
-            (progn (goto-char beg)
-                   (error "Cannot move past superior level")))
-        (setq cnt (1- cnt)))
-      (if (> headers 0)
-          ;; Moving forward - still need to move over subtree
-          (progn (outline-end-of-subtree)
-                 (if (= (char-after) ?\n) (forward-char 1))))
-      (move-marker ins-point (point))
-      (setq txt (buffer-substring beg end))
-      (delete-region beg end)
-      (insert txt)
-      (goto-char ins-point)
-      (if folded (outline-hide-subtree))
-      (move-marker ins-point nil)))
-#+end_src
+Hydra を用いて outline-minor-mode を使いやすくします．
 
 #+begin_src emacs-lisp
-  (use-package outline-magic
-    :functions (my--outline-move-subtree-down)
+  (use-feature outline
     :hydra
     (hydra-outline
      (:hint nil)
      "
-  ^Navigate^                ^Hide^         ^Show^         ^   ^         ^Edit^
-  ^^^^^^^^^^^^------------------------------------------------------------------------------
-  _u_: up                   _l_: leaves    _a_: all       _TAB_: cycle  _↑_: move up
-  _n_: next visible         _t_: body      _e_: entry     ^   ^         _↓_: move down
-  _p_: previous visible     _c_: entry     _k_: branches  ^   ^         _←_: promote
-  _f_: forward same level   _d_: subtree   _i_: children  ^   ^         _→_: demote
+  ^Navigate^                ^Hide^         ^Show^         ^Edit^
+  ^^^^^^^^^^^^----------------------------------------------------------------
+  _u_: up                   _l_: leaves    _a_: all       _↑_: move up
+  _n_: next visible         _t_: body      _e_: entry     _↓_: move down
+  _p_: previous visible     _c_: entry     _k_: branches  _←_: promote
+  _f_: forward same level   _d_: subtree   _i_: children  _→_: demote
   _b_: backward same level  _q_: sublevel  _s_: subtree
-  ^ ^                       _o_: other     ^ ^            ^   ^         _z_: quit
+  ^ ^                       _o_: other     ^ ^            _z_: quit
   "
      ;; Navigate
      ("u" outline-up-heading)
@@ -1069,9 +1025,6 @@ outline-magic が再定義する =outline-move-subtree-down= は移動後にサ�
      ("k" outline-show-branches)
      ("i" outline-show-children)
      ("s" outline-show-subtree)
-     ;; Cycle
-     ("TAB" outline-cycle)
-     ("<tab>" outline-cycle)
      ;; Edit
      ("<up>" outline-move-subtree-up)
      ("<down>" outline-move-subtree-down)
@@ -1080,11 +1033,7 @@ outline-magic が再定義する =outline-move-subtree-down= は移動後にサ�
      ;; quit
      ("z" nil))
     :bind (:map outline-minor-mode-map
-                ("C-c #" . hydra-outline/body))
-    :demand t
-    :after (outline)
-    :config
-    (advice-add 'outline-move-subtree-down :override #'my--outline-move-subtree-down))
+                ("C-c #" . hydra-outline/body)))
 #+end_src
 
 ** TeX/LaTeX

@@ -466,20 +466,19 @@ _e_: end of line        ^ ^                 _x_: execute command
   :demand t
   :after (ox))
 
-(use-package outline-magic
-  :functions (my--outline-move-subtree-down)
+(use-feature outline
   :hydra
   (hydra-outline
    (:hint nil)
    "
-^Navigate^                ^Hide^         ^Show^         ^   ^         ^Edit^
-^^^^^^^^^^^^------------------------------------------------------------------------------
-_u_: up                   _l_: leaves    _a_: all       _TAB_: cycle  _↑_: move up
-_n_: next visible         _t_: body      _e_: entry     ^   ^         _↓_: move down
-_p_: previous visible     _c_: entry     _k_: branches  ^   ^         _←_: promote
-_f_: forward same level   _d_: subtree   _i_: children  ^   ^         _→_: demote
+^Navigate^                ^Hide^         ^Show^         ^Edit^
+^^^^^^^^^^^^----------------------------------------------------------------
+_u_: up                   _l_: leaves    _a_: all       _↑_: move up
+_n_: next visible         _t_: body      _e_: entry     _↓_: move down
+_p_: previous visible     _c_: entry     _k_: branches  _←_: promote
+_f_: forward same level   _d_: subtree   _i_: children  _→_: demote
 _b_: backward same level  _q_: sublevel  _s_: subtree
-^ ^                       _o_: other     ^ ^            ^   ^         _z_: quit
+^ ^                       _o_: other     ^ ^            _z_: quit
 "
    ;; Navigate
    ("u" outline-up-heading)
@@ -500,9 +499,6 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
    ("k" outline-show-branches)
    ("i" outline-show-children)
    ("s" outline-show-subtree)
-   ;; Cycle
-   ("TAB" outline-cycle)
-   ("<tab>" outline-cycle)
    ;; Edit
    ("<up>" outline-move-subtree-up)
    ("<down>" outline-move-subtree-down)
@@ -511,11 +507,7 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
    ;; quit
    ("z" nil))
   :bind (:map outline-minor-mode-map
-              ("C-c #" . hydra-outline/body))
-  :demand t
-  :after (outline)
-  :config
-  (advice-add 'outline-move-subtree-down :override #'my--outline-move-subtree-down))
+              ("C-c #" . hydra-outline/body)))
 
 (straight-use-package 'auctex)
 
