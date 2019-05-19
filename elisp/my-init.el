@@ -418,10 +418,7 @@ _e_: end of line        ^ ^                 _x_: execute command
   :commands (flycheck-disable-checker)
   :hook (after-init . global-flycheck-mode)
   :custom
-  (flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  :config
-  (flycheck-add-mode 'tex-chktex 'yatex-mode)
-  (flycheck-add-mode 'tex-lacheck 'yatex-mode))
+  (flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
 (use-package flycheck-popup-tip
   :hook (flycheck-mode . flycheck-popup-tip-mode))
@@ -469,20 +466,19 @@ _e_: end of line        ^ ^                 _x_: execute command
   :demand t
   :after (ox))
 
-(use-package outline-magic
-  :functions (my--outline-move-subtree-down)
+(use-feature outline
   :hydra
   (hydra-outline
    (:hint nil)
    "
-^Navigate^                ^Hide^         ^Show^         ^   ^         ^Edit^
-^^^^^^^^^^^^------------------------------------------------------------------------------
-_u_: up                   _l_: leaves    _a_: all       _TAB_: cycle  _↑_: move up
-_n_: next visible         _t_: body      _e_: entry     ^   ^         _↓_: move down
-_p_: previous visible     _c_: entry     _k_: branches  ^   ^         _←_: promote
-_f_: forward same level   _d_: subtree   _i_: children  ^   ^         _→_: demote
+^Navigate^                ^Hide^         ^Show^         ^Edit^
+^^^^^^^^^^^^----------------------------------------------------------------
+_u_: up                   _l_: leaves    _a_: all       _↑_: move up
+_n_: next visible         _t_: body      _e_: entry     _↓_: move down
+_p_: previous visible     _c_: entry     _k_: branches  _←_: promote
+_f_: forward same level   _d_: subtree   _i_: children  _→_: demote
 _b_: backward same level  _q_: sublevel  _s_: subtree
-^ ^                       _o_: other     ^ ^            ^   ^         _z_: quit
+^ ^                       _o_: other     ^ ^            _z_: quit
 "
    ;; Navigate
    ("u" outline-up-heading)
@@ -503,9 +499,6 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
    ("k" outline-show-branches)
    ("i" outline-show-children)
    ("s" outline-show-subtree)
-   ;; Cycle
-   ("TAB" outline-cycle)
-   ("<tab>" outline-cycle)
    ;; Edit
    ("<up>" outline-move-subtree-up)
    ("<down>" outline-move-subtree-down)
@@ -514,52 +507,144 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
    ;; quit
    ("z" nil))
   :bind (:map outline-minor-mode-map
-              ("C-c #" . hydra-outline/body))
-  :demand t
-  :after (outline)
-  :config
-  (advice-add 'outline-move-subtree-down :override #'my--outline-move-subtree-down))
+              ("C-c #" . hydra-outline/body)))
 
-(use-package yatex
-  :functions (my-YaTeX-with-outline)
+(straight-use-package 'auctex)
+
+(use-feature tex
   :preface
-  (defvar my-YaTeX-user-completion-table
-    (expand-file-name "~/texmf/emacs/yatexrc")
-    "You put here your own completion table.")
-  :commands (yatex-mode)
+  (defun my-plain-TeX-mode-hook ()
+    (outline-minor-mode 1)
+    (setq-local TeX-electric-math
+                (cons "$" "$")))
   :init
-  (setq YaTeX-inhibit-prefix-letter t)
-  :mode (("\\.tex\\'" . yatex-mode)
-         ("\\.sty\\'" . yatex-mode)
-         ("\\.ltx\\'" . yatex-mode))
-  :hook (yatex-mode . my-YaTeX-with-outline)
+  (setq TeX-format-list
+        '(("JLATEX" japanese-latex-mode
+           "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(u\\|lt\\|bx\\)?\\(j[st-]?\\|t\\)\
+\\(article\\|report\\|book\\|slides\\|lreq\\)")
+          ("JTEX" japanese-plain-tex-mode
+           "-- string likely in Japanese TeX --")
+          ("AMSTEX" ams-tex-mode
+           "\\\\document\\b")
+          ("CONTEXT" context-mode
+           "\\\\\\(start\\(text\\|tekst\\|proje[ck]t\\|proiect\\|\
+produ[ck]t\\|produs\\|environment\\|omgeving\\|umgebung\\|prostredi\\|mediu\\|\
+component\\|onderdeel\\|komponent[ea]\\|componenta\\)\
+\\|inizia\\(testo\\|progetto\\|prodotto\\|ambiente\\|componente\\)\
+\\)\\|%.*?interface=")
+          ("LATEX" latex-mode
+           "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
+documentclass\\)\\b")
+          ("TEX" plain-tex-mode ".")))
+  :hook (plain-TeX-mode . my-plain-TeX-mode-hook)
+  :custom
+  (TeX-auto-save nil)
+  (TeX-parse-self t)
+  (TeX-electric-sub-and-superscript t)
+  (TeX-source-correlate-mode t)
+  (TeX-source-correlate-method '((dvi . synctex)
+                                 (pdf . synctex)))
   :config
-  (setq YaTeX-kanji-code 4)             ; use UTF-8
-  (setq YaTeX-use-AMS-LaTeX t)
-  (setq tex-command "latexmk")
-  (setq YaTeX-user-completion-table my-YaTeX-user-completion-table)
-  (add-hook 'align-load-hook
-            #'(lambda ()
-                (add-to-list 'align-rules-list '(yatex-table
-                                                 (regexp . "\\(\\s-*\\)&")
-                                                 (repeat . t)
-                                                 (mode . '(yatex-mode))))))
-  )
+  (add-to-list 'TeX-command-list
+               '("LatexMk" "latexmk %t"
+                 TeX-run-TeX nil
+                 (latex-mode) :help "Run latexmk")))
 
-(use-package company-math
-  :demand t
-  :after (company yatex)
+(use-feature latex
+  :preface
+  (defun my-LaTeX-mode-hook ()
+    (outline-minor-mode 1)
+    (electric-pair-local-mode -1)
+    (setq-local TeX-electric-math
+                (cons "\\(" "\\)")))
+  :hook (LaTeX-mode . my-LaTeX-mode-hook)
+  :custom
+  (LaTeX-electric-left-right-brace t))
+
+(use-feature font-latex
+  :custom
+  (font-latex-fontify-script nil))
+
+(use-feature tex-jp
+  :custom
+  (japanese-TeX-engine-default 'uptex)
+  (japanese-LaTeX-default-style "jsarticle")
+  (japanese-LaTeX-style-list
+   '(("jsarticle") ("jsreport") ("jsbook")
+     ;; for upLaTeX
+     ("ujarticle") ("ujreport") ("ujbook")
+     ("utarticle") ("utreport") ("utbook")
+     ;; for LuaLaTeX
+     ("ltjarticle") ("ltjreport") ("ltjbook")
+     ("ltjsarticle") ("ltjsreport") ("ltjsbook")
+     ;; for XeLaTeX/LuaTeX
+     ("bxjsarticle") ("bxjsreport") ("bxjsbook") ("bxjsslide")
+     ;; for jlreq
+     ("jlreq")))
   :config
-  (push 'company-math-symbols-latex company-backends)
-  (push 'company-latex-commands company-backends))
+  ;; By setting `TeX-expand-list', override `TeX-expand-list-builtin'
+  ;; which is modified by `tex-jp.el'.
+  (setq TeX-expand-list
+        (append TeX-expand-list
+                '(("%(bibtex)" (lambda ()
+                                 (cond
+                                  ((eq TeX-engine 'ptex)
+                                   (if (executable-find "pbibtex")
+                                       "pbibtex %(kanjiopt)" "jbibtex"))
+                                  ((eq TeX-engine 'jtex) "jbibtex")
+                                  ((and japanese-TeX-mode
+                                        (memq TeX-engine '(uptex xetex luatex)))
+                                   "upbibtex")
+                                  (t "bibtex")))))))
+  (defun my-japanese-LaTeX-guess-engine ()
+    "Guess Japanese TeX engine and set it to `TeX-engine'.
+Document class and its option is considered in the guess.  Do not
+overwrite the value already set locally."
+    ;; `TeX-engine' may be set by the file local variable or by the menu
+    ;; Command->TeXing Options manually.  Don't override the user
+    ;; preference set in such ways.
+    (unless (local-variable-p 'TeX-engine (current-buffer))
+      (TeX-engine-set
+       (cond
+        ((TeX-match-style "jlreq")
+         (cond
+          ((LaTeX-match-class-option "\\`platex\\'") 'ptex)
+          ((LaTeX-match-class-option "\\`uplatex\\'") 'uptex)
+          ((LaTeX-match-class-option "\\`lulatex\\'") 'luatex)
+          (t japanese-TeX-engine-default)))
+        ((TeX-match-style "\\`bxjs\\(?:article\\|report\\|book\\)\\'")
+         (cond
+          ((LaTeX-match-class-option "\\`platex\\'") 'ptex)
+          ((LaTeX-match-class-option "\\`uplatex\\'") 'uptex)
+          ((LaTeX-match-class-option "\\`lualatex\\'") 'luatex)
+          ((LaTeX-match-class-option "\\`xelatex\\'") 'xetex)
+          (t japanese-TeX-engine-default)))
+        ((TeX-match-style "\\`ltj[st]?\\(?:article\\|report\\|book\\)\\'")
+         'luatex)
+        ((TeX-match-style "\\`u[jt]\\(?:article\\|report\\|book\\)\\'")
+         'uptex)
+        ((TeX-match-style "\\`[jt]s?\\(?:article\\|report\\|book\\)\\'")
+         (if (LaTeX-match-class-option "\\`uplatex\\'")
+             'uptex 'ptex))
+        ((TeX-match-style "\\`j-\\(?:article\\|report\\|book\\)\\'")
+         'jtex)
+        (t japanese-TeX-engine-default)))))
+  (advice-add 'japanese-LaTeX-guess-engine :override #'my-japanese-LaTeX-guess-engine))
+
+(use-package company-auctex
+  :demand t
+  :after (company tex)
+  :config
+  (company-auctex-init))
 
 (use-feature reftex
-  :hook (yatex-mode . reftex-mode)
-  :bind (:map reftex-mode-map
-              ("C-c )" . nil)
-              ("C-c (" . reftex-reference)
-              ("C-c {" . reftex-cleveref-cref))
+  :hook (LaTeX-mode . reftex-mode)
+  ;; :bind (:map reftex-mode-map
+              ;; ("C-c )" . nil)
+              ;; ("C-c (" . reftex-reference)
+              ;; ("C-c {" . reftex-cleveref-cref))
   :custom
+  (reftex-plug-into-AUCTeX t)
   (reftex-ref-style-default-list '("Cleveref"))
   (reftex-label-alist '((nil ?e nil "~\\ref{%s}" nil nil) ; omit parens surrounding eq-like reference
                         ("definition"  ?d "def:"  "~\\ref{%s}" nil ("definiton")   nil)
