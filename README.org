@@ -1099,6 +1099,7 @@ TeX 文書の作成には [[https://www.gnu.org/software/auctex/][AUCTeX]] を�
 AUCTeX は ~tex.el~, ~latex.el~, ~tex-buf.el~ および ~font-latex.el~ などを提供します．
 変数 =TeX-parse-self= を =t= にすることで，TeX 文書内を解析して用いているパッケージを調べます．
 変数 =TeX-electric-sub-and-superscript= を =t= にすることで =^= または =_= を入力後に自動的に ={...}= が挿入されます．
+変数 =TeX-source-correlate-mode= を =t= にすることで常に SyncTeX を利用するようにします．
 
 =C-c C-c= (=TeX-command-master=) から latexmk を呼べるように =TeX-command-list= に追加しておきます．
 
@@ -1109,13 +1110,33 @@ AUCTeX は ~tex.el~, ~latex.el~, ~tex-buf.el~ および ~font-latex.el~ など�
       (outline-minor-mode 1)
       (setq-local TeX-electric-math
                   (cons "$" "$")))
+    :init
+    (setq TeX-format-list
+          '(("JLATEX" japanese-latex-mode
+             "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(u\\|lt\\|bx\\)?\\(j[st-]?\\|t\\)\
+  \\(article\\|report\\|book\\|slides\\|lreq\\)")
+            ("JTEX" japanese-plain-tex-mode
+             "-- string likely in Japanese TeX --")
+            ("AMSTEX" ams-tex-mode
+             "\\\\document\\b")
+            ("CONTEXT" context-mode
+             "\\\\\\(start\\(text\\|tekst\\|proje[ck]t\\|proiect\\|\
+  produ[ck]t\\|produs\\|environment\\|omgeving\\|umgebung\\|prostredi\\|mediu\\|\
+  component\\|onderdeel\\|komponent[ea]\\|componenta\\)\
+  \\|inizia\\(testo\\|progetto\\|prodotto\\|ambiente\\|componente\\)\
+  \\)\\|%.*?interface=")
+            ("LATEX" latex-mode
+             "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
+  documentclass\\)\\b")
+            ("TEX" plain-tex-mode ".")))
     :hook (plain-TeX-mode . my-plain-TeX-mode-hook)
     :custom
     (TeX-auto-save nil)
     (TeX-parse-self t)
     (TeX-electric-sub-and-superscript t)
-    (TeX-engine-alist '((ptex "pTeX" "ptex %(kanjiopt)" "platex %(kajiopt)" "eptex")
-                        (uptex "upTeX" "uptex" "uplatex" "euptex")))
+    (TeX-source-correlate-mode t)
+    (TeX-source-correlate-method '((dvi . synctex)
+                                   (pdf . synctex)))
     :config
     (add-to-list 'TeX-command-list
                  '("LatexMk" "latexmk %t"
@@ -1127,8 +1148,6 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
 変数 =LaTeX-electric-left-right-brace= を =t= に設定することで， =\left= と =\right= など対応する括弧類を自動的に挿入します．
 この機能は ~electric-pair-mode~ と相性が悪いので LaTeX-mode では ~electric-pair-mode~ を OFF にしておきます．
 
-=japanese-latex-mode= 以外でも =C-c C-f g= で =\textgt= が， =C-c C-f m= で =\textmc= が挿入されるように =LaTeX-font-list= を設定します．
-
 #+begin_src emacs-lisp
   (use-feature latex
     :preface
@@ -1139,12 +1158,7 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
                   (cons "\\(" "\\)")))
     :hook (LaTeX-mode . my-LaTeX-mode-hook)
     :custom
-    (LaTeX-electric-left-right-brace t)
-    :config
-    (setq LaTeX-font-list
-          (append '((?m "\\textmc{" "}")
-                    (?g "\\textgt{" "}"))
-                  LaTeX-font-list)))
+    (LaTeX-electric-left-right-brace t))
 #+end_src
 
 上付き・下付き文字の表示を plain にします．
@@ -1159,7 +1173,78 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
   (use-feature tex-jp
     :custom
     (japanese-TeX-engine-default 'uptex)
-    (japanese-LaTeX-default-style "jsarticle"))
+    (japanese-LaTeX-default-style "jsarticle")
+    (japanese-LaTeX-style-list
+     '(("jsarticle") ("jsreport") ("jsbook")
+       ;; for upLaTeX
+       ("ujarticle") ("ujreport") ("ujbook")
+       ("utarticle") ("utreport") ("utbook")
+       ;; for LuaLaTeX
+       ("ltjarticle") ("ltjreport") ("ltjbook")
+       ("ltjsarticle") ("ltjsreport") ("ltjsbook")
+       ;; for XeLaTeX/LuaTeX
+       ("bxjsarticle") ("bxjsreport") ("bxjsbook") ("bxjsslide")
+       ;; for jlreq
+       ("jlreq")))
+    :config
+    ;; By setting `TeX-expand-list', override `TeX-expand-list-builtin'
+    ;; which is modified by `tex-jp.el'.
+    (setq TeX-expand-list
+          (append TeX-expand-list
+                  '(("%(bibtex)" (lambda ()
+                                   (cond
+                                    ((eq TeX-engine 'ptex)
+                                     (if (executable-find "pbibtex")
+                                         "pbibtex %(kanjiopt)" "jbibtex"))
+                                    ((eq TeX-engine 'jtex) "jbibtex")
+                                    ((and japanese-TeX-mode
+                                          (memq TeX-engine '(uptex xetex luatex)))
+                                     "upbibtex")
+                                    (t "bibtex")))))))
+    (defun my-japanese-LaTeX-guess-engine ()
+      "Guess Japanese TeX engine and set it to `TeX-engine'.
+  Document class and its option is considered in the guess.  Do not
+  overwrite the value already set locally."
+      ;; `TeX-engine' may be set by the file local variable or by the menu
+      ;; Command->TeXing Options manually.  Don't override the user
+      ;; preference set in such ways.
+      (unless (local-variable-p 'TeX-engine (current-buffer))
+        (TeX-engine-set
+         (cond
+          ((TeX-match-style "jlreq")
+           (cond
+            ((LaTeX-match-class-option "\\`platex\\'") 'ptex)
+            ((LaTeX-match-class-option "\\`uplatex\\'") 'uptex)
+            ((LaTeX-match-class-option "\\`lulatex\\'") 'luatex)
+            (t japanese-TeX-engine-default)))
+          ((TeX-match-style "\\`bxjs\\(?:article\\|report\\|book\\)\\'")
+           (cond
+            ((LaTeX-match-class-option "\\`platex\\'") 'ptex)
+            ((LaTeX-match-class-option "\\`uplatex\\'") 'uptex)
+            ((LaTeX-match-class-option "\\`lualatex\\'") 'luatex)
+            ((LaTeX-match-class-option "\\`xelatex\\'") 'xetex)
+            (t japanese-TeX-engine-default)))
+          ((TeX-match-style "\\`ltj[st]?\\(?:article\\|report\\|book\\)\\'")
+           'luatex)
+          ((TeX-match-style "\\`u[jt]\\(?:article\\|report\\|book\\)\\'")
+           'uptex)
+          ((TeX-match-style "\\`[jt]s?\\(?:article\\|report\\|book\\)\\'")
+           (if (LaTeX-match-class-option "\\`uplatex\\'")
+               'uptex 'ptex))
+          ((TeX-match-style "\\`j-\\(?:article\\|report\\|book\\)\\'")
+           'jtex)
+          (t japanese-TeX-engine-default)))))
+    (advice-add 'japanese-LaTeX-guess-engine :override #'my-japanese-LaTeX-guess-engine))
+#+end_src
+
+入力補完に [[https://github.com/alexeyr/company-auctex][company-auctex]] を利用します．
+
+#+begin_src emacs-lisp
+  (use-package company-auctex
+    :demand t
+    :after (company tex)
+    :config
+    (company-auctex-init))
 #+end_src
 
 **** Insertion of Quotes, Dollars and Braces
@@ -1231,6 +1316,7 @@ TeX 文書をコンパイルするには =C-c C-c= (=TeX-command-master=) を用
 | =C-c C-r= | =TeX-command-region=  | Compile the selected region.                             |
 | =C-c C-b= | =TeX-command-buffer=  | Compile the current buffer.                              |
 | =C-c C-z= | =TeX-command-section= | Compile the current section.                             |
+| =C-c C-a= | =TeX-command-run-all= | Compile the current document until it is finished.       |
 
 コンパイル時のコマンドは =TeX-command-list= から選ぶことができます．
 利用する (La)TeX エンジンはカスタム変数 =TeX-engine= で指定できます．
@@ -1246,7 +1332,7 @@ TeX 文書をコンパイルするには =C-c C-c= (=TeX-command-master=) を用
 
 たとえばデフォルトの設定で =pdflatex= を利用するには
 
-- =TeX-PDF-mode= (=C-c C-t C-p=) であり，かつ変数 =TeX-PDF-from-DVI= が =nil=
+- =TeX-PDF-mode= (=C-c C-t C-p= でトグルできます) であり，かつ変数 =TeX-PDF-from-DVI= が =nil=
 
 の状況で =C-c C-c LaTeX= とすれば良いはずです．
 また，たとえば LuaLaTeX で PDF を直接生成するためには
@@ -1265,36 +1351,14 @@ TeX 文書をコンパイルするには =C-c C-c= (=TeX-command-master=) を用
 
 を渡します．
 
-**** Enable =japanese-LaTeX-mode= in LuaTeX-ja classes
-あまりご利益が思いつかない．
-~tex.el~ の設定の =:init= キーワード内に次を追加すれば良さそう．
-
-#+begin_src emacs-lisp :tangle no
-  (setq TeX-format-list
-        '(("JLATEX" japanese-latex-mode
-           "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(u\\|lt\\)?\\(j[s-]?\\|t\\|jt\\)\
-  \\(article\\|report\\|book\\|slides\\)")
-          ("JTEX" japanese-plain-tex-mode
-           "-- string likely in Japanese TeX --")
-          ("AMSTEX" ams-tex-mode
-           "\\\\document\\b")
-          ("CONTEXT" context-mode
-           "\\\\\\(start\\(text\\|tekst\\|proje[ck]t\\|proiect\\|\
-  produ[ck]t\\|produs\\|environment\\|omgeving\\|umgebung\\|prostredi\\|mediu\\|\
-  component\\|onderdeel\\|komponent[ea]\\|componenta\\)\
-  \\|inizia\\(testo\\|progetto\\|prodotto\\|ambiente\\|componente\\)\
-  \\)\\|%.*?interface=")
-          ("LATEX" latex-mode
-           "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
-  documentclass\\)\\b")
-          ("TEX" plain-tex-mode ".")))
-#+end_src
-
-=TeX-engine= を自動的にセットするには ~tex-jp.el~ 内の =japanese-LaTeX-guess-engine= 関数も修正する必要がある？
+**** Viewing outputs
+コンパイルして得られた生成物を見るには =C-c C-v= (=TeX-view=) とします．
+SyncTeX を利用するには =TeX-source-correlate-mode= になっている必要があります．
+これは =C-c C-t C-s= でトグルできます．
+ビューアとして使われるプログラムは AUCTeX が判断します．
 
 *** RefTeX
 参考文献や相互参照のために [[https://www.gnu.org/software/auctex/reftex.html][RefTeX]] を利用します．
-YaTeX の =YaTeX-insert-paren-region= と併用するために ~C-c )~ を nil にバインドします．
 
 |---------+------------------------|
 | Key     | Action                 |

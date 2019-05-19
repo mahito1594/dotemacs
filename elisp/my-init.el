@@ -525,13 +525,33 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
     (outline-minor-mode 1)
     (setq-local TeX-electric-math
                 (cons "$" "$")))
+  :init
+  (setq TeX-format-list
+        '(("JLATEX" japanese-latex-mode
+           "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(u\\|lt\\|bx\\)?\\(j[st-]?\\|t\\)\
+\\(article\\|report\\|book\\|slides\\|lreq\\)")
+          ("JTEX" japanese-plain-tex-mode
+           "-- string likely in Japanese TeX --")
+          ("AMSTEX" ams-tex-mode
+           "\\\\document\\b")
+          ("CONTEXT" context-mode
+           "\\\\\\(start\\(text\\|tekst\\|proje[ck]t\\|proiect\\|\
+produ[ck]t\\|produs\\|environment\\|omgeving\\|umgebung\\|prostredi\\|mediu\\|\
+component\\|onderdeel\\|komponent[ea]\\|componenta\\)\
+\\|inizia\\(testo\\|progetto\\|prodotto\\|ambiente\\|componente\\)\
+\\)\\|%.*?interface=")
+          ("LATEX" latex-mode
+           "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
+documentclass\\)\\b")
+          ("TEX" plain-tex-mode ".")))
   :hook (plain-TeX-mode . my-plain-TeX-mode-hook)
   :custom
   (TeX-auto-save nil)
   (TeX-parse-self t)
   (TeX-electric-sub-and-superscript t)
-  (TeX-engine-alist '((ptex "pTeX" "ptex %(kanjiopt)" "platex %(kajiopt)" "eptex")
-                      (uptex "upTeX" "uptex" "uplatex" "euptex")))
+  (TeX-source-correlate-mode t)
+  (TeX-source-correlate-method '((dvi . synctex)
+                                 (pdf . synctex)))
   :config
   (add-to-list 'TeX-command-list
                '("LatexMk" "latexmk %t"
@@ -547,12 +567,7 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
                 (cons "\\(" "\\)")))
   :hook (LaTeX-mode . my-LaTeX-mode-hook)
   :custom
-  (LaTeX-electric-left-right-brace t)
-  :config
-  (setq LaTeX-font-list
-        (append '((?m "\\textmc{" "}")
-                  (?g "\\textgt{" "}"))
-                LaTeX-font-list)))
+  (LaTeX-electric-left-right-brace t))
 
 (use-feature font-latex
   :custom
@@ -561,7 +576,74 @@ _b_: backward same level  _q_: sublevel  _s_: subtree
 (use-feature tex-jp
   :custom
   (japanese-TeX-engine-default 'uptex)
-  (japanese-LaTeX-default-style "jsarticle"))
+  (japanese-LaTeX-default-style "jsarticle")
+  (japanese-LaTeX-style-list
+   '(("jsarticle") ("jsreport") ("jsbook")
+     ;; for upLaTeX
+     ("ujarticle") ("ujreport") ("ujbook")
+     ("utarticle") ("utreport") ("utbook")
+     ;; for LuaLaTeX
+     ("ltjarticle") ("ltjreport") ("ltjbook")
+     ("ltjsarticle") ("ltjsreport") ("ltjsbook")
+     ;; for XeLaTeX/LuaTeX
+     ("bxjsarticle") ("bxjsreport") ("bxjsbook") ("bxjsslide")
+     ;; for jlreq
+     ("jlreq")))
+  :config
+  ;; By setting `TeX-expand-list', override `TeX-expand-list-builtin'
+  ;; which is modified by `tex-jp.el'.
+  (setq TeX-expand-list
+        (append TeX-expand-list
+                '(("%(bibtex)" (lambda ()
+                                 (cond
+                                  ((eq TeX-engine 'ptex)
+                                   (if (executable-find "pbibtex")
+                                       "pbibtex %(kanjiopt)" "jbibtex"))
+                                  ((eq TeX-engine 'jtex) "jbibtex")
+                                  ((and japanese-TeX-mode
+                                        (memq TeX-engine '(uptex xetex luatex)))
+                                   "upbibtex")
+                                  (t "bibtex")))))))
+  (defun my-japanese-LaTeX-guess-engine ()
+    "Guess Japanese TeX engine and set it to `TeX-engine'.
+Document class and its option is considered in the guess.  Do not
+overwrite the value already set locally."
+    ;; `TeX-engine' may be set by the file local variable or by the menu
+    ;; Command->TeXing Options manually.  Don't override the user
+    ;; preference set in such ways.
+    (unless (local-variable-p 'TeX-engine (current-buffer))
+      (TeX-engine-set
+       (cond
+        ((TeX-match-style "jlreq")
+         (cond
+          ((LaTeX-match-class-option "\\`platex\\'") 'ptex)
+          ((LaTeX-match-class-option "\\`uplatex\\'") 'uptex)
+          ((LaTeX-match-class-option "\\`lulatex\\'") 'luatex)
+          (t japanese-TeX-engine-default)))
+        ((TeX-match-style "\\`bxjs\\(?:article\\|report\\|book\\)\\'")
+         (cond
+          ((LaTeX-match-class-option "\\`platex\\'") 'ptex)
+          ((LaTeX-match-class-option "\\`uplatex\\'") 'uptex)
+          ((LaTeX-match-class-option "\\`lualatex\\'") 'luatex)
+          ((LaTeX-match-class-option "\\`xelatex\\'") 'xetex)
+          (t japanese-TeX-engine-default)))
+        ((TeX-match-style "\\`ltj[st]?\\(?:article\\|report\\|book\\)\\'")
+         'luatex)
+        ((TeX-match-style "\\`u[jt]\\(?:article\\|report\\|book\\)\\'")
+         'uptex)
+        ((TeX-match-style "\\`[jt]s?\\(?:article\\|report\\|book\\)\\'")
+         (if (LaTeX-match-class-option "\\`uplatex\\'")
+             'uptex 'ptex))
+        ((TeX-match-style "\\`j-\\(?:article\\|report\\|book\\)\\'")
+         'jtex)
+        (t japanese-TeX-engine-default)))))
+  (advice-add 'japanese-LaTeX-guess-engine :override #'my-japanese-LaTeX-guess-engine))
+
+(use-package company-auctex
+  :demand t
+  :after (company tex)
+  :config
+  (company-auctex-init))
 
 (use-feature reftex
   :hook (LaTeX-mode . reftex-mode)
