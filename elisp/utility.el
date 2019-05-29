@@ -128,5 +128,16 @@
           (substring key (string-match "[A-Za-z]+" key) (match-end 0))
           (replace-regexp-in-string ":" "" key)))
 
+(defvar my-markdown-electric-pair-pairs
+  '((?` . ?`)
+    (?* . ?*)
+    (?_ . ?_)))
+
+(defun my-markdown-electric-pair-mode ()
+  "Use `markdown-mode' with `electric-pair-mode'."
+  (electric-pair-local-mode +1)
+  (setq-local electric-pair-pairs (append electric-pair-pairs
+                                          my-markdown-electric-pair-pairs)))
+
 (provide 'utility)
 ;;; utility.el ends here
