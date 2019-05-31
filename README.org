@@ -1507,10 +1507,45 @@ electric pair の設定を適宜追加します．
            ("\\.md\\'" . markdown-mode))
     :hook ((gfm-mode markdown-mode) . my-markdown-electric-pair-mode)
     :init
-    (setq markdown-command "marked"))
+    (setq markdown-command "marked")
+    :custom
+    (markdown-fontify-code-blocks-natively t))
 #+end_src
 
+Org-mode のように =C-c '= でコードブロックを編集するには [[https://github.com/Fanael/edit-indirect/][edit-indirect]] パッケージが必要なようです．
+
 よく使うキーバインドについて，次のようにまとめておきます．
+
+| key           | action                        |
+|---------------+-------------------------------|
+| =C-c C-l=     | Insert links                  |
+| =C-c C-s i=   | Markup (italic)               |
+| =C-c C-s b=   | Markup (bold)                 |
+| =C-c C-s c=   | Markup (inline code)          |
+| =C-c C-s k=   | Markup (<kbd> tag)            |
+| =C-c C-s q=   | Markup (blockquote)           |
+| =C-c C-s h=   | Insert a heading              |
+| =C-c C-s <n>= | Insert a heading of level <n> |
+| =C-c C-s f=   | Insert footnotes              |
+
+=markdown-command= を利用して HTML へ変換，プレビュー等を行えます．
+
+| key         | action                                |
+|-------------+---------------------------------------|
+| =C-c C-c m= | Output to ~*markdown-output*~ buffer  |
+| =C-c C-c p= | Output to browser via temporary file  |
+| =C-c C-c e= | Output to ~basename.html~             |
+| =C-c C-c v= | Output to browser via ~basename.html~ |
+
+サブツリーの移動については次のようなキーバインドが用意されています．
+
+| key           | action    |
+|---------------+-----------|
+| =C-c <up>=    | Move up   |
+| =C-c <down>=  | Move down |
+| =C-c <right>= | Demote    |
+| =C-c <left>=  | Promote   |
+
 
 * Programming Languages
 ** C/C++
