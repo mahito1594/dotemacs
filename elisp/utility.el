@@ -30,37 +30,17 @@
 (defvar my-locate-utility (expand-file-name "elisp/utility.el" user-emacs-directory)
   "Place where `utility.el' should be.")
 
-(defvar my-locate-document (expand-file-name "docs/index.html" user-emacs-directory)
-  "Place where `index.html' should be.")
-
-(defun my-open-document ()
-  "Open document in default browser."
-  (interactive)
-  (browse-url-of-file my-locate-document))
-
 (defun my-edit-init ()
   "Open `README.org' to edit."
   (interactive)
   (find-file my-locate-readme))
 
-(defun my-make-all ()
-  "Make `my-init.el', `utility.el' and `index.html'."
-  (interactive)
-  (my-make-init)
-  (byte-compile-file my-locate-utility)
-  (my-make-document))
-
-(defun my-make-init ()
-  "Make `my-init.el' with `org-babel-tangle'."
+(defun my-make-config ()
+  "Make `my-init.el', `utility.el' and `utility.elc'."
   (interactive)
   (with-current-buffer (find-file-noselect my-locate-readme)
-    (org-babel-tangle)))
-
-(defun my-make-document ()
-  "Make document html file."
-  (interactive)
-  (with-current-buffer (find-file-noselect my-locate-readme)
-    (org-html-export-to-html)))
+    (org-babel-tangle))
+  (byte-compile-file my-locate-utility))
 
 ;;; for ivy-rich: show icons
 (defun my-ivy-rich-buffer-icon (candidate)
