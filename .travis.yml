@@ -10,7 +10,7 @@ before_script:
 
 script:
   # Export HTML
-  - emacs26 -q -batch --load=deploy-ghpage.el --visit=README.org --funcall=org-html-export-to-html
+  - emacs26 -q -batch --load=deploy-ghpages.el --visit=README.org --funcall=org-html-export-to-html
   # Rename README.html to docs/index.html
   - mkdir -p docs
   - mv README.html docs/index.html
