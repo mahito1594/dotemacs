@@ -1,0 +1,27 @@
+language: generic
+dist: xenial
+
+before_script:
+  # Install Emacs 26
+  - sudo add-apt-repository ppa:kelleyk/emacs -y
+  - sudo apt-get update -q
+  - sudo apt-get install -y --no-install-recommends emacs26
+  - emacs26 --version
+
+script:
+  # Export HTML
+  - emacs26 -q -batch --load=deploy-ghpages.el --visit=README.org --funcall=org-html-export-to-html
+  # Rename README.html to docs/index.html
+  - mkdir -p docs
+  - mv README.html docs/index.html
+  # Download CSS
+  - curl -sS https://orgmode.org/worg/style/worg.css -o docs/style.css
+
+deploy:
+  provider: pages
+  local_dir: docs
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  on:
+    branch: master
