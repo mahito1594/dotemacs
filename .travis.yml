@@ -6,11 +6,12 @@ before_script:
   - sudo add-apt-repository ppa:kelleyk/emacs -y
   - sudo apt-get update -q
   - sudo apt-get install -y --no-install-recommends emacs26
+  # Check version
   - emacs26 --version
 
 script:
   # Export HTML
-  - emacs26 -q -batch --load=deploy-ghpages.el --visit=README.org --funcall=org-html-export-to-html
+  - emacs26 -Q -batch --load=deploy-ghpages.el --visit=README.org --funcall=org-html-export-to-html
   # Rename README.html to docs/index.html
   - mkdir -p docs
   - mv README.html docs/index.html
@@ -23,6 +24,6 @@ deploy:
   target_branch: gh-pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  keep_history: true
+  keep_history: false
   on:
     branch: master
