@@ -726,6 +726,18 @@ overwrite the value already set locally."
   (ebib-keywords-file-save-on-exit 'always)
   (ebib-keywords-file my-ebib-keywords-file))
 
+(use-package markdown-mode
+  :defines (my-markdown-electric-pair-pairs)
+  :functions (my-markdown-electric-pair-mode)
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode))
+  :hook ((gfm-mode markdown-mode) . my-markdown-electric-pair-mode)
+  :init
+  (setq markdown-command "marked")
+  :custom
+  (markdown-fontify-code-blocks-natively t))
+
 (use-package ccls
   :hook ((c-mode c++-mode objc-mode) . (lambda ()
                                          (require 'ccls)
