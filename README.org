@@ -2,9 +2,7 @@
 #+TITLE: My configuration file for Emacs
 #+AUTHOR: Mahito TANNO
 #+DATE:
-#+EXPORT_FILE_NAME: ./docs/index.html
 #+OPTIONS: H:2
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="worg.css"/>
 
 * Quick start
 #+begin_src sh :tangle no
@@ -1545,7 +1543,6 @@ Org-mode のように =C-c '= でコードブロックを編集するには [[ht
 | =C-c <down>=  | Move down |
 | =C-c <right>= | Demote    |
 | =C-c <left>=  | Promote   |
-
 
 * Programming Languages
 ** C/C++
