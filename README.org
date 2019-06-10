@@ -207,6 +207,34 @@ Issue [[https://github.com/purcell/exec-path-from-shell/issues/36][#36]] [[https
         (org-html-export-to-html))))
 #+end_src
 
+*** View README of installed packages
+インストールしたパッケージの README を =M-x my-straight-view-readme= で開くことができます．
+ただしパッケージによっては上手く開くことができない場合があります．
+
+#+begin_src emacs-lisp :tangle ./elisp/utility.el
+  (defvar my-straight-readme-names-list
+    '("README" "README.org"
+      "README.md" "README.mkdn" "README.mdown")
+    "The list used by `my-straight-view-readme'.")
+
+  (defun my-straight-view-readme (package)
+    "Open README of PACKAGE in `view-mode' if it exists.
+
+  We search a file such as \"README\", \"README.org\" and so on.
+  We remark that search case-insensitively.
+  See `my-straight-readme-name-list'."
+    (interactive (list (straight--select-package "View README" nil 'installed)))
+    (let ((found nil))
+      (cl-loop with case-fold-search = t
+               for file in my-straight-readme-names-list
+               for path = (expand-file-name file (straight--repos-dir package))
+               when (file-exists-p path)
+               return (progn
+                        (setq found t)
+                        (view-file path)))
+      (unless found (message "README not found."))))
+#+end_src
+
 ** Package manager
 パッケージマネージャとして ~straight.el~ と ~use-package.el~ を利用します
 

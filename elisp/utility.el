@@ -50,6 +50,28 @@ via Travis CI."
     (with-current-buffer (find-file-noselect my-locate-readme)
       (org-html-export-to-html))))
 
+(defvar my-straight-readme-names-list
+  '("README" "README.org"
+    "README.md" "README.mkdn" "README.mdown")
+  "The list used by `my-straight-view-readme'.")
+
+(defun my-straight-view-readme (package)
+  "Open README of PACKAGE in `view-mode' if it exists.
+
+We search a file such as \"README\", \"README.org\" and so on.
+We remark that search case-insensitively.
+See `my-straight-readme-name-list'."
+  (interactive (list (straight--select-package "View README" nil 'installed)))
+  (let ((found nil))
+    (cl-loop with case-fold-search = t
+             for file in my-straight-readme-names-list
+             for path = (expand-file-name file (straight--repos-dir package))
+             when (file-exists-p path)
+             return (progn
+                      (setq found t)
+                      (view-file path)))
+    (unless found (message "README not found."))))
+
 ;;; for ivy-rich: show icons
 (defun my-ivy-rich-buffer-icon (candidate)
   "Show buffer isons in `ivy-rich', only on GUI."
