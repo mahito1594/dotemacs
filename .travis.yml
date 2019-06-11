@@ -1,5 +1,5 @@
 language: generic
-dist: xenial
+dist: trusty
 
 env:
   global:
@@ -9,9 +9,6 @@ env:
     - EMACS_VERSION=master
   allow_failure:
     env: EMACS_VERSION=master
-
-before_install:
-  - sudo apt-get install libgnutls-dev -y
 
 install:
   # Install Emacs to /tmp/emacs
