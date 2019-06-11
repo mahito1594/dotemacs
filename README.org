@@ -1647,8 +1647,10 @@ LSP ([[https://github.com/palantir/python-language-server][pyls]]) を利用し�
 
 #+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+  (if (display-graphic-p)
+      (progn
+        (tool-bar-mode -1)
+        (scrool-bar-mode -1)))
   (size-indication-mode +1)
   (setq frame-title-format "%f")
 #+end_src
