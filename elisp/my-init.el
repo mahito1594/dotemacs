@@ -88,6 +88,7 @@ We set `backup-directory-alist' and `auto-save-file-name-transforms' to `my-back
   :demand t)
 
 (use-package all-the-icons
+  :if (window-system)
   :demand t
   :config
   (unless (member "all-the-icons" (font-family-list))
@@ -373,7 +374,9 @@ _e_: end of line        ^ ^                 _x_: execute command
 
 (use-package company-box
   :functions (all-the-icons-faicon all-the-icons-octicon all-the-icons-material all-the-icons-alltheicon)
-  :preface
+  :if (and (window-system)
+           (>= emacs-major-version 26))
+  :init
   (defvar my-company-box-icons-all-the-icons
     `((Unknown       . ,(all-the-icons-faicon     "cog"                      :height 0.9))
       (Text          . ,(all-the-icons-octicon    "file-text"                :height 0.9))
@@ -403,8 +406,6 @@ _e_: end of line        ^ ^                 _x_: execute command
       (TypeParameter . ,(all-the-icons-faicon     "cogs"                     :height 0.9))
       (Template      . ,(all-the-icons-material   "format_align_center"      :height 0.9))
       ))
-  :if (and (window-system)
-           (>= emacs-major-version 26))
   :hook (company-mode . company-box-mode)
   :custom
   (company-box-show-single-candidate t)

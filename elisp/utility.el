@@ -42,6 +42,14 @@
     (org-babel-tangle))
   (byte-compile-file my-locate-utility))
 
+(defun my-deploy-ghpage ()
+  "Export \"README.org\" in order to deploy GitHub Pages
+via Travis CI."
+  (let ((org-html-head
+         "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"))
+    (with-current-buffer (find-file-noselect my-locate-readme)
+      (org-html-export-to-html))))
+
 ;;; for ivy-rich: show icons
 (defun my-ivy-rich-buffer-icon (candidate)
   "Show buffer isons in `ivy-rich', only on GUI."
