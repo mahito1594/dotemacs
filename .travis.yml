@@ -18,7 +18,7 @@ install:
   - $EMACS --version
 
 script:
-  - rm straight/versions/default.el
+  # If the build timeout, you can remove "straight/versions/default.el" in order to use shallow-clone.
   - $EMACS -batch --load=init.el --eval '(message "Test Passed.")'
 
 before_deploy:
