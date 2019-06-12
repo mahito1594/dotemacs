@@ -4,6 +4,8 @@
 #+DATE:
 #+OPTIONS: H:2
 
+[[https://travis-ci.com/mahito1594/dotemacs][file:https://travis-ci.com/mahito1594/dotemacs.svg?branch=master]]
+
 * Quick start
 #+begin_src sh :tangle no
   $ git clone --recursive https://github.com/mahito1594/dotemacs.git ~/.emacs.d
