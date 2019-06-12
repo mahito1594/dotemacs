@@ -1,13 +1,15 @@
 language: generic
 dist: trusty
 
+sudo: false
+
 env:
   global:
-    CURL="curl -fsSkL --retry 9 --retry-delay 9"
+    - CURL="curl -fsSkL --retry 9 --retry-delay 9"
   matrix:
     - EMACS_VERSION=26
     - EMACS_VERSION=master
-  allow_failure:
+  allow_failures:
     env: EMACS_VERSION=master
 
 install:
@@ -22,7 +24,7 @@ script:
   - $EMACS -batch --load=init.el --eval '(message "Test Passed.")'
 
 before_deploy:
-  - $EMACS -batch --load=init.el  --funcall=my-deploy-ghpage
+  - $EMACS -batch --load=init.el --funcall=my-deploy-ghpage
   - mkdir -p docs
   - mv README.html docs/index.html
   - $CURL https://orgmode.org/worg/style/worg.css -o docs/style.css
@@ -36,7 +38,7 @@ deploy:
   keep_history: false
   on:
     branch: master
-    condition: $EMACS_VERSION=26
+    condition: $EMACS_VERSION = 26
 
 notifications:
   email:
