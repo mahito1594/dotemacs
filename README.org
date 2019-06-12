@@ -1663,6 +1663,25 @@ LSP ([[https://github.com/palantir/python-language-server][pyls]]) を利用し�
       (setq python-shell-interpreter "python3")))
 #+end_src
 
+** Others
+*** CSV (Comma-Separated Values)
+CSV ファイルの編集には [[https://elpa.gnu.org/packages/csv-mode.html][csv-mode]] を利用します．
+
+#+begin_src emacs-lisp
+  (use-package csv-mode)
+#+end_src
+
+=C-c C-a= で見やすいように整形されます．整形を解除するには =C-c C-u= を押下します．
+他にも辞書式，数値順にソート (=C-c C-s=, =C-c C-n=) したり，
+kill-ring (=C-c C-k=) や yank (=C-c C-y=) が行えます．
+
+*** YAML
+YAML の編集には [[https://github.com/yoshiki/yaml-mode][yaml-mode]] を利用します．
+
+#+begin_src emacs-lisp
+  (use-package yaml-mode)
+#+end_src
+
 * Appearance
 ** Color theme
 [[https://github.com/hlissner/emacs-doom-themes][doom-themes]] の ~doom-dracula~ テーマを利用します．

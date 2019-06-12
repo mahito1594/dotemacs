@@ -777,6 +777,10 @@ overwrite the value already set locally."
     ;; use python3 if it exists
     (setq python-shell-interpreter "python3")))
 
+(use-package csv-mode)
+
+(use-package yaml-mode)
+
 (use-package doom-themes
   :demand t
   :custom
