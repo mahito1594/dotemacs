@@ -1532,6 +1532,10 @@ electric pair の設定を適宜追加します．
 
 Org-mode のように =C-c '= でコードブロックを編集するには [[https://github.com/Fanael/edit-indirect/][edit-indirect]] パッケージが必要なようです．
 
+#+begin_src emacs-lisp
+  (use-package edit-indirect)
+#+end_src
+
 よく使うキーバインドについて，次のようにまとめておきます．
 
 | key           | action                        |

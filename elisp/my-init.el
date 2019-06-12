@@ -743,6 +743,8 @@ overwrite the value already set locally."
   :custom
   (markdown-fontify-code-blocks-natively t))
 
+(use-package edit-indirect)
+
 (use-package ccls
   :hook ((c-mode c++-mode objc-mode) . (lambda ()
                                          (require 'ccls)
