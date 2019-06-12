@@ -347,6 +347,10 @@ _e_: end of line        ^ ^                 _x_: execute command
   :custom
   (beacon-color "yellow"))
 
+(use-package symbol-overlay
+  :hook ((prog-mode . symbol-overlay-mode))
+  :bind (("M-i" . symbol-overlay-put)))
+
 (add-hook 'after-init-hook #'transient-mark-mode)
 
 (setq ring-bell-function 'ignore)

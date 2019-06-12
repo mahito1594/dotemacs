@@ -776,6 +776,16 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     (beacon-color "yellow"))
 #+end_src
 
+*** Symbol highlight
+[[https://github.com/wolray/symbol-overlay][Symbol Overlay]] を用いて，同じ単語をハイライトします．
+=M-i= (=symbol-overlay-put=) を押下することで =n= や =p= などで同じ単語間を行き来することができます．
+
+#+begin_src emacs-lisp
+  (use-package symbol-overlay
+    :hook ((prog-mode . symbol-overlay-mode))
+    :bind (("M-i" . symbol-overlay-put)))
+#+end_src
+
 *** Region
 選択中のリージョンをハイライトします．
 
