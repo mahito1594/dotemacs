@@ -796,7 +796,7 @@ overwrite the value already set locally."
 (if (display-graphic-p)
     (progn
       (tool-bar-mode -1)
-      (scrool-bar-mode -1)))
+      (scroll-bar-mode -1)))
 (size-indication-mode +1)
 (setq frame-title-format "%f")
 
