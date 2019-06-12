@@ -4,6 +4,8 @@
 #+DATE:
 #+OPTIONS: H:2
 
+[[https://travis-ci.com/mahito1594/dotemacs][file:https://travis-ci.com/mahito1594/dotemacs.svg?branch=master]]
+
 * Quick start
 #+begin_src sh :tangle no
   $ git clone --recursive https://github.com/mahito1594/dotemacs.git ~/.emacs.d
@@ -195,6 +197,16 @@ Issue [[https://github.com/purcell/exec-path-from-shell/issues/36][#36]] [[https
     (byte-compile-file my-locate-utility))
 #+end_src
 
+#+begin_src emacs-lisp :tangle ./elisp/utility.el
+  (defun my-deploy-ghpage ()
+    "Export \"README.org\" in order to deploy GitHub Pages
+  via Travis CI."
+    (let ((org-html-head
+           "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"))
+      (with-current-buffer (find-file-noselect my-locate-readme)
+        (org-html-export-to-html))))
+#+end_src
+
 ** Package manager
 パッケージマネージャとして ~straight.el~ と ~use-package.el~ を利用します
 
@@ -322,10 +334,11 @@ lsp-mode が flymake に依存しており，古いバージョンの flymake �
 
 *** all-the-icons
 いくつかのパッケージで ~all-the-icons~ のフォントを使用します．
-フォントが未インストールの場合，自動的にインストールします．
+フォントが未インストールかつ GUI で起動した場合，フォントを自動的にインストールします．
 
 #+begin_src emacs-lisp
   (use-package all-the-icons
+    :if (window-system)
     :demand t
     :config
     (unless (member "all-the-icons" (font-family-list))
@@ -791,7 +804,9 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 #+begin_src emacs-lisp
   (use-package company-box
     :functions (all-the-icons-faicon all-the-icons-octicon all-the-icons-material all-the-icons-alltheicon)
-    :preface
+    :if (and (window-system)
+             (>= emacs-major-version 26))
+    :init
     (defvar my-company-box-icons-all-the-icons
       `((Unknown       . ,(all-the-icons-faicon     "cog"                      :height 0.9))
         (Text          . ,(all-the-icons-octicon    "file-text"                :height 0.9))
@@ -821,8 +836,6 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
         (TypeParameter . ,(all-the-icons-faicon     "cogs"                     :height 0.9))
         (Template      . ,(all-the-icons-material   "format_align_center"      :height 0.9))
         ))
-    :if (and (window-system)
-             (>= emacs-major-version 26))
     :hook (company-mode . company-box-mode)
     :custom
     (company-box-show-single-candidate t)
@@ -1636,8 +1649,10 @@ LSP ([[https://github.com/palantir/python-language-server][pyls]]) を利用し�
 
 #+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+  (if (display-graphic-p)
+      (progn
+        (tool-bar-mode -1)
+        (scrool-bar-mode -1)))
   (size-indication-mode +1)
   (setq frame-title-format "%f")
 #+end_src
