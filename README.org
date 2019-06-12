@@ -723,6 +723,16 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     ("q" nil "quit"))
 #+end_src
 
+** Insert License Notice
+[[https://github.com/buzztaiki/lice-el][lice]] はファイルヘッダにライセンスをコメントとして自動挿入してくれます．
+=M-x lice= とします．
+
+#+begin_src emacs-lisp
+  (use-package lice)
+#+end_src
+
+新しいライセンスを追加する場合は =~/.emacs.d/lice= 以下にファイルを保存してください．
+
 ** Others
 *** Parenthesis
 対応する括弧類は自動的に挿入し，また強調するようにします．

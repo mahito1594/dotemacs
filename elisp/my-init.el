@@ -314,6 +314,8 @@ _e_: end of line        ^ ^                 _x_: execute command
   ("k" kill-buffer)
   ("q" nil "quit"))
 
+(use-package lice)
+
 (use-feature elec-pair
   :hook (after-init . electric-pair-mode))
 
