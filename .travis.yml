@@ -9,7 +9,7 @@ env:
     - EMACS_VERSION=26.2
     - EMACS_VERSION=master
   allow_failures:
-    env: EMACS_VERSION=master
+    - env: EMACS_VERSION=master
 
 install:
   # Install Emacs to /tmp/emacs
@@ -20,10 +20,9 @@ install:
 
 script:
   # If the build timeout, you can remove "straight/versions/default.el" in order to use shallow-clone.
-  - $EMACS -batch --load=init.el --eval '(message "Test Passed.")'
+  - $EMACS -batch --load=init.el --funcall=my-deploy-ghpage
 
 before_deploy:
-  - $EMACS -batch --load=init.el --funcall=my-deploy-ghpage
   - mkdir -p docs
   - mv README.html docs/index.html
   - $CURL https://orgmode.org/worg/style/worg.css -o docs/style.css
