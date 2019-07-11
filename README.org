@@ -1271,6 +1271,8 @@ section 型命令や環境の挿入についてまとめます．
 | =C-M-a=   | Move to suitable =\begin{...}= |
 | =C-M-e=   | Move to suitable =\end{...}=   |
 
+また，環境内で =C-u C-c C-e= とすれば環境を変更できます．
+
 **** Math
 =C-c ~= で =LaTeX-math-mode= に入ります．
 ~LaTeX-math-mode~ 中で =`= を押下すると数式マクロが簡単に入力できるようになります．
