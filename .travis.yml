@@ -1,31 +1,37 @@
-language: generic
-dist: trusty
+language: nix
+
+os:
+  - osx
+  - linux
 
 env:
-  global:
-    - CURL="curl -fsSkL --retry 9 --retry-delay 9"
-  matrix:
-    - EMACS_VERSION=26.1
-    - EMACS_VERSION=26.2
-    - EMACS_VERSION=master
-  allow_failures:
-    - env: EMACS_VERSION=master
+  - EMACS_CI=emacs-26-1
+  - EMACS_CI=emacs-26-2
+  - EMACS_CI=emacs-26-3
+  - EMACS_CI=emacs-snapshot
 
 install:
-  # Install Emacs to /tmp/emacs
-  - $CURL -O https://github.com/npostavs/emacs-travis/releases/download/bins/emacs-bin-${EMACS_VERSION}.tar.gz
-  - tar -xaf emacs-bin-${EMACS_VERSION}.tar.gz -C /
-  - export EMACS=/tmp/emacs/bin/emacs
-  - $EMACS --version
+  - bash <(curl https://raw.githubusercontent.com/purcell/nix-emacs-ci/master/travis-install)
 
 script:
   # If the build timeout, you can remove "straight/versions/default.el" in order to use shallow-clone.
-  - $EMACS -batch --load=init.el --funcall=my-deploy-ghpage
+  - export HOME=$PWD/..
+  - ln -s dotemacs ../.emacs.d
+  - |-
+    emacs -nw --batch \
+          -eval '(let ((debug-on-error t)
+                       (url-show-status nil)
+                       (user-emacs-directory default-directory)
+                       (user-init-file (expand-file-name "init.el"))
+                       (load-path (delq default-directory load-path)))
+                   (load-file user-init-file)
+                   (run-hooks (quote after-init-hook)))' && \
+    echo "Startup succeeded."
 
 before_deploy:
   - mkdir -p docs
   - mv README.html docs/index.html
-  - $CURL https://orgmode.org/worg/style/worg.css -o docs/style.css
+  - curl -fsSkL --retry 9 https://orgmode.org/worg/style/worg.css -o docs/style.css
 
 deploy:
   provider: pages
@@ -36,7 +42,7 @@ deploy:
   keep_history: false
   on:
     branch: master
-    condition: $EMACS_VERSION = 26.1
+    condition: $EMACS_CI = emacs-26-1
 
 notifications:
   email:
