@@ -43,7 +43,7 @@ deploy:
   keep_history: false
   on:
     branch: master
-    condition: $EMACS_CI = emacs-26-1
+    condition: os = linux AND $EMACS_CI = emacs-26-1
 
 notifications:
   email:
