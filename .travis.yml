@@ -33,6 +33,7 @@ before_deploy:
   - mkdir -p docs
   - mv README.html docs/index.html
   - curl -fsSkL --retry 9 https://orgmode.org/worg/style/worg.css -o docs/style.css
+  - echo "emacs.koffierente.com" > docs/CNAME
 
 deploy:
   provider: pages
