@@ -1684,6 +1684,14 @@ YAML の編集には [[https://github.com/yoshiki/yaml-mode][yaml-mode]] を利�
   (use-package yaml-mode)
 #+end_src
 
+*** Dockerfile
+Dockerfile の編集には [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] を利用します．
+
+#+begin_src emacs-lisp
+  (use-package dockerfile-mode
+    :mode ("Dockerfile\'" . dockerfile-mode))
+#+end_src
+
 * Appearance
 ** Color theme
 [[https://github.com/hlissner/emacs-doom-themes][doom-themes]] の ~doom-dracula~ テーマを利用します．

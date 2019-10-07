@@ -781,6 +781,9 @@ overwrite the value already set locally."
 
 (use-package yaml-mode)
 
+(use-package dockerfile-mode
+  :mode ("Dockerfile\'" . dockerfile-mode))
+
 (use-package doom-themes
   :demand t
   :custom
