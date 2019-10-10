@@ -784,17 +784,10 @@ overwrite the value already set locally."
 (use-package dockerfile-mode
   :mode ("Dockerfile\'" . dockerfile-mode))
 
-(use-package doom-themes
+(use-package kaolin-themes
   :demand t
-  :custom
-  (doom-themes-enable-bold t)
-  (doom-themes-enable-italic t)
-  (doom-neotree-file-icons t)
   :config
-  (load-theme 'doom-dracula t)
-  (doom-themes-visual-bell-config)
-  (doom-themes-neotree-config)
-  (doom-themes-org-config))
+  (load-theme 'kaolin-aurora t))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
@@ -805,7 +798,8 @@ overwrite the value already set locally."
   (find-file-visit-truename t)
   :config
   (setq doom-modeline-mu4e nil)
-  (setq doom-modeline-irc nil))
+  (setq doom-modeline-irc nil)
+  (setq column-number-mode t))
 
 (setq inhibit-startup-screen t)
 (if (display-graphic-p)

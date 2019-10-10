@@ -1694,20 +1694,13 @@ Dockerfile の編集には [[https://github.com/spotify/dockerfile-mode][dockerf
 
 * Appearance
 ** Color theme
-[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] の ~doom-dracula~ テーマを利用します．
+[[https://github.com/ogdenwebb/emacs-kaolin-themes][kaolin-theme]] を利用します ~M-x counsel-load-theme~ でカラーテーマを入れ替えることができます．
 
 #+begin_src emacs-lisp
-  (use-package doom-themes
+  (use-package kaolin-themes
     :demand t
-    :custom
-    (doom-themes-enable-bold t)
-    (doom-themes-enable-italic t)
-    (doom-neotree-file-icons t)
     :config
-    (load-theme 'doom-dracula t)
-    (doom-themes-visual-bell-config)
-    (doom-themes-neotree-config)
-    (doom-themes-org-config))
+    (load-theme 'kaolin-aurora t))
 #+end_src
 
 またモードラインを [[https://github.com/seagle0128/doom-modeline][doom-modeline]] でカスタマイズします．
@@ -1722,7 +1715,8 @@ Dockerfile の編集には [[https://github.com/spotify/dockerfile-mode][dockerf
     (find-file-visit-truename t)
     :config
     (setq doom-modeline-mu4e nil)
-    (setq doom-modeline-irc nil))
+    (setq doom-modeline-irc nil)
+    (setq column-number-mode t))
 #+end_src
 
 ** Frame
