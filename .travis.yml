@@ -10,6 +10,10 @@ env:
   - EMACS_CI=emacs-26-3
   - EMACS_CI=emacs-snapshot
 
+matrix:
+  allow_failures:
+    - env: EMACS_CI=emacs-snapshot
+
 install:
   - bash <(curl https://raw.githubusercontent.com/purcell/nix-emacs-ci/master/travis-install)
 
