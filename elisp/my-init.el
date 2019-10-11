@@ -358,6 +358,8 @@ _e_: end of line        ^ ^                 _x_: execute command
 (setq ring-bell-function 'ignore)
 
 (use-package yasnippet
+  :demand t
+  :after (lsp-mode)
   :blackout t)
 
 (use-package company
@@ -451,6 +453,11 @@ _e_: end of line        ^ ^                 _x_: execute command
   (lsp-ui-sideline-enable nil "Disable `lsp-ui-sideline-mode'.")
   :blackout t)
 
+(use-package lsp-latex
+  :straight (:host github :repo "ROCKTAKEY/lsp-latex")
+  :demand t
+  :after (lsp-mode))
+
 (use-feature org
   :functions (my-org-electric-pair-mode)
   :hook (org-mode . my-org-electric-pair-mode)
@@ -543,7 +550,8 @@ component\\|onderdeel\\|komponent[ea]\\|componenta\\)\
            "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
 documentclass\\)\\b")
           ("TEX" plain-tex-mode ".")))
-  :hook (plain-TeX-mode . my-plain-TeX-mode-hook)
+  :hook ((plain-TeX-mode . my-plain-TeX-mode-hook)
+         (TeX-mode . lsp))
   :custom
   (TeX-auto-save nil)
   (TeX-parse-self t)
@@ -564,7 +572,8 @@ documentclass\\)\\b")
     (electric-pair-local-mode -1)
     (setq-local TeX-electric-math
                 (cons "\\(" "\\)")))
-  :hook (LaTeX-mode . my-LaTeX-mode-hook)
+  :hook ((LaTeX-mode . my-LaTeX-mode-hook)
+         (LaTeX-mode . lsp))
   :custom
   (LaTeX-electric-left-right-brace t))
 
@@ -637,12 +646,6 @@ overwrite the value already set locally."
          'jtex)
         (t japanese-TeX-engine-default)))))
   (advice-add 'japanese-LaTeX-guess-engine :override #'my-japanese-LaTeX-guess-engine))
-
-(use-package company-auctex
-  :demand t
-  :after (company tex)
-  :config
-  (company-auctex-init))
 
 (use-feature reftex
   :hook (LaTeX-mode . reftex-mode)

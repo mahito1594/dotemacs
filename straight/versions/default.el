@@ -7,7 +7,6 @@
  ("blackout" . "87822abd1ed46411368ef91752a7f51c0ef2aee0")
  ("caml-mode" . "38ebde12d3d529e6ef8078967997d32226e69e82")
  ("cl-lib" . "e79686c4a26959c0ecba0951a7e335ed28035386")
- ("company-auctex" . "48c42c58ce2f0e693301b0cb2d085055410c1b25")
  ("company-box" . "8fc6168f2d3a0275156dd3fdf46ba496adbab226")
  ("company-lsp" . "cd1a41583f2d71baef44604a14ea71f49b280bf0")
  ("company-mode" . "ad6ff0eecca99dc5ac8b6a8a6174df7d2ad88ae7")
@@ -37,6 +36,7 @@
  ("ivy-rich" . "f6bfa293c6df0b43cc411876b665816ec3f03d08")
  ("let-alist" . "33e71829e8814cf5f28b6e4291192aafef61b69e")
  ("lice-el" . "4339929927c62bd636f89bb39ea999d18d269250")
+ ("lsp-latex" . "d016440fe364a016935bd90ae07e22d9012bcf8f")
  ("lsp-mode" . "dddefb21608fb1cbe3f3a15213f8e01c465bd876")
  ("lsp-ui" . "3ccc3e3386732c3ee22c151e6b5215a0e4c99173")
  ("markdown-mode" . "115f77df9755c6a453f3e5d9623ff885d207ea82")
@@ -64,5 +64,5 @@
  ("use-package" . "4aa14a4fcd5ca52b3f1bfcf5ab294173f7bbe390")
  ("use-package-hydra" . "8cd55a1128fbdf6327bb38a199d206225896d146")
  ("yaml-mode" . "40067a10ac1360f0b9533f0bbbb2eea128e2574d")
- ("yasnippet" . "e45e3de357fbd4289fcfa3dd26aaa7be357fb0b8"))
+ ("yasnippet" . "a66f15e6c975a4370877df272c1ae87490835d28"))
 :alpha
