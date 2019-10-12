@@ -814,8 +814,7 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 ** Yasnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :demand t
-    :after (lsp-mode)
+    :commands (yas-minor-mode)
     :blackout t)
 #+end_src
 
@@ -920,19 +919,16 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 詳細は各言語の設定を参照してください．
 
 ここでは [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] を利用します．
-補完には [[https://github.com/tigersoldier/company-lsp][company-lsp]] を，文法チェックには [[https://github.com/emacs-lsp/lsp-ui][lsp-ui/flycheck]] を利用します．
-
-lsp-mode と flycheck を併用するにはカスタム変数 ~lsp-prefer-flymake~ を ~nil~ にセットします．
-また flycheck-popup-tip を使用していると画面がうるさくなるのでカスタム変数 ~lsp-ui-sideline-enable~ を ~nil~ にセットし，
-~lsp-ui-sideline-mode~ を無効化します．
-
-大きいプロジェクトを開くと flycheck が重くなるという話もあるので場合によっては flymake を使うほうが良いかもしれません．
+補完には [[https://github.com/tigersoldier/company-lsp][company-lsp]] を，文法チェックには [[https://github.com/emacs-lsp/lsp-ui][lsp-ui]] を利用します．
+大きいプロジェクトを開くと flycheck が重くなるという話もあり，flymake を利用することにしました．
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands (lsp)
+    :hook (lsp-mode . yas-minor-mode)
     :custom
-    (lsp-prefer-flymake nil "Use `flycheck'."))
+    (lsp-prefer-flymake t)
+    :config)
 
   (use-package company-lsp
     :demand t
@@ -947,8 +943,13 @@ lsp-mode と flycheck を併用するにはカスタム変数 ~lsp-prefer-flymak
                 ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
                 ([remap xref-find-references] . lsp-ui-peek-find-references))
     :custom
-    (lsp-ui-sideline-enable nil "Disable `lsp-ui-sideline-mode'.")
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-flycheck-enable nil)
     :blackout t)
+
+  (use-package flymake-diagnostic-at-point
+    :commands (flymake-diagnostic-at-point-mode)
+    :hook (flymake-mode . flymake-diagnostic-at-point-mode))
 
   (use-package lsp-latex
     :straight (:host github :repo "ROCKTAKEY/lsp-latex")
@@ -1133,6 +1134,9 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
 変数 =LaTeX-electric-left-right-brace= を =t= に設定することで， =\left= と =\right= など対応する括弧類を自動的に挿入します．
 この機能は ~electric-pair-mode~ と相性が悪いので LaTeX-mode では ~electric-pair-mode~ を OFF にしておきます．
 
+AUCTeX は section 型環境を挿入 (=C-c C-s=) 後に =\label= を自動的に挿入します(=LaTeX-section-label=)．
+しかし，この挿入には改行を伴うため，後述する RefTeX の =reftex-label= (=C-c (=) を利用することにします．
+
 #+begin_src emacs-lisp
   (use-feature latex
     :preface
@@ -1144,7 +1148,10 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
     :hook ((LaTeX-mode . my-LaTeX-mode-hook)
            (LaTeX-mode . lsp))
     :custom
-    (LaTeX-electric-left-right-brace t))
+    (LaTeX-label-alist nil)
+    (LaTeX-electric-left-right-brace t)
+    :config
+    (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
 #+end_src
 
 上付き・下付き文字の表示を plain にします．
@@ -1239,6 +1246,8 @@ lsp-mode の設定は [[https://github.com/ROCKTAKEY/lsp-latex][lsp-latex]] が�
 リージョン選択中に =$= を押下すると，選択範囲を =$...$= または =\(...\)= で囲みます．
 また続けて =$= を押下することで別行立て数式・非数式・インライン数式をトグルします．
 また，リージョン選択中に =C-c {= を押下することで選択範囲を ={...}= で囲みます．
+
+リージョンを =\left= と =\right= などで囲みたい場合は =C-c C-m= (=TeX-insert-macro=) を利用するのが良いでしょう．
 
 **** Font specifiers
 フォントに関する制御綴の挿入についてまとめます．

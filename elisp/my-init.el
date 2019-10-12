@@ -358,8 +358,7 @@ _e_: end of line        ^ ^                 _x_: execute command
 (setq ring-bell-function 'ignore)
 
 (use-package yasnippet
-  :demand t
-  :after (lsp-mode)
+  :commands (yas-minor-mode)
   :blackout t)
 
 (use-package company
@@ -434,8 +433,10 @@ _e_: end of line        ^ ^                 _x_: execute command
 
 (use-package lsp-mode
   :commands (lsp)
+  :hook (lsp-mode . yas-minor-mode)
   :custom
-  (lsp-prefer-flymake nil "Use `flycheck'."))
+  (lsp-prefer-flymake t)
+  :config)
 
 (use-package company-lsp
   :demand t
@@ -450,8 +451,13 @@ _e_: end of line        ^ ^                 _x_: execute command
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
               ([remap xref-find-references] . lsp-ui-peek-find-references))
   :custom
-  (lsp-ui-sideline-enable nil "Disable `lsp-ui-sideline-mode'.")
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-flycheck-enable nil)
   :blackout t)
+
+(use-package flymake-diagnostic-at-point
+  :commands (flymake-diagnostic-at-point-mode)
+  :hook (flymake-mode . flymake-diagnostic-at-point-mode))
 
 (use-package lsp-latex
   :straight (:host github :repo "ROCKTAKEY/lsp-latex")
@@ -575,7 +581,10 @@ documentclass\\)\\b")
   :hook ((LaTeX-mode . my-LaTeX-mode-hook)
          (LaTeX-mode . lsp))
   :custom
-  (LaTeX-electric-left-right-brace t))
+  (LaTeX-label-alist nil)
+  (LaTeX-electric-left-right-brace t)
+  :config
+  (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
 
 (use-feature font-latex
   :custom
