@@ -358,7 +358,7 @@ _e_: end of line        ^ ^                 _x_: execute command
 (setq ring-bell-function 'ignore)
 
 (use-package yasnippet
-  :commands (yas-minor-mode)
+  :hook (after-init . yas-global-mode)
   :blackout t)
 
 (use-package company
@@ -433,7 +433,6 @@ _e_: end of line        ^ ^                 _x_: execute command
 
 (use-package lsp-mode
   :commands (lsp)
-  :hook (lsp-mode . yas-minor-mode)
   :custom
   (lsp-prefer-flymake t)
   :config)

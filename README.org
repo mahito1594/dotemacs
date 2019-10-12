@@ -814,7 +814,7 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 ** Yasnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :commands (yas-minor-mode)
+    :hook (after-init . yas-global-mode)
     :blackout t)
 #+end_src
 
@@ -921,11 +921,12 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 ここでは [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] を利用します．
 補完には [[https://github.com/tigersoldier/company-lsp][company-lsp]] を，文法チェックには [[https://github.com/emacs-lsp/lsp-ui][lsp-ui]] を利用します．
 大きいプロジェクトを開くと flycheck が重くなるという話もあり，flymake を利用することにしました．
+[[https://github.com/meqif/flymake-diagnostic-at-point][flymake-diagnostic-at-point]] を利用してエラーを見やすくしています．
+エラー一覧を表示するには =M-x flymake-show-diagnostic-buffer= とします．
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands (lsp)
-    :hook (lsp-mode . yas-minor-mode)
     :custom
     (lsp-prefer-flymake t)
     :config)
