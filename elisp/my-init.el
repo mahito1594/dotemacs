@@ -424,12 +424,15 @@ _e_: end of line        ^ ^                 _x_: execute command
 
 (use-package flycheck
   :commands (flycheck-disable-checker)
-  :hook (after-init . global-flycheck-mode)
   :custom
   (flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
 (use-package flycheck-popup-tip
   :hook (flycheck-mode . flycheck-popup-tip-mode))
+
+(use-package flymake-diagnostic-at-point
+  :commands (flymake-diagnostic-at-point-mode)
+  :hook (flymake-mode . flymake-diagnostic-at-point-mode))
 
 (use-package lsp-mode
   :commands (lsp)
@@ -453,10 +456,6 @@ _e_: end of line        ^ ^                 _x_: execute command
   (lsp-ui-sideline-enable nil)
   (lsp-ui-flycheck-enable nil)
   :blackout t)
-
-(use-package flymake-diagnostic-at-point
-  :commands (flymake-diagnostic-at-point-mode)
-  :hook (flymake-mode . flymake-diagnostic-at-point-mode))
 
 (use-package lsp-latex
   :straight (:host github :repo "ROCKTAKEY/lsp-latex")

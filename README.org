@@ -895,14 +895,15 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     :blackout t)
 #+end_src
 
-** Flycheck
-文法チェックには [[https://www.flycheck.org/en/latest/][Flycheck]] を利用します．
-後述の [[LSP][LSP]] を用いる場合には暴走するという情報があるので要確認です．
+** Flycheck/Flymake
+文法チェックは [[https://www.flycheck.org/en/latest/][flycheck]] と flymake を利用します．
+
+*** Flycheck
+Flycheck を有効にしたいモードについて個々に =flycheck-mode= を =add-hook= します．
 
 #+begin_src emacs-lisp
   (use-package flycheck
     :commands (flycheck-disable-checker)
-    :hook (after-init . global-flycheck-mode)
     :custom
     (flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 #+end_src
@@ -914,6 +915,17 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     :hook (flycheck-mode . flycheck-popup-tip-mode))
 #+end_src
 
+*** Flymake
+[[https://github.com/meqif/flymake-diagnostic-at-point][flymake-diagnostic-at-point]] を利用してエラーを見やすくしています．
+エラー一覧を表示するには =M-x flymake-show-diagnostic-buffer= とします．
+
+#+begin_src emacs-lisp
+  (use-package flymake-diagnostic-at-point
+    :commands (flymake-diagnostic-at-point-mode)
+    :hook (flymake-mode . flymake-diagnostic-at-point-mode))
+#+end_src
+
+
 ** LSP
 いくつかの言語では Language Server Protocol を用いて補完・文法チェックを行います．
 詳細は各言語の設定を参照してください．
@@ -921,8 +933,6 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 ここでは [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] を利用します．
 補完には [[https://github.com/tigersoldier/company-lsp][company-lsp]] を，文法チェックには [[https://github.com/emacs-lsp/lsp-ui][lsp-ui]] を利用します．
 大きいプロジェクトを開くと flycheck が重くなるという話もあり，flymake を利用することにしました．
-[[https://github.com/meqif/flymake-diagnostic-at-point][flymake-diagnostic-at-point]] を利用してエラーを見やすくしています．
-エラー一覧を表示するには =M-x flymake-show-diagnostic-buffer= とします．
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
@@ -948,10 +958,6 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     (lsp-ui-flycheck-enable nil)
     :blackout t)
 
-  (use-package flymake-diagnostic-at-point
-    :commands (flymake-diagnostic-at-point-mode)
-    :hook (flymake-mode . flymake-diagnostic-at-point-mode))
-
   (use-package lsp-latex
     :straight (:host github :repo "ROCKTAKEY/lsp-latex")
     :demand t
@@ -959,6 +965,18 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 #+end_src
 
 * Documents
+** Spell check
+Hunspell, Aspell, Ispell, Enchant のいずれかがインストールされている場合，Emacs でスペルチェックができます．
+バッファ内の文章のスペルチェックをするには =M-x ispell= とします．
+最近は [[http://aspell.net][Aspell]] を利用しています．
+Aspell の設定については [[https://gitlab.com/mahito1594/texmf][GitLab]] にホストしています．
+
+検索すると =(setq ispell-program-name "aspell")= という設定を見かけますが，
+明示的に行わなくても適当に設定されるように見えます．
+
+また， =flyspell-mode= というのもあるようです．
+使い勝手が良くないのと，動きが遅くなるような気がしているので現在は使っていません．
+
 ** Org-mode
 [[https://orgmode.org/][Org-mode]] の設定を行います．
 前の方で ~(straight-use-package 'org)~ しているので ~use-feature~ マクロを用います．
