@@ -672,7 +672,9 @@ overwrite the value already set locally."
                         ("remark"      ?r "rem:"  "~\\ref{%s}" nil ("remark")      nil)
                         ("example"     ?x "ex:"   "~\\ref{%s}" nil ("example")     nil)
                         ("conjecture"  ?c "conj:" "~\\ref{%s}" nil ("conjecture")  nil)))
-  (reftex-bibpath-environment-varibales '("!kpsewhich -show-path=.bib"))
+  (reftex-use-external-file-finders t)
+  (reftex-external-file-finders '(("tex" . "kpsewhich -format=.tex %f")
+                                  ("bib" . "kpsewhich -format=.bib %f")))
   (reftex-bibliography-commands '("bibliography"
                                   "nobibliography"
                                   "addbibresource")))
