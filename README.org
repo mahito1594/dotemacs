@@ -1191,7 +1191,7 @@ AUCTeX は section 型環境を挿入 (=C-c C-s=) 後に =\label= を自動的�
                        LaTeX-environment-list)))))
       (my-LaTeX-remove-eqnarray-from-environments)
       (add-hook 'TeX-auto-cleanup-hook
-                #'my-LaTeX-remove-eqnarray))
+                #'my-LaTeX-remove-eqnarray-from-environments))
 #+end_src
 
 上付き・下付き文字の表示を plain にします．

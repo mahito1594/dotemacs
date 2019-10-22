@@ -599,7 +599,7 @@ Madsen's report (\"Avoid eqnarray!\")."
                      LaTeX-environment-list)))))
     (my-LaTeX-remove-eqnarray-from-environments)
     (add-hook 'TeX-auto-cleanup-hook
-              #'my-LaTeX-remove-eqnarray))
+              #'my-LaTeX-remove-eqnarray-from-environments))
 
 (use-feature font-latex
   :custom
