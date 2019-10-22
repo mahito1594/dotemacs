@@ -571,19 +571,35 @@ documentclass\\)\\b")
                  (latex-mode) :help "Run latexmk")))
 
 (use-feature latex
-  :preface
-  (defun my-LaTeX-mode-hook ()
-    (outline-minor-mode 1)
-    (electric-pair-local-mode -1)
-    (setq-local TeX-electric-math
-                (cons "\\(" "\\)")))
-  :hook ((LaTeX-mode . my-LaTeX-mode-hook)
-         (LaTeX-mode . lsp))
-  :custom
-  (LaTeX-label-alist nil)
-  (LaTeX-electric-left-right-brace t)
-  :config
-  (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
+    :preface
+    (defun my-LaTeX-mode-hook ()
+      (outline-minor-mode 1)
+      (electric-pair-local-mode -1)
+      (setq-local TeX-electric-math
+                  (cons "\\(" "\\)")))
+    :hook ((LaTeX-mode . my-LaTeX-mode-hook)
+           (LaTeX-mode . lsp))
+    :custom
+    (LaTeX-label-alist nil)
+    (LaTeX-electric-left-right-brace t)
+    :config
+    (remove-hook 'LaTeX-section-hook #'LaTeX-section-label)
+    ;; Below function is due to A. Esbati.  See
+    ;; https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-environment-in-auctex
+    (defun my-LaTeX-remove-eqnarray-from-environments ()
+      "Remove \"eqnarray\" and \"eqnarray*\" environmens from the variable
+`LaTeX-environment-list', they should not be used.  For more detail, see
+Madsen's report (\"Avoid eqnarray!\")."
+      (let ((evil-envs '("eqnarray" "eqnarray*")))
+        (LaTeX-environment-list)
+        (dolist (env evil-envs)
+        (setq-local LaTeX-environment-list
+                    (assq-delete-all
+                     (car (assoc env LaTeX-environment-list))
+                     LaTeX-environment-list)))))
+    (my-LaTeX-remove-eqnarray-from-environments)
+    (add-hook 'TeX-auto-cleanup-hook
+              #'my-LaTeX-remove-eqnarray))
 
 (use-feature font-latex
   :custom

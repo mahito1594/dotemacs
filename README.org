@@ -35,7 +35,9 @@ shallow clone でパッケージをダウンロードします．
 これらは Git によって追跡されません．
 
 起動時にガベージコレクタが走らないように閾値を下げます．
-ただし，起動後には元々の値に戻すようにします．
+ただし，起動後には =my-gc-cons-threshold= の値にセットします．
+変数 =my-gc-cons-threshold= の値は Emacs のデフォルト値 (800000) です．
+この変数は =local-conf.el= 等で変更することが可能です．
 
 ** my-init.el
 ~my-init.el~ に個人的な Emacs の設定をまとめてあります．
@@ -1156,21 +1158,40 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
 AUCTeX は section 型環境を挿入 (=C-c C-s=) 後に =\label= を自動的に挿入します(=LaTeX-section-label=)．
 しかし，この挿入には改行を伴うため，後述する RefTeX の =reftex-label= (=C-c (=) を利用することにします．
 
+=C-c C-e= で挿入される環境の補完候補から =eqnarray= を削除します(参考 [[https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-environment-in-auctex/][TeX Stack Exchange]])．
+これは =eqnarray= 環境には不具合があり非推奨となっているためです． =amsmath= パッケージを利用するべきです．
+
 #+begin_src emacs-lisp
-  (use-feature latex
-    :preface
-    (defun my-LaTeX-mode-hook ()
-      (outline-minor-mode 1)
-      (electric-pair-local-mode -1)
-      (setq-local TeX-electric-math
-                  (cons "\\(" "\\)")))
-    :hook ((LaTeX-mode . my-LaTeX-mode-hook)
-           (LaTeX-mode . lsp))
-    :custom
-    (LaTeX-label-alist nil)
-    (LaTeX-electric-left-right-brace t)
-    :config
-    (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
+    (use-feature latex
+      :preface
+      (defun my-LaTeX-mode-hook ()
+        (outline-minor-mode 1)
+        (electric-pair-local-mode -1)
+        (setq-local TeX-electric-math
+                    (cons "\\(" "\\)")))
+      :hook ((LaTeX-mode . my-LaTeX-mode-hook)
+             (LaTeX-mode . lsp))
+      :custom
+      (LaTeX-label-alist nil)
+      (LaTeX-electric-left-right-brace t)
+      :config
+      (remove-hook 'LaTeX-section-hook #'LaTeX-section-label)
+      ;; Below function is due to A. Esbati.  See
+      ;; https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-environment-in-auctex
+      (defun my-LaTeX-remove-eqnarray-from-environments ()
+        "Remove \"eqnarray\" and \"eqnarray*\" environmens from the variable
+  `LaTeX-environment-list', they should not be used.  For more detail, see
+  Madsen's report (\"Avoid eqnarray!\")."
+        (let ((evil-envs '("eqnarray" "eqnarray*")))
+          (LaTeX-environment-list)
+          (dolist (env evil-envs)
+          (setq-local LaTeX-environment-list
+                      (assq-delete-all
+                       (car (assoc env LaTeX-environment-list))
+                       LaTeX-environment-list)))))
+      (my-LaTeX-remove-eqnarray-from-environments)
+      (add-hook 'TeX-auto-cleanup-hook
+                #'my-LaTeX-remove-eqnarray))
 #+end_src
 
 上付き・下付き文字の表示を plain にします．

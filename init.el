@@ -24,8 +24,9 @@
 ;;; Prevent GC to run in start-up
 ;; The original value of `gc-cons-threshold' is 800000.
 (setq gc-cons-threshold (* 16 1000 1000))
-(defvar my-gc-cons-threshold (* 16 1000 1000)
-  "Use this value as `gc-cons-threshold' after init Emacs.")
+(defvar my-gc-cons-threshold (* 8 100 1000)
+  "Use this value as `gc-cons-threshold' after init Emacs.  You can modify the
+value in \"local-conf.el\".")
 
 ;; reset `gc-cons-threshold' after start up
 (run-with-idle-timer 5 nil
