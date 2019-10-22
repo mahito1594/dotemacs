@@ -458,6 +458,7 @@ _e_: end of line        ^ ^                 _x_: execute command
   :blackout t)
 
 (use-package lsp-latex
+  :if (executable-find "texlab")
   :straight (:host github :repo "ROCKTAKEY/lsp-latex")
   :demand t
   :after (lsp-mode))
@@ -653,6 +654,17 @@ overwrite the value already set locally."
          'jtex)
         (t japanese-TeX-engine-default)))))
   (advice-add 'japanese-LaTeX-guess-engine :override #'my-japanese-LaTeX-guess-engine))
+
+(use-package company-math
+  :if (not (executable-find "texlab"))
+  :demand t
+  :after (company)
+  :config
+  (defun my-LaTeX-mode-setup ()
+    (setq-local company-backends
+                (append '((company-math-symbols-latex company-latex-commands))
+                        company-backends)))
+  (add-hook 'LaTeX-mode-hook #'my-LaTeX-mode-setup))
 
 (use-feature reftex
   :hook (LaTeX-mode . reftex-mode)

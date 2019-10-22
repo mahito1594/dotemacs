@@ -925,7 +925,6 @@ Flycheck を有効にしたいモードについて個々に =flycheck-mode= を
     :hook (flymake-mode . flymake-diagnostic-at-point-mode))
 #+end_src
 
-
 ** LSP
 いくつかの言語では Language Server Protocol を用いて補完・文法チェックを行います．
 詳細は各言語の設定を参照してください．
@@ -959,6 +958,7 @@ Flycheck を有効にしたいモードについて個々に =flycheck-mode= を
     :blackout t)
 
   (use-package lsp-latex
+    :if (executable-find "texlab")
     :straight (:host github :repo "ROCKTAKEY/lsp-latex")
     :demand t
     :after (lsp-mode))
@@ -1252,6 +1252,21 @@ AUCTeX は section 型環境を挿入 (=C-c C-s=) 後に =\label= を自動的�
 入力補完に [[https://github.com/latex-lsp/texlab][TexLab]] という Language Server を利用します．
 実行バイナリを PATH の通ったディレクトリにダウンロードします．
 lsp-mode の設定は [[https://github.com/ROCKTAKEY/lsp-latex][lsp-latex]] が行ってくれます．
+
+TeXLab の実行バイナリが見つからなかった場合は [[https://github.com/vspinu/company-math][company-math]] を利用します．
+
+#+begin_src emacs-lisp
+  (use-package company-math
+    :if (not (executable-find "texlab"))
+    :demand t
+    :after (company)
+    :config
+    (defun my-LaTeX-mode-setup ()
+      (setq-local company-backends
+                  (append '((company-math-symbols-latex company-latex-commands))
+                          company-backends)))
+    (add-hook 'LaTeX-mode-hook #'my-LaTeX-mode-setup))
+#+end_src
 
 **** Insertion of Quotes, Dollars and Braces
 引用符の挿入等の操作についてまとめます．
