@@ -35,7 +35,9 @@ shallow clone でパッケージをダウンロードします．
 これらは Git によって追跡されません．
 
 起動時にガベージコレクタが走らないように閾値を下げます．
-ただし，起動後には元々の値に戻すようにします．
+ただし，起動後には =my-gc-cons-threshold= の値にセットします．
+変数 =my-gc-cons-threshold= の値は Emacs のデフォルト値 (800000) です．
+この変数は =local-conf.el= 等で変更することが可能です．
 
 ** my-init.el
 ~my-init.el~ に個人的な Emacs の設定をまとめてあります．
@@ -814,6 +816,7 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 ** Yasnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
+    :hook (after-init . yas-global-mode)
     :blackout t)
 #+end_src
 
@@ -894,14 +897,15 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     :blackout t)
 #+end_src
 
-** Flycheck
-文法チェックには [[https://www.flycheck.org/en/latest/][Flycheck]] を利用します．
-後述の [[LSP][LSP]] を用いる場合には暴走するという情報があるので要確認です．
+** Flycheck/Flymake
+文法チェックは [[https://www.flycheck.org/en/latest/][flycheck]] と flymake を利用します．
+
+*** Flycheck
+Flycheck を有効にしたいモードについて個々に =flycheck-mode= を =add-hook= します．
 
 #+begin_src emacs-lisp
   (use-package flycheck
     :commands (flycheck-disable-checker)
-    :hook (after-init . global-flycheck-mode)
     :custom
     (flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 #+end_src
@@ -913,24 +917,30 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     :hook (flycheck-mode . flycheck-popup-tip-mode))
 #+end_src
 
+*** Flymake
+[[https://github.com/meqif/flymake-diagnostic-at-point][flymake-diagnostic-at-point]] を利用してエラーを見やすくしています．
+エラー一覧を表示するには =M-x flymake-show-diagnostic-buffer= とします．
+
+#+begin_src emacs-lisp
+  (use-package flymake-diagnostic-at-point
+    :commands (flymake-diagnostic-at-point-mode)
+    :hook (flymake-mode . flymake-diagnostic-at-point-mode))
+#+end_src
+
 ** LSP
 いくつかの言語では Language Server Protocol を用いて補完・文法チェックを行います．
 詳細は各言語の設定を参照してください．
 
 ここでは [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]] を利用します．
-補完には [[https://github.com/tigersoldier/company-lsp][company-lsp]] を，文法チェックには [[https://github.com/emacs-lsp/lsp-ui][lsp-ui/flycheck]] を利用します．
-
-lsp-mode と flycheck を併用するにはカスタム変数 ~lsp-prefer-flymake~ を ~nil~ にセットします．
-また flycheck-popup-tip を使用していると画面がうるさくなるのでカスタム変数 ~lsp-ui-sideline-enable~ を ~nil~ にセットし，
-~lsp-ui-sideline-mode~ を無効化します．
-
-大きいプロジェクトを開くと flycheck が重くなるという話もあるので場合によっては flymake を使うほうが良いかもしれません．
+補完には [[https://github.com/tigersoldier/company-lsp][company-lsp]] を，文法チェックには [[https://github.com/emacs-lsp/lsp-ui][lsp-ui]] を利用します．
+大きいプロジェクトを開くと flycheck が重くなるという話もあり，flymake を利用することにしました．
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands (lsp)
     :custom
-    (lsp-prefer-flymake nil "Use `flycheck'."))
+    (lsp-prefer-flymake t)
+    :config)
 
   (use-package company-lsp
     :demand t
@@ -945,11 +955,30 @@ lsp-mode と flycheck を併用するにはカスタム変数 ~lsp-prefer-flymak
                 ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
                 ([remap xref-find-references] . lsp-ui-peek-find-references))
     :custom
-    (lsp-ui-sideline-enable nil "Disable `lsp-ui-sideline-mode'.")
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-flycheck-enable nil)
     :blackout t)
+
+  (use-package lsp-latex
+    :if (executable-find "texlab")
+    :straight (:host github :repo "ROCKTAKEY/lsp-latex")
+    :demand t
+    :after (lsp-mode))
 #+end_src
 
 * Documents
+** Spell check
+Hunspell, Aspell, Ispell, Enchant のいずれかがインストールされている場合，Emacs でスペルチェックができます．
+バッファ内の文章のスペルチェックをするには =M-x ispell= とします．
+最近は [[http://aspell.net][Aspell]] を利用しています．
+Aspell の設定については [[https://gitlab.com/mahito1594/texmf][GitLab]] にホストしています．
+
+検索すると =(setq ispell-program-name "aspell")= という設定を見かけますが，
+明示的に行わなくても適当に設定されるように見えます．
+
+また， =flyspell-mode= というのもあるようです．
+使い勝手が良くないのと，動きが遅くなるような気がしているので現在は使っていません．
+
 ** Org-mode
 [[https://orgmode.org/][Org-mode]] の設定を行います．
 前の方で ~(straight-use-package 'org)~ しているので ~use-feature~ マクロを用います．
@@ -1106,7 +1135,8 @@ AUCTeX は ~tex.el~, ~latex.el~, ~tex-buf.el~ および ~font-latex.el~ など�
              "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
   documentclass\\)\\b")
             ("TEX" plain-tex-mode ".")))
-    :hook (plain-TeX-mode . my-plain-TeX-mode-hook)
+    :hook ((plain-TeX-mode . my-plain-TeX-mode-hook)
+           (TeX-mode . lsp))
     :custom
     (TeX-auto-save nil)
     (TeX-parse-self t)
@@ -1125,17 +1155,43 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
 変数 =LaTeX-electric-left-right-brace= を =t= に設定することで， =\left= と =\right= など対応する括弧類を自動的に挿入します．
 この機能は ~electric-pair-mode~ と相性が悪いので LaTeX-mode では ~electric-pair-mode~ を OFF にしておきます．
 
+AUCTeX は section 型環境を挿入 (=C-c C-s=) 後に =\label= を自動的に挿入します(=LaTeX-section-label=)．
+しかし，この挿入には改行を伴うため，後述する RefTeX の =reftex-label= (=C-c (=) を利用することにします．
+
+=C-c C-e= で挿入される環境の補完候補から =eqnarray= を削除します(参考 [[https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-environment-in-auctex/][TeX Stack Exchange]])．
+これは =eqnarray= 環境には不具合があり非推奨となっているためです． =amsmath= パッケージを利用するべきです．
+
 #+begin_src emacs-lisp
-  (use-feature latex
-    :preface
-    (defun my-LaTeX-mode-hook ()
-      (outline-minor-mode 1)
-      (electric-pair-local-mode -1)
-      (setq-local TeX-electric-math
-                  (cons "\\(" "\\)")))
-    :hook (LaTeX-mode . my-LaTeX-mode-hook)
-    :custom
-    (LaTeX-electric-left-right-brace t))
+    (use-feature latex
+      :preface
+      ;; Below function is due to A. Esbati.  See
+      ;; https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-environment-in-auctex
+      ;; licensed under CC-BY-SA 4.0
+      (defun my-LaTeX-remove-eqnarray-from-environments ()
+        "Remove \"eqnarray\" and \"eqnarray*\" environmens from the variable
+    `LaTeX-environment-list', they should not be used.  For more detail, see
+    Madsen's report (\"Avoid eqnarray!\")."
+        (let ((evil-envs '("eqnarray" "eqnarray*")))
+          (LaTeX-environment-list)
+          (dolist (env evil-envs)
+            (setq-local LaTeX-environment-list
+                        (assq-delete-all
+                         (car (assoc env LaTeX-environment-list))
+                         LaTeX-environment-list)))))
+      (defun my-LaTeX-mode-hook ()
+        (my-LaTeX-remove-eqnarray-from-environments)
+        (outline-minor-mode 1)
+        (electric-pair-local-mode -1)
+        (setq-local TeX-electric-math
+                    (cons "\\(" "\\)")))
+      :hook ((LaTeX-mode . my-LaTeX-mode-hook)
+             (LaTeX-mode . lsp)
+             (TeX-auto-cleanup . my-LaTeX-remove-eqnarray-from-environments))
+      :custom
+      (LaTeX-label-alist nil)
+      (LaTeX-electric-left-right-brace t)
+      :config
+      (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
 #+end_src
 
 上付き・下付き文字の表示を plain にします．
@@ -1214,14 +1270,23 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
     (advice-add 'japanese-LaTeX-guess-engine :override #'my-japanese-LaTeX-guess-engine))
 #+end_src
 
-入力補完に [[https://github.com/alexeyr/company-auctex][company-auctex]] を利用します．
+入力補完に [[https://github.com/latex-lsp/texlab][TexLab]] という Language Server を利用します．
+実行バイナリを PATH の通ったディレクトリにダウンロードします．
+lsp-mode の設定は [[https://github.com/ROCKTAKEY/lsp-latex][lsp-latex]] が行ってくれます．
+
+TeXLab の実行バイナリが見つからなかった場合は [[https://github.com/vspinu/company-math][company-math]] を利用します．
 
 #+begin_src emacs-lisp
-  (use-package company-auctex
+  (use-package company-math
+    :if (not (executable-find "texlab"))
     :demand t
-    :after (company tex)
+    :after (company)
     :config
-    (company-auctex-init))
+    (defun my-LaTeX-mode-setup ()
+      (setq-local company-backends
+                  (append '((company-math-symbols-latex company-latex-commands))
+                          company-backends)))
+    (add-hook 'LaTeX-mode-hook #'my-LaTeX-mode-setup))
 #+end_src
 
 **** Insertion of Quotes, Dollars and Braces
@@ -1236,6 +1301,8 @@ LaTeX 文書を執筆する際は，インライン数式の記述に ~\(...\)~ 
 リージョン選択中に =$= を押下すると，選択範囲を =$...$= または =\(...\)= で囲みます．
 また続けて =$= を押下することで別行立て数式・非数式・インライン数式をトグルします．
 また，リージョン選択中に =C-c {= を押下することで選択範囲を ={...}= で囲みます．
+
+リージョンを =\left= と =\right= などで囲みたい場合は =C-c C-m= (=TeX-insert-macro=) を利用するのが良いでしょう．
 
 **** Font specifiers
 フォントに関する制御綴の挿入についてまとめます．
@@ -1371,7 +1438,9 @@ SyncTeX を利用するには =TeX-source-correlate-mode= になっている必�
                           ("remark"      ?r "rem:"  "~\\ref{%s}" nil ("remark")      nil)
                           ("example"     ?x "ex:"   "~\\ref{%s}" nil ("example")     nil)
                           ("conjecture"  ?c "conj:" "~\\ref{%s}" nil ("conjecture")  nil)))
-    (reftex-bibpath-environment-varibales '("!kpsewhich -show-path=.bib"))
+    (reftex-use-external-file-finders t)
+    (reftex-external-file-finders '(("tex" . "kpsewhich -format=.tex %f")
+                                    ("bib" . "kpsewhich -format=.bib %f")))
     (reftex-bibliography-commands '("bibliography"
                                     "nobibliography"
                                     "addbibresource")))

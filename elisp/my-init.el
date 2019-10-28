@@ -358,6 +358,7 @@ _e_: end of line        ^ ^                 _x_: execute command
 (setq ring-bell-function 'ignore)
 
 (use-package yasnippet
+  :hook (after-init . yas-global-mode)
   :blackout t)
 
 (use-package company
@@ -423,17 +424,21 @@ _e_: end of line        ^ ^                 _x_: execute command
 
 (use-package flycheck
   :commands (flycheck-disable-checker)
-  :hook (after-init . global-flycheck-mode)
   :custom
   (flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
 (use-package flycheck-popup-tip
   :hook (flycheck-mode . flycheck-popup-tip-mode))
 
+(use-package flymake-diagnostic-at-point
+  :commands (flymake-diagnostic-at-point-mode)
+  :hook (flymake-mode . flymake-diagnostic-at-point-mode))
+
 (use-package lsp-mode
   :commands (lsp)
   :custom
-  (lsp-prefer-flymake nil "Use `flycheck'."))
+  (lsp-prefer-flymake t)
+  :config)
 
 (use-package company-lsp
   :demand t
@@ -448,8 +453,15 @@ _e_: end of line        ^ ^                 _x_: execute command
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
               ([remap xref-find-references] . lsp-ui-peek-find-references))
   :custom
-  (lsp-ui-sideline-enable nil "Disable `lsp-ui-sideline-mode'.")
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-flycheck-enable nil)
   :blackout t)
+
+(use-package lsp-latex
+  :if (executable-find "texlab")
+  :straight (:host github :repo "ROCKTAKEY/lsp-latex")
+  :demand t
+  :after (lsp-mode))
 
 (use-feature org
   :functions (my-org-electric-pair-mode)
@@ -543,7 +555,8 @@ component\\|onderdeel\\|komponent[ea]\\|componenta\\)\
            "\\\\\\(begin\\|\\(?:sub\\)\\{0,2\\}section\\|chapter\\|documentstyle\\|\
 documentclass\\)\\b")
           ("TEX" plain-tex-mode ".")))
-  :hook (plain-TeX-mode . my-plain-TeX-mode-hook)
+  :hook ((plain-TeX-mode . my-plain-TeX-mode-hook)
+         (TeX-mode . lsp))
   :custom
   (TeX-auto-save nil)
   (TeX-parse-self t)
@@ -559,14 +572,34 @@ documentclass\\)\\b")
 
 (use-feature latex
   :preface
+  ;; Below function is due to A. Esbati.  See
+  ;; https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-environment-in-auctex
+  ;; licensed under CC-BY-SA 4.0
+  (defun my-LaTeX-remove-eqnarray-from-environments ()
+    "Remove \"eqnarray\" and \"eqnarray*\" environmens from the variable
+`LaTeX-environment-list', they should not be used.  For more detail, see
+Madsen's report (\"Avoid eqnarray!\")."
+    (let ((evil-envs '("eqnarray" "eqnarray*")))
+      (LaTeX-environment-list)
+      (dolist (env evil-envs)
+        (setq-local LaTeX-environment-list
+                    (assq-delete-all
+                     (car (assoc env LaTeX-environment-list))
+                     LaTeX-environment-list)))))
   (defun my-LaTeX-mode-hook ()
+    (my-LaTeX-remove-eqnarray-from-environments)
     (outline-minor-mode 1)
     (electric-pair-local-mode -1)
     (setq-local TeX-electric-math
                 (cons "\\(" "\\)")))
-  :hook (LaTeX-mode . my-LaTeX-mode-hook)
+  :hook ((LaTeX-mode . my-LaTeX-mode-hook)
+         (LaTeX-mode . lsp)
+         (TeX-auto-cleanup . my-LaTeX-remove-eqnarray-from-environments))
   :custom
-  (LaTeX-electric-left-right-brace t))
+  (LaTeX-label-alist nil)
+  (LaTeX-electric-left-right-brace t)
+  :config
+  (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
 
 (use-feature font-latex
   :custom
@@ -638,11 +671,16 @@ overwrite the value already set locally."
         (t japanese-TeX-engine-default)))))
   (advice-add 'japanese-LaTeX-guess-engine :override #'my-japanese-LaTeX-guess-engine))
 
-(use-package company-auctex
+(use-package company-math
+  :if (not (executable-find "texlab"))
   :demand t
-  :after (company tex)
+  :after (company)
   :config
-  (company-auctex-init))
+  (defun my-LaTeX-mode-setup ()
+    (setq-local company-backends
+                (append '((company-math-symbols-latex company-latex-commands))
+                        company-backends)))
+  (add-hook 'LaTeX-mode-hook #'my-LaTeX-mode-setup))
 
 (use-feature reftex
   :hook (LaTeX-mode . reftex-mode)
@@ -662,7 +700,9 @@ overwrite the value already set locally."
                         ("remark"      ?r "rem:"  "~\\ref{%s}" nil ("remark")      nil)
                         ("example"     ?x "ex:"   "~\\ref{%s}" nil ("example")     nil)
                         ("conjecture"  ?c "conj:" "~\\ref{%s}" nil ("conjecture")  nil)))
-  (reftex-bibpath-environment-varibales '("!kpsewhich -show-path=.bib"))
+  (reftex-use-external-file-finders t)
+  (reftex-external-file-finders '(("tex" . "kpsewhich -format=.tex %f")
+                                  ("bib" . "kpsewhich -format=.bib %f")))
   (reftex-bibliography-commands '("bibliography"
                                   "nobibliography"
                                   "addbibresource")))
