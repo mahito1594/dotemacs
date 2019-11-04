@@ -2,6 +2,14 @@
 #+TITLE: My configuration file for Emacs
 #+AUTHOR: Mahito TANNO
 #+DATE:
+
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+#+HTML_HEAD: <style> code{font-size:90%;}</style>
+#+HTML_HEAD: <style> pre.src{font-size:90%;}</style>
+#+HTML_HEAD: <style> #content{max-width:1800px;}</style>
+#+HTML_HEAD: <style> p{max-width:800px;}</style>
+#+HTML_HEAD: <style> li{max-width:800px;}</style>
+
 #+OPTIONS: H:2
 
 [[https://travis-ci.com/mahito1594/dotemacs][file:https://travis-ci.com/mahito1594/dotemacs.svg?branch=master]]
@@ -1893,8 +1901,8 @@ Macaulay2 を Emacs で使うにはこのファイルをロードすれば良い
 * License
 本設定ファイルは [[https://www.gnu.org/licenses/gpl.html][GNU 一般公衆ライセンス]] (バージョン 3 または以降の任意のバージョン) で公開しています．
 
-また [[https://mahito1594.github.io/dotemacs/][GitHub Page]] の表示に [[https://orgmode.org/worg/style/worg.css][~worg.css~]] を利用しています．
-~worg.css~ は GNU 一般公衆ライセンス (バージョン 3 または以降の任意のバージョン) で公開されています．
+また [[https://mahito1594.github.io/dotemacs/][GitHub Page]] の表示に [[https://github.com/fniessen/org-html-themes][ReadTheOrg]] を利用しています．
+~ReadTheOrg~ は GNU 一般公衆ライセンス (バージョン 3 または以降の任意のバージョン) で公開されています．
 
 #+begin_src emacs-lisp :tangle ./elisp/utility.el
   (provide 'utility)
