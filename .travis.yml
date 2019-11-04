@@ -1,9 +1,5 @@
 language: nix
 
-os:
-  - osx
-  - linux
-
 env:
   - EMACS_CI=emacs-26-1
   - EMACS_CI=emacs-26-2
@@ -36,7 +32,6 @@ script:
 before_deploy:
   - mkdir -p docs
   - mv README.html docs/index.html
-  - curl -fsSkL --retry 9 https://orgmode.org/worg/style/worg.css -o docs/style.css
   - echo "emacs.koffierente.com" > docs/CNAME
 
 deploy:
@@ -48,7 +43,7 @@ deploy:
   keep_history: false
   on:
     branch: master
-    condition: "$TRAVIS_OS_NAME = linux && $EMACS_CI = emacs-26-1"
+    condition: $EMACS_CI=emacs-26-1
 
 notifications:
   email:
