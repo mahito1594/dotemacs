@@ -1899,10 +1899,10 @@ Macaulay2 を Emacs で使うにはこのファイルをロードすれば良い
 #+end_src
 
 * License
-本設定ファイルは [[https://www.gnu.org/licenses/gpl.html][GNU 一般公衆ライセンス]] (バージョン 3 または以降の任意のバージョン) で公開しています．
+本設定ファイルは [[https://www.gnu.org/licenses/gpl.html][GNU General Public License]] (バージョン 3 または以降の任意のバージョン) で公開しています．
 
 また [[https://mahito1594.github.io/dotemacs/][GitHub Page]] の表示に [[https://github.com/fniessen/org-html-themes][ReadTheOrg]] を利用しています．
-~ReadTheOrg~ は GNU 一般公衆ライセンス (バージョン 3 または以降の任意のバージョン) で公開されています．
+~ReadTheOrg~ は GNU General Public License (バージョン 3 または以降の任意のバージョン) で公開されています．
 
 #+begin_src emacs-lisp :tangle ./elisp/utility.el
   (provide 'utility)
