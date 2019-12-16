@@ -540,20 +540,6 @@ Emacs 起動後に =server-start= します．
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-*** neotree
-ツリープラグインとして [[https://github.com/jaypei/emacs-neotree][neotree]] を用います．
-~C-c t~ で起動します．
-GUI での使用の際，all-the-icons を用いてアイコンを表示するようにします．
-
-#+begin_src emacs-lisp
-  (use-package neotree
-    :bind (("C-c t" . neotree-toggle))
-    :custom
-    (neo-theme (if (display-graphic-p)
-                   'classic
-                 'arrow)))
-#+end_src
-
 ** Candidates
 *** Ivy, Counsel and swiper
 補完インターフェイスとして [[https://github.com/abo-abo/swiper][Ivy/Counsel]] を利用します．

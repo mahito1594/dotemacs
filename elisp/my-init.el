@@ -200,13 +200,6 @@ _a_: open in        _S_: symlink
   :if (window-system)
   :hook (dired-mode . all-the-icons-dired-mode))
 
-(use-package neotree
-  :bind (("C-c t" . neotree-toggle))
-  :custom
-  (neo-theme (if (display-graphic-p)
-                 'classic
-               'arrow)))
-
 (use-package counsel
   :hook ((after-init . ivy-mode)
          (ivy-mode . counsel-mode))
