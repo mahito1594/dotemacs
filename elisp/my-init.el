@@ -276,6 +276,13 @@ _a_: open in        _S_: symlink
 (use-package amx
   :hook (ivy-mode . amx-mode))
 
+(use-package ivy-ghq
+  :straight (:host github :repo "analyticd/ivy-ghq")
+  :if (executable-find "ghq")
+  :commands (ivy-ghq-open)
+  :custom
+  (ivy-ghq-short-list nil))
+
 (use-package which-key
   :hook (after-init . which-key-mode)
   :bind (:map which-key-mode-map
@@ -315,6 +322,15 @@ _e_: end of line        ^ ^                 _x_: execute command
   ("q" nil "quit"))
 
 (use-package lice)
+
+(use-package magit
+  :commands (magit-status)
+  :bind ("C-x g" . magit-status))
+
+(with-current-buffer "*scratch*"
+  (emacs-lock-mode 'kill))
+(with-current-buffer "*Messages*"
+  (emacs-lock-mode 'kill))
 
 (use-feature elec-pair
   :hook (after-init . electric-pair-mode))
@@ -780,6 +796,7 @@ overwrite the value already set locally."
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode))
   :hook ((gfm-mode markdown-mode) . my-markdown-electric-pair-mode)
+  :bind (("C-c C-," . markdown-insert-gfm-code-block))
   :init
   (setq markdown-command "marked")
   :custom
@@ -801,6 +818,9 @@ overwrite the value already set locally."
 
 (use-feature elisp-mode
   :blackout (lisp-interaction-mode . "Lisp-Interaction"))
+
+(use-package js2-mode
+  :mode "\\.js\\'")
 
 (use-package tuareg
   :hook (tuareg-mode . lsp))

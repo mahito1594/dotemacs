@@ -685,6 +685,19 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
     :hook (ivy-mode . amx-mode))
 #+end_src
 
+[[https://github.com/motemen/ghq][ghq]] を利用してリポジトリを管理している場合，[[https://github.com/analyticd/ivy-ghq][ivy-ghq]] を利用できるようにしておきます．
+~M-x ivy-ghq-open~ で ghq 管理下のディレクトリを dired で開きます．
+~ghq root~ を複数設定してる場合，変数 ~ivy-ghq-short-list~ は ~nil~ にしておく方が良いでしょう．
+
+#+begin_src emacs-lisp
+  (use-package ivy-ghq
+    :straight (:host github :repo "analyticd/ivy-ghq")
+    :if (executable-find "ghq")
+    :commands (ivy-ghq-open)
+    :custom
+    (ivy-ghq-short-list nil))
+#+end_src
+
 *** emacs-which-key
 [[https://github.com/justbur/emacs-which-key][which-key]] を用いてキーバインドを表示させます．
 
@@ -743,7 +756,26 @@ ivy-hydra を利用して minibuffer での操作性を向上させます．
 
 新しいライセンスを追加する場合は =~/.emacs.d/lice= 以下にファイルを保存してください．
 
+** Git (magit)
+普段は端末から git 操作しますが，たまに [[https://github.com/magit/magit][~magit~]] も使います．
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :commands (magit-status)
+    :bind ("C-x g" . magit-status))
+#+end_src
+
 ** Others
+*** Scratch/Messages buffers
+=*scratch*= および =*Messages*= バッファを消去しないようにします．
+
+#+begin_src emacs-lisp
+  (with-current-buffer "*scratch*"
+    (emacs-lock-mode 'kill))
+  (with-current-buffer "*Messages*"
+    (emacs-lock-mode 'kill))
+#+end_src
+
 *** Parenthesis
 対応する括弧類は自動的に挿入し，また強調するようにします．
 
@@ -1605,6 +1637,8 @@ electric pair の設定を適宜追加します．
 ファイル名が ~README.md~ と一致する場合 =gfm-mode= で開きます．
 それ以外で拡張子が ~.md~ の場合は =markdown-mode= で開きます．
 
+また ~C-c C-,~ でコードブロックが挿入されるようにキーバインドを追加します．
+
 #+begin_src emacs-lisp
   (use-package markdown-mode
     :defines (my-markdown-electric-pair-pairs)
@@ -1613,6 +1647,7 @@ electric pair の設定を適宜追加します．
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode))
     :hook ((gfm-mode markdown-mode) . my-markdown-electric-pair-mode)
+    :bind (("C-c C-," . markdown-insert-gfm-code-block))
     :init
     (setq markdown-command "marked")
     :custom
@@ -1690,6 +1725,14 @@ flycheck の emacs-lisp-checkdoc の警告はあまり有益に思えないた�
 #+begin_src emacs-lisp
   (use-feature elisp-mode
     :blackout (lisp-interaction-mode . "Lisp-Interaction"))
+#+end_src
+
+** JavaScript
+JavaScript を書くには [[https://github.com/mooz/js2-mode][~js2-mode~]] を利用します．
+
+#+begin_src emacs-lisp
+  (use-package js2-mode
+    :mode "\\.js\\'")
 #+end_src
 
 ** Ocaml
