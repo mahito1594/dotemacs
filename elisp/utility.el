@@ -149,5 +149,29 @@ See `my-straight-readme-name-list'."
   (setq-local electric-pair-pairs (append electric-pair-pairs
                                           my-markdown-electric-pair-pairs)))
 
+(defvar my-font-size)
+(defvar my-font-family)
+
+(defun my-font-initialize ()
+  "Initialize font settings"
+  (let* ((fheight (round (* 10 my-font-size))))
+    (set-face-attribute 'default nil
+                        :family my-font-family
+                        :height fheight)
+    (message "Font setting...done")))
+
+
+(defun my-set-default-font-size (size)
+  "Set font size to SIZE"
+  (interactive "nFont Size:")
+  (setq my-font-size size)
+  (my-font-initialize))
+
+(defun my-set-default-font-family (family)
+  "Set font family to FAMILY"
+  (interactive "sFont Family:")
+  (setq my-font-family family)
+  (my-font-initialize))
+
 (provide 'utility)
 ;;; utility.el ends here
