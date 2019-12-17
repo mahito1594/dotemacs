@@ -149,29 +149,37 @@ See `my-straight-readme-name-list'."
   (setq-local electric-pair-pairs (append electric-pair-pairs
                                           my-markdown-electric-pair-pairs)))
 
-(defvar my-font-size)
-(defvar my-font-family)
+(defvar my-font-size 10
+  "Font size.")
+(defvar my-font-family ""
+  "Font family.")
 
-(defun my-font-initialize ()
-  "Initialize font settings"
+(defun my--font-initialize ()
+  "Initialize font settings.
+
+After setting the variables `my-font-size' and `my-font-family',
+run this function.  For instance, add to `after-init-hook' in `local-conf.el'."
   (let* ((fheight (round (* 10 my-font-size))))
     (set-face-attribute 'default nil
                         :family my-font-family
                         :height fheight)
     (message "Font setting...done")))
 
-
-(defun my-set-default-font-size (size)
-  "Set font size to SIZE"
-  (interactive "nFont Size:")
+(defun my-change-font-size (size)
+  "Set the default font size to SIZE."
+  (interactive "nFont Size: ")
   (setq my-font-size size)
-  (my-font-initialize))
+  (my--font-initialize))
 
-(defun my-set-default-font-family (family)
-  "Set font family to FAMILY"
-  (interactive "sFont Family:")
-  (setq my-font-family family)
-  (my-font-initialize))
+(defun my-change-font-family ()
+  "Set the default font family to FAMILY."
+  (interactive)
+  (ivy-read "Font Family: " (font-family-list)
+            :require-match t
+            :action (lambda (family)
+                      (setq my-font-family family)
+                      (my--font-initialize))
+            :caller 'my-change-font-family))
 
 (provide 'utility)
 ;;; utility.el ends here
