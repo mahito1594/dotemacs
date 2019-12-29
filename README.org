@@ -1852,13 +1852,65 @@ Emacs 起動時にフレームを最大化します．
 #+end_src
 
 ** Font
-フォントに関しては，例えば，次のように ~local-conf.el~ に記述します．
+フォントの設定は ~local-conf.el~ で次の変数
+
+- ~my-font-size~
+- ~my-font-family~
+
+をセットし， ~after-init-hook~ などに関数 ~my--font-initialize~ を追加します．
+
+#+begin_src emacs-lisp :tangle ./elisp/utility.el
+  (defvar my-font-size 10
+    "Font size.")
+  (defvar my-font-family ""
+    "Font family.")
+
+  (defun my--font-initialize ()
+    "Initialize font settings.
+
+  After setting the variables `my-font-size' and `my-font-family',
+  run this function.  For instance, add to `after-init-hook' in `local-conf.el'."
+    (let* ((fheight (round (* 10 my-font-size))))
+      (set-face-attribute 'default nil
+                          :family my-font-family
+                          :height fheight)
+      (message "Font setting...done")))
+#+end_src
+
+また関数 ~my-change-font-size~ と ~my-change-font-family~ を利用してインタラクティブにフォントサイズやファミリを変更することもできます．
+~my-change-font-family~ は ~ivy-read~ を利用した絞り込み検索を行います．
+
+#+begin_src emacs-lisp :tangle ./elisp/utility.el
+  (defun my-change-font-size (size)
+    "Set the default font size to SIZE."
+    (interactive "nFont Size: ")
+    (setq my-font-size size)
+    (my--font-initialize))
+
+  (defun my-change-font-family ()
+    "Set the default font family to FAMILY."
+    (interactive)
+    (ivy-read "Font Family: " (font-family-list)
+              :require-match t
+              :action (lambda (family)
+                        (setq my-font-family family)
+                        (my--font-initialize))
+              :caller 'my-change-font-family))
+#+end_src
+
+例えば次のような設定が考えられます．
 
 #+begin_src emacs-lisp :tangle no
-  (set-face-attribute 'default nil
-                      :family "Source Han Code JP"
-                      :height 140)
+  (add-hook 'after-init-hook
+            #'(lambda ()
+                (setq my-font-size 12
+                      my-font-family "Cica")
+                (my-font-initialize)))
 #+end_src
+
+[[https://github.com/miiton/Cica][Cica]] フォントが all-the-icons と相性が悪いように思います ([[https://github.com/mahito1594/dotemacs/issues/32][参考]])．
+また変数 ~all-the-icons-scale-factor~ を小さめに設定したほうが良いかもしれません．
+
 * Global keybindings
 global-map のキーバインドを次のように変更します．
 
