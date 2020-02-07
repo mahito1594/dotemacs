@@ -840,7 +840,7 @@ overwrite the value already set locally."
 (use-package kaolin-themes
   :demand t
   :config
-  (load-theme 'kaolin-aurora t))
+  (load-theme 'kaolin-galaxy t))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)

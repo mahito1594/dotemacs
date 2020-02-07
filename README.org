@@ -1806,7 +1806,7 @@ Dockerfile の編集には [[https://github.com/spotify/dockerfile-mode][dockerf
   (use-package kaolin-themes
     :demand t
     :config
-    (load-theme 'kaolin-aurora t))
+    (load-theme 'kaolin-galaxy t))
 #+end_src
 
 またモードラインを [[https://github.com/seagle0128/doom-modeline][doom-modeline]] でカスタマイズします．
@@ -1929,6 +1929,7 @@ global-map のキーバインドを次のように変更します．
   (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
   (define-key global-map (kbd "C-x ?") 'help-for-help)
 #+end_src
+
 * Local configuration
 ** Overview
 ~.emacs.d/local-conf.el~ にマシン・環境ごとの設定を記述します．
