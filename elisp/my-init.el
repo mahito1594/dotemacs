@@ -600,9 +600,17 @@ Madsen's report (\"Avoid eqnarray!\")."
     (outline-minor-mode 1)
     (electric-pair-local-mode -1)
     (setq-local TeX-electric-math
-                (cons "\\(" "\\)")))
+                (cons "\\(" "\\)"))
+    ;; use TexLab --- language server for LaTeX --- if available and *not* in
+    ;; japanese-(La)TeX-mode.
+    (if (and (executable-find "texlab")
+             (or (not (boundp 'japanese-TeX-mode))
+                 (not japanese-TeX-mode)))
+        (lsp)
+      (setq-local company-backends
+                  (append '(company-math-symbols-latex company-latex-commands)
+                          company-backends))))
   :hook ((LaTeX-mode . my-LaTeX-mode-hook)
-         (LaTeX-mode . lsp)
          (TeX-auto-cleanup . my-LaTeX-remove-eqnarray-from-environments))
   :custom
   (LaTeX-label-alist nil)
@@ -681,15 +689,8 @@ overwrite the value already set locally."
   (advice-add 'japanese-LaTeX-guess-engine :override #'my-japanese-LaTeX-guess-engine))
 
 (use-package company-math
-  :if (not (executable-find "texlab"))
   :demand t
-  :after (company)
-  :config
-  (defun my-LaTeX-mode-setup ()
-    (setq-local company-backends
-                (append '((company-math-symbols-latex company-latex-commands))
-                        company-backends)))
-  (add-hook 'LaTeX-mode-hook #'my-LaTeX-mode-setup))
+  :after (company))
 
 (use-feature reftex
   :hook (LaTeX-mode . reftex-mode)
