@@ -445,9 +445,13 @@ _e_: end of line        ^ ^                 _x_: execute command
 
 (use-package lsp-mode
   :commands (lsp)
+  :hook (lsp-mode . lsp-enable-which-key-integration)
   :custom
   (lsp-prefer-flymake t)
   :config)
+
+(use-package lsp-ivy
+  :commands (lsp-ivy-workspace-symbol))
 
 (use-package company-lsp
   :demand t

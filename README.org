@@ -964,9 +964,13 @@ Flycheck を有効にしたいモードについて個々に =flycheck-mode= を
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands (lsp)
+    :hook (lsp-mode . lsp-enable-which-key-integration)
     :custom
     (lsp-prefer-flymake t)
     :config)
+
+  (use-package lsp-ivy
+    :commands (lsp-ivy-workspace-symbol))
 
   (use-package company-lsp
     :demand t
