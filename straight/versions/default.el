@@ -42,7 +42,7 @@
  ("lice-el" . "4339929927c62bd636f89bb39ea999d18d269250")
  ("lsp-ivy" . "78c1429c62c19006058b89d462657e1448d1e595")
  ("lsp-latex" . "d016440fe364a016935bd90ae07e22d9012bcf8f")
- ("lsp-mode" . "4137054b7d7701eab0d1d66efd8939996dbebace")
+ ("lsp-mode" . "5a6a265b077ab97c26edf84473a062b5aa96624d")
  ("lsp-ui" . "207bc8d61abff7c3024f8a484f63bc60bc4ad58b")
  ("magit" . "491420c6016d6b8ea43f08de764e740030e5820b")
  ("markdown-mode" . "115f77df9755c6a453f3e5d9623ff885d207ea82")
