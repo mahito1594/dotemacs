@@ -964,9 +964,9 @@ Flycheck を有効にしたいモードについて個々に =flycheck-mode= を
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands (lsp)
+    :hook (lsp-mode . lsp-enable-which-key-integration)
     :custom
-    (lsp-prefer-flymake t)
-    :config)
+    (lsp-prefer-flymake t))
 
   (use-package company-lsp
     :demand t
@@ -1188,36 +1188,44 @@ AUCTeX は section 型環境を挿入 (=C-c C-s=) 後に =\label= を自動的�
 これは =eqnarray= 環境には不具合があり非推奨となっているためです． =amsmath= パッケージを利用するべきです．
 
 #+begin_src emacs-lisp
-    (use-feature latex
-      :preface
-      ;; Below function is due to A. Esbati.  See
-      ;; https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-environment-in-auctex
-      ;; licensed under CC-BY-SA 4.0
-      (defun my-LaTeX-remove-eqnarray-from-environments ()
-        "Remove \"eqnarray\" and \"eqnarray*\" environmens from the variable
-    `LaTeX-environment-list', they should not be used.  For more detail, see
-    Madsen's report (\"Avoid eqnarray!\")."
-        (let ((evil-envs '("eqnarray" "eqnarray*")))
-          (LaTeX-environment-list)
-          (dolist (env evil-envs)
-            (setq-local LaTeX-environment-list
-                        (assq-delete-all
-                         (car (assoc env LaTeX-environment-list))
-                         LaTeX-environment-list)))))
-      (defun my-LaTeX-mode-hook ()
-        (my-LaTeX-remove-eqnarray-from-environments)
-        (outline-minor-mode 1)
-        (electric-pair-local-mode -1)
-        (setq-local TeX-electric-math
-                    (cons "\\(" "\\)")))
-      :hook ((LaTeX-mode . my-LaTeX-mode-hook)
-             (LaTeX-mode . lsp)
-             (TeX-auto-cleanup . my-LaTeX-remove-eqnarray-from-environments))
-      :custom
-      (LaTeX-label-alist nil)
-      (LaTeX-electric-left-right-brace t)
-      :config
-      (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
+  (use-feature latex
+    :preface
+    ;; Below function is due to A. Esbati.  See
+    ;; https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-environment-in-auctex
+    ;; licensed under CC-BY-SA 4.0
+    (defun my-LaTeX-remove-eqnarray-from-environments ()
+      "Remove \"eqnarray\" and \"eqnarray*\" environmens from the variable
+  `LaTeX-environment-list', they should not be used.  For more detail, see
+  Madsen's report (\"Avoid eqnarray!\")."
+      (let ((evil-envs '("eqnarray" "eqnarray*")))
+        (LaTeX-environment-list)
+        (dolist (env evil-envs)
+          (setq-local LaTeX-environment-list
+                      (assq-delete-all
+                       (car (assoc env LaTeX-environment-list))
+                       LaTeX-environment-list)))))
+    (defun my-LaTeX-mode-hook ()
+      (my-LaTeX-remove-eqnarray-from-environments)
+      (outline-minor-mode 1)
+      (electric-pair-local-mode -1)
+      (setq-local TeX-electric-math
+                  (cons "\\(" "\\)"))
+      ;; use TexLab --- language server for LaTeX --- if available and *not* in
+      ;; japanese-(La)TeX-mode.
+      (if (and (executable-find "texlab")
+               (or (not (boundp 'japanese-TeX-mode))
+                   (not japanese-TeX-mode)))
+          (lsp)
+        (setq-local company-backends
+                    (append '(company-math-symbols-latex company-latex-commands)
+                            company-backends))))
+    :hook ((LaTeX-mode . my-LaTeX-mode-hook)
+           (TeX-auto-cleanup . my-LaTeX-remove-eqnarray-from-environments))
+    :custom
+    (LaTeX-label-alist nil)
+    (LaTeX-electric-left-right-brace t)
+    :config
+    (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
 #+end_src
 
 上付き・下付き文字の表示を plain にします．
@@ -1301,18 +1309,13 @@ AUCTeX は section 型環境を挿入 (=C-c C-s=) 後に =\label= を自動的�
 lsp-mode の設定は [[https://github.com/ROCKTAKEY/lsp-latex][lsp-latex]] が行ってくれます．
 
 TeXLab の実行バイナリが見つからなかった場合は [[https://github.com/vspinu/company-math][company-math]] を利用します．
+また日本語 LuaLaTeX 文書を開くと lsp-mode がエラーを吐く場合があります．
+work around としては ~my-LaTeX-mode-hook~ を参照してください．
 
 #+begin_src emacs-lisp
   (use-package company-math
-    :if (not (executable-find "texlab"))
     :demand t
-    :after (company)
-    :config
-    (defun my-LaTeX-mode-setup ()
-      (setq-local company-backends
-                  (append '((company-math-symbols-latex company-latex-commands))
-                          company-backends)))
-    (add-hook 'LaTeX-mode-hook #'my-LaTeX-mode-setup))
+    :after (company))
 #+end_src
 
 **** Insertion of Quotes, Dollars and Braces
