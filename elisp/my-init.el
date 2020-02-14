@@ -201,12 +201,18 @@ _a_: open in        _S_: symlink
   :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package counsel
-  :hook ((after-init . ivy-mode)
-         (ivy-mode . counsel-mode))
-  :bind (("C-s" . swiper)
-         ("C-r" . swiper)
-         ("C-S-s" . swiper-all)
-         ("C-c C-r" . ivy-resume)
+  :commands (counsel-mode)
+  :hook ((ivy-mode . counsel-mode))
+  :custom
+  (counsel-yank-pop-separator "\n<--------->\n")
+  :config
+  (setq ivy-initial-inputs-alist nil)
+  :blackout t)
+
+(use-package ivy
+  :commands (ivy-mode)
+  :hook ((after-init . ivy-mode))
+  :bind (("C-c C-r" . ivy-resume)
          :map ivy-minibuffer-map
          ("<tab>" . ivy-alt-done)
          ("C-w" . ivy-yank-word))
@@ -214,10 +220,42 @@ _a_: open in        _S_: symlink
   (ivy-use-virtual-buffers t)
   (ivy-count-format "(%d/%d) ")
   (ivy-wrap t)
-  (ivy-format-function 'ivy-format-function-arrow)
-  (counsel-yank-pop-separator "\n<--------->\n")
-  (ivy-initial-inputs-alist nil)
-  :blackout t)
+  :config
+  (when window-system
+    ;; Use the FontAwesome "hand-o-right" icon for ivy-format-function when
+    ;; window system.  These are based on @takaxp's article, see
+    ;;   https://qiita.com/takaxp/items/2fde2c119e419713342b
+    ;; for more details.
+    (defface my--ivy-invisible-arrow
+      `((t :foreground ,(face-attribute 'default :background)))
+      "My face used by Ivy for unchoiced items.")
+    (defun my-ivy-format-function-arrow (cands)
+      "Transform CANDS into a string for minibuffer."
+      (ivy--format-function-generic
+       (lambda (str)
+         (concat (all-the-icons-faicon
+                  "hand-o-right")
+                 " "
+                 (ivy--add-face str 'ivy-current-match)))
+       (lambda (str)
+         (concat (all-the-icons-faicon
+                  "hand-o-right"
+                  :face 'my--ivy-invisible-arrow)
+                 " " str))
+       cands
+       "\n"))
+    (advice-add 'ivy-format-function-default :override #'my-ivy-format-function-arrow)
+
+    (defun my--update-ivy-invisible-arrow (&rest args)
+      "Update `my--ivy-invisible-arrow' face after change color theme."
+      (set-face-attribute 'my--ivy-invisible-arrow nil
+                          :foreground (face-attribute 'default :background)))
+    (advice-add 'load-theme :after #'my--update-ivy-invisible-arrow)))
+
+(use-package swiper
+  :commands (swiper-isearch)
+  :bind (("C-s" . swiper-isearch)
+         ("C-r" . swiper-isearch)))
 
 (use-package ivy-hydra
   :bind (:map ivy-minibuffer-map

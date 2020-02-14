@@ -545,14 +545,25 @@ Emacs 起動後に =server-start= します．
 補完インターフェイスとして [[https://github.com/abo-abo/swiper][Ivy/Counsel]] を利用します．
 詳しい使い方は[[https://oremacs.com/swiper/][ユーザマニュアル]]を参照してください．
 
+[[https://qiita.com/takaxp/items/2fde2c119e419713342b#%25E7%258F%25BE%25E5%259C%25A8%25E3%2581%25AE%25E9%2581%25B8%25E6%258A%259E%25E5%2580%2599%25E8%25A3%259C%25E3%2582%2592%25E3%2582%258F%25E3%2581%258B%25E3%2582%258A%25E3%2582%2584%25E3%2581%2599%25E3%2581%258F%25E3%2581%2599%25E3%2582%258B][@takaxp さんの記事]]を参考に，Font Awesome アイコンを利用した =ivy-format-function= を定義しています．
+カスタム変数 =ivy-format-functions-alist= に直接設定すると，適当なコマンド実行後に変数が壊れることがあるため
+=advice-add= で上書きしています．
+非 GUI 環境ではデフォルトの =ivy-format-function-default= を使用します．
+
 #+begin_src emacs-lisp
   (use-package counsel
-    :hook ((after-init . ivy-mode)
-           (ivy-mode . counsel-mode))
-    :bind (("C-s" . swiper)
-           ("C-r" . swiper)
-           ("C-S-s" . swiper-all)
-           ("C-c C-r" . ivy-resume)
+    :commands (counsel-mode)
+    :hook ((ivy-mode . counsel-mode))
+    :custom
+    (counsel-yank-pop-separator "\n<--------->\n")
+    :config
+    (setq ivy-initial-inputs-alist nil)
+    :blackout t)
+
+  (use-package ivy
+    :commands (ivy-mode)
+    :hook ((after-init . ivy-mode))
+    :bind (("C-c C-r" . ivy-resume)
            :map ivy-minibuffer-map
            ("<tab>" . ivy-alt-done)
            ("C-w" . ivy-yank-word))
@@ -560,10 +571,42 @@ Emacs 起動後に =server-start= します．
     (ivy-use-virtual-buffers t)
     (ivy-count-format "(%d/%d) ")
     (ivy-wrap t)
-    (ivy-format-function 'ivy-format-function-arrow)
-    (counsel-yank-pop-separator "\n<--------->\n")
-    (ivy-initial-inputs-alist nil)
-    :blackout t)
+    :config
+    (when window-system
+      ;; Use the FontAwesome "hand-o-right" icon for ivy-format-function when
+      ;; window system.  These are based on @takaxp's article, see
+      ;;   https://qiita.com/takaxp/items/2fde2c119e419713342b
+      ;; for more details.
+      (defface my--ivy-invisible-arrow
+        `((t :foreground ,(face-attribute 'default :background)))
+        "My face used by Ivy for unchoiced items.")
+      (defun my-ivy-format-function-arrow (cands)
+        "Transform CANDS into a string for minibuffer."
+        (ivy--format-function-generic
+         (lambda (str)
+           (concat (all-the-icons-faicon
+                    "hand-o-right")
+                   " "
+                   (ivy--add-face str 'ivy-current-match)))
+         (lambda (str)
+           (concat (all-the-icons-faicon
+                    "hand-o-right"
+                    :face 'my--ivy-invisible-arrow)
+                   " " str))
+         cands
+         "\n"))
+      (advice-add 'ivy-format-function-default :override #'my-ivy-format-function-arrow)
+
+      (defun my--update-ivy-invisible-arrow (&rest args)
+        "Update `my--ivy-invisible-arrow' face after change color theme."
+        (set-face-attribute 'my--ivy-invisible-arrow nil
+                            :foreground (face-attribute 'default :background)))
+      (advice-add 'load-theme :after #'my--update-ivy-invisible-arrow)))
+
+  (use-package swiper
+    :commands (swiper-isearch)
+    :bind (("C-s" . swiper-isearch)
+           ("C-r" . swiper-isearch)))
 #+end_src
 
 ivy-hydra を利用して minibuffer での操作性を向上させます．
