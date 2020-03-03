@@ -852,7 +852,19 @@ overwrite the value already set locally."
   :blackout (lisp-interaction-mode . "Lisp-Interaction"))
 
 (use-package js2-mode
-  :mode "\\.js\\'")
+  :mode "\\.js\\'"
+  :interpreter "node"
+  :hook ((js2-mode . lsp)))
+
+(use-feature js-mode
+  :if (version<= "27.0.50" emacs-version)
+  :mode "\\.jsx\\'"
+  :hook ((js-mode . js2-minor-mode)))
+
+(use-package rjsx-mode
+  :if (version< emacs-version "27.0.50")
+  :mode "\\.jsx\\'"
+  :hook ((rjsx-mode . lsp)))
 
 (use-package tuareg
   :hook (tuareg-mode . lsp))
