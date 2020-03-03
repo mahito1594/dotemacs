@@ -1009,7 +1009,7 @@ Flycheck を有効にしたいモードについて個々に =flycheck-mode= を
     :commands (lsp)
     :hook (lsp-mode . lsp-enable-which-key-integration)
     :custom
-    (lsp-prefer-flymake t))
+    (lsp-diagnostic-package :flymake))
 
   (use-package company-lsp
     :demand t

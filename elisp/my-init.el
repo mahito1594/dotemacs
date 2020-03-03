@@ -485,7 +485,7 @@ _e_: end of line        ^ ^                 _x_: execute command
   :commands (lsp)
   :hook (lsp-mode . lsp-enable-which-key-integration)
   :custom
-  (lsp-prefer-flymake t))
+  (lsp-diagnostic-package :flymake))
 
 (use-package company-lsp
   :demand t
