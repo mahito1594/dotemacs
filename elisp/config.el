@@ -47,7 +47,6 @@
 ;;; Fundamental
 (leaf leaf
   :config
-  (leaf leaf-convert :ensure t)
   (leaf leaf-tree
     :ensure t
     :custom ((imenu-list-size . 30)
@@ -74,6 +73,9 @@
   ;; Language/Codings
   (set-language-environment "Japanese")
   (prefer-coding-system 'utf-8)
+
+  ;; Add newlien at the end of file
+  (setq require-final-newline t)
 
   ;; Don't delete *scratch* and *Messages* buffer
   (with-current-buffer "*scratch*" (emacs-lock-mode 'kill))
@@ -177,6 +179,7 @@
       :bind ((:dired-mode-map
               ("." . hydra-dired/body)))
       :custom ((dired-omit-files . "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$"))
+      :require t
       :hydra (hydra-dired
               (:hint nil)
               "
@@ -490,10 +493,16 @@ We should use el-get/straight.el or some installer. DO IT LATER."
 (leaf *LanguageServer
   :config
   (leaf lsp-mode
+    :preface
+    (setq lsp-keymap-prefix "s-l")
     :ensure t
-    :commands (lsp)
+    :commands (lsp lsp-deferred)
     :hook ((lsp-mode . lsp-enable-which-key-integration))
     :custom ((lsp-diagnostic-package . :flymake)))
+
+  (leaf lsp-ivy
+    :ensure t
+    :commands (lsp-ivy-workspace-symbol))
 
   (leaf company-lsp
     :ensure t
@@ -780,6 +789,12 @@ overwrite the value already set locally."
               (substring key (string-match "[A-Za-z]+" key) (match-end 0))
               (replace-regexp-in-string ":" "" key)))))
 
+(leaf yaml-mode
+  :ensure t
+  :config
+  (when (executable-find "yaml-language-server")
+    (add-hook 'yaml-mode-hook #'lsp)))
+
 ;;; Appearance
 (leaf *Appearance
   :config
@@ -865,7 +880,38 @@ run this function.  For instance, add to `after-init-hook' in `local-conf.el'."
   (define-key global-map (kbd "C-;") #'comment-line)
   ;; Swap C-h <-> DEL
   (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
-  (define-key global-map (kbd "C-x ?") #'help-for-help))
+  (define-key global-map (kbd "C-x ?") #'help-for-help)
+
+  ;; Keybinds for navigation
+  (defhydra hydra-navi
+    (:hint nil)
+    "
+^Navigate^              ^ ^                 ^Action
+^^^^^^-----------------------------------------------------------
+_f_: foward char        _n_: next line      _s_: search
+_F_: foward word        _p_: previous line  _r_: replace
+_b_: backward char      _v_: scroll down
+_B_: backward word      _V_: scroll up      _k_: kill buffer
+_a_: beginning of line  ^ ^
+_e_: end of line        ^ ^                 _x_: execute command
+"
+    ("n" next-line)
+    ("p" previous-line)
+    ("f" forward-char)
+    ("F" forward-word)
+    ("b" backward-char)
+    ("B" backward-word)
+    ("a" beginning-of-line)
+    ("e" move-end-of-line)
+    ("v" scroll-up-command)
+    ("V" scroll-down-command)
+    ("s" swiper)
+    ("r" query-replace)
+    ("x" counsel-M-x)
+    ("k" kill-buffer)
+    ("q" nil "quit"))
+  (define-key global-map (kbd "C-v") #'hydra-navi/body)
+  )
 
 (provide 'config)
 ;;; config.el ends here
