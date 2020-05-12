@@ -498,17 +498,14 @@ We should use el-get/straight.el or some installer. DO IT LATER."
     :ensure t
     :commands (lsp lsp-deferred)
     :hook ((lsp-mode . lsp-enable-which-key-integration))
-    :custom ((lsp-diagnostic-package . :flymake)))
+    :custom ((lsp-auto-configure . t)
+             (lsp-diagnostic-package . :auto)))
 
   (leaf lsp-ivy
     :ensure t
-    :commands (lsp-ivy-workspace-symbol))
-
-  (leaf company-lsp
-    :ensure t
-    :after (company lsp-mode)
-    :config
-    (push 'company-lsp company-backends))
+    :commands (lsp-ivy-workspace-symbol)
+    :bind ((:lsp-mode-map
+            ([remap xref-find-apropos] . lsp-ivy-workspace-symbol))))
 
   (leaf lsp-ui
     :ensure t
@@ -516,8 +513,6 @@ We should use el-get/straight.el or some installer. DO IT LATER."
     :bind ((:lsp-ui-mode-map
             ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
             ([remap xref-find-references] . lsp-ui-peek-find-refrences)))
-    :custom ((lsp-ui-sideline-enable . nil)
-             (lsp-ui-flycheck-enable . nil))
     :blackout t))
 
 ;;; Documents
