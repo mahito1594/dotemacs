@@ -516,6 +516,53 @@ We should use el-get/straight.el or some installer. DO IT LATER."
     :blackout t))
 
 ;;; Documents
+(leaf *Org-mode
+  :doc "Orgmode settings"
+  (leaf org
+    :preface
+    ;; Config for electric pair mode in Org
+    (defvar my-org-electric-pair-pairs
+      '((?~ . ?~) (?= . ?=)))
+
+    (defun my-org-electric-pair-inhibit (char)
+      "Do not insert close `>'"
+      (if (char-equal char ?>)
+          t
+        (electric-pair-default-inhibit char)))
+
+    (defun my-org-electric-pair-mode ()
+      (electric-pair-mode 1)
+      (setq-local electric-pair-pairs (append electric-pair-pairs
+                                              my-org-electric-pair-pairs))
+      (setq-local electric-pair-text-pairs (append electric-pair-pairs
+                                                   my-org-electric-pair-pairs))
+      (setq-local electric-pair-inhibit-predicate #'my-org-electric-pair-inhibit))
+    :hook ((org-mode-hook . my-org-electric-pair-mode))
+    :custom ((org-startup-indented . t)
+             (org-fontify-natively . t)
+             (org-html-htmlize-output-type . 'css))
+    :config
+    (setq org-structure-template-alist (append '(("el" . "src emacs-lisp"))
+                                               org-structure-template-alist))
+
+    (leaf toc-org
+      :doc "Generate TOC.
+
+To generate TOC, put a `:TOC:' tag at the first headline."
+      :ensure t
+      :commands (toc-org-mode))
+
+    (leaf ox-gfm
+      :ensure t
+      :after (ox))
+
+    (leaf htmlize
+      :ensure t
+      :after (ox)))
+
+  (leaf org-bullets
+    :ensure t))
+
 (leaf *TeX/LaTeX
   :doc "TeX/LaTeX settings"
   :config
