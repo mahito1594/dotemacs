@@ -237,15 +237,15 @@ _a_: open in        _S_: symlink
     :config
     (leaf ivy
       :ensure t
-      :commands (ivy-mode)
       :bind (("C-c C-r" . ivy-resume)
              (:ivy-minibuffer-map
               ("<tab>" . ivy-alt-done)
               ("C-w" . ivy-yank-word)))
-      :hook ((after-init-hook . ivy-mode))
       :custom ((ivy-use-virtual-buffers . t)
                (ivy-count-format . "(%d/%d) ")
-               (ivy-wrap . t)))
+               (ivy-wrap . t))
+      :config
+      (ivy-mode 1))
 
     (leaf counsel
       :ensure t
@@ -254,36 +254,6 @@ _a_: open in        _S_: symlink
       :custom ((counsel-yank-pop-separater . "\n<------------>\n"))
       :config
       (setq ivy-initial-inputs-alist nil) ; this is defined in ivy.el but override by counsel.el
-      (when window-system
-        ;; Use the FontAwesome "hand-o-right" icon for ivy-format-function when
-        ;; window system.  These are based on @takaxp's article, see
-        ;;   https://qiita.com/takaxp/items/2fde2c119e419713342b
-        ;; for more details.
-        (defface my--ivy-invisible-arrow
-          `((t :foreground ,(face-attribute 'default :background)))
-          "My face used by Ivy for unchoiced items.")
-        (defun my-ivy-format-function-arrow (cands)
-          "Transform CANDS into a string for minibuffer."
-          (ivy--format-function-generic
-           (lambda (str)
-             (concat (all-the-icons-faicon
-                      "hand-o-right")
-                     " "
-                     (ivy--add-face str 'ivy-current-match)))
-           (lambda (str)
-             (concat (all-the-icons-faicon
-                      "hand-o-right"
-                      :face 'my--ivy-invisible-arrow)
-                     " " str))
-           cands
-           "\n"))
-        (advice-add 'ivy-format-function-default :override #'my-ivy-format-function-arrow)
-
-        (defun my--update-ivy-invisible-arrow (&rest args)
-          "Update `my--ivy-invisible-arrow' face after change color theme."
-          (set-face-attribute 'my--ivy-invisible-arrow nil
-                              :foreground (face-attribute 'default :background)))
-        (advice-add 'load-theme :after #'my--update-ivy-invisible-arrow))
       :blackout t)
 
     (leaf swiper
@@ -296,96 +266,61 @@ _a_: open in        _S_: symlink
       :bind ((:ivy-minibuffer-map
               ("C-o" . hydra-ivy/body))))
 
+    (leaf all-the-icons-ivy-rich
+      :if (display-graphic-p)
+      :ensure t
+      :config
+      (all-the-icons-ivy-rich-mode 1)
+      ;; Use the FontAwesome "hand-o-right" icon for ivy-format-function when
+      ;; window system.  These are based on @takaxp's article, see
+      ;;   https://qiita.com/takaxp/items/2fde2c119e419713342b
+      ;; for more details.
+      (defface my--ivy-invisible-arrow
+        `((t :foreground ,(face-attribute 'default :background)))
+        "My face used by Ivy for unchoiced items.")
+
+      (defun my-ivy-format-function-arrow (cands)
+        "Transform CANDS into a string for minibuffer."
+        (ivy--format-function-generic
+         (lambda (str)
+           (concat (all-the-icons-faicon
+                    "hand-o-right")
+                   " "
+                   (ivy--add-face str 'ivy-current-match)))
+         (lambda (str)
+           (concat (all-the-icons-faicon
+                    "hand-o-right"
+                    :face 'my--ivy-invisible-arrow)
+                   " " str))
+         cands
+         "\n"))
+      (setcdr (assq t ivy-format-functions-alist) #'my-ivy-format-function-arrow)
+
+      (defun my--update-ivy-invisible-arrow (&rest args)
+        "Update `my--ivy-invisible-arrow' face after change color theme."
+        (set-face-attribute 'my--ivy-invisible-arrow nil
+                            :foreground (face-attribute 'default :background)))
+      (advice-add 'load-theme :after #'my--update-ivy-invisible-arrow))
+
     (leaf ivy-rich
       :ensure t
-      :hook ((ivy-mode-hook . ivy-rich-mode))
-      :preface
-      (defun my-ivy-rich-buffer-icon (candidate)
-        "Show buffer isons in `ivy-rich', only on GUI."
-        (when (display-graphic-p)
-          (with-current-buffer
-              (get-buffer candidate)
-            (let ((icon (all-the-icons-icon-for-mode major-mode)))
-              (if (symbolp icon)
-                  (all-the-icons-icon-for-mode 'fundamental-mode)
-                icon)))))
-
-      (defun my-ivy-rich-file-icon (candidate)
-        "Show file icons in `ivy-rich', only on GUI."
-        (when (display-graphic-p)
-          (let ((icon
-                 ;; for directories
-                 (if (file-directory-p candidate)
-                     (cond
-                      ;; for `tramp-mode'
-                      ((and (fboundp 'tramp-tramp-file-p)
-                            (tramp-tramp-file-p default-directory))
-                       (all-the-icons-octicon "file-directory"))
-                      ;; for symbolic links
-                      ((file-symlink-p candidate)
-                       (all-the-icons-octicon "file-symlink-directory"))
-                      ;; for git submodules
-                      ((all-the-icons-dir-is-submodule candidate)
-                       (all-the-icons-octicon "file-submodule"))
-                      ;; for version-controled by git
-                      ((file-exists-p (format "%s/.git" candidate))
-                       (all-the-icons-octicon "repo"))
-                      ;; otherwise
-                      (t (let ((matcher (all-the-icons-match-to-alist candidate all-the-icons-dir-icon-alist)))
-                           (apply (car matcher) (list (cadr matcher))))))
-                   ;; for files
-                   (all-the-icons-icon-for-file candidate))))
-            (unless (symbolp icon)
-              (propertize icon
-                          'face `(:family ,(all-the-icons-icon-family icon) :height 1.1))))))
       :custom
-      ((ivy-rich-path-style . 'abbrev)
-       (ivy-rich-display-transformers-list . '(ivy-switch-buffer
-                                               (:columns
-                                                ((my-ivy-rich-buffer-icon :width 2)
-                                                 (ivy-rich-candidate (:width 30))
-                                                 (ivy-rich-switch-buffer-size (:width 7))
-                                                 (ivy-rich-switch-buffer-indicators (:width 4 :face error :align left))
-                                                 (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))
-                                                 (ivy-rich-switch-buffer-project (:width 15 :face success))
-                                                 (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))
-                                                :predicate
-                                                (lambda (cand) (get-buffer cand)))
-                                               counsel-M-x
-                                               (:columns
-                                                ((counsel-M-x-transformer (:width 40))
-                                                 (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))
-                                               counsel-describe-function
-                                               (:columns
-                                                ((counsel-describe-function-transformer (:width 40))
-                                                 (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))
-                                               counsel-describe-variable
-                                               (:columns
-                                                ((counsel-describe-variable-transformer (:width 40))
-                                                 (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))
-                                               counsel-recentf
-                                               (:columns
-                                                ((ivy-rich-candidate (:width 0.8))
-                                                 (ivy-rich-file-last-modified-time (:face font-lock-comment-face))))
-                                               counsel-find-file
-                                               (:columns
-                                                ((my-ivy-rich-file-icon :width 2)
-                                                 (ivy-rich-candidate)))
-                                               counsel-git
-                                               (:columns
-                                                ((my-ivy-rich-file-icon :width 2)
-                                                 (ivy-rich-candidate)))))))
+      ((ivy-rich-path-style . 'abbrev))
+      :config
+      (ivy-rich-mode 1)
+      (unless window-system
+        (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)))
 
     (leaf amx
       :ensure t
       :hook ((ivy-mode-hook . amx-mode)))
 
     (leaf ivy-ghq
+      :load-path* "site-lisp/ivy-ghq"
       :doc "`ivy-ghq' is not available from MELPA.
 
 We should use el-get/straight.el or some installer. DO IT LATER."
-      :disabled t
-      ;; :if (executable-find "ghq")
+      :if (executable-find "ghq")
       :commands (ivy-ghq-open)
       :custom ((ivy-ghq-short-list . nil))))
 

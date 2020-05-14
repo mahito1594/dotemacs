@@ -1,0 +1,3 @@
+[submodule "site-lisp/ivy-ghq"]
+	path = site-lisp/ivy-ghq
+	url = https://github.com/analyticd/ivy-ghq.git
