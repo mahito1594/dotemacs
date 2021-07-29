@@ -1,6 +1,6 @@
 ;;; init.el --- init Emacs -*- lexical-binding: t -*-
 
-;; Copyright (C) 2019  TANNO Mahito
+;; Copyright (C) 2019--2020  Mahito Tanno
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -17,47 +17,45 @@
 
 ;;; Commentary:
 
-;; This init file load `my-init.el'.  See `README.org'.
-
 ;;; Code:
 
 ;;; Prevent GC to run in start-up
 ;; The original value of `gc-cons-threshold' is 800000.
-(setq gc-cons-threshold (* 16 1000 1000))
-(defvar my-gc-cons-threshold (* 8 100 1000)
+(defvar my-gc-cons-threshold gc-cons-threshold
   "Use this value as `gc-cons-threshold' after init Emacs.  You can modify the
 value in \"local-conf.el\".")
+(setq gc-cons-threshold (* 16 1000 1000)) ; increase the value when start-up
 
 ;; reset `gc-cons-threshold' after start up
 (run-with-idle-timer 5 nil
                      (lambda ()
                        (setq gc-cons-threshold my-gc-cons-threshold)
                        (setq garbage-collection-messages t)
-                       (message "The value of gc-cons-threshold is set to %d" my-gc-cons-threshold)))
+                       (message "The value of gc-cons-threshold is set to %d"
+                                my-gc-cons-threshold)))
 
 ;;; Debugging
 (setq debug-on-error t)
 (setq init-file-debug t)
 
-;;; Load file
+;;; Fundamental variables, constants and functions
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
-;;; Variables and constants
-(defconst my-minimum-emacs-version "25.4"
-  "Expected minimum Emacs version.")
-(defconst my-elisp-directory
-  (expand-file-name "elisp" user-emacs-directory)
-  "We should put here your self-made Emacs Lisp files.")
+(add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
 
-;;; Load `my-init.el'.
+(defconst my-minimum-emacs-version "26.1"
+  "Expected minimum Emacs version.  However, we strongly recommend using Emacs
+version 26.3 or higher.")
+
+
+;;; Load configuration files.
 (if (version< emacs-version my-minimum-emacs-version)
     (error (concat "Emacs of ver. %s or later is required, "
                    "but you use Emacs of ver. %s!")
            my-minimum-emacs-version emacs-version)
-  (add-to-list 'load-path my-elisp-directory)
-  (require 'utility)
-  (require 'my-init))
+  (require 'config)
+  (require 'local-conf nil t))
 
 (provide 'init)
 ;;; init.el ends here

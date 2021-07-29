@@ -14,7 +14,6 @@ install:
   - bash <(curl https://raw.githubusercontent.com/purcell/nix-emacs-ci/master/travis-install)
 
 script:
-  # If the build timeout, you can remove "straight/versions/default.el" in order to use shallow-clone.
   - export HOME=$PWD/..
   - ln -s dotemacs ../.emacs.d
   - |-
@@ -25,25 +24,8 @@ script:
                        (user-init-file (expand-file-name "init.el"))
                        (load-path (delq default-directory load-path)))
                    (load-file user-init-file)
-                   (run-hooks (quote after-init-hook))
-                   (my-deploy-ghpage))' && \
+                   (run-hooks (quote after-init-hook)))' && \
     echo "Startup succeeded."
-
-before_deploy:
-  - mkdir -p docs
-  - mv README.html docs/index.html
-  - echo "emacs.koffierente.com" > docs/CNAME
-
-deploy:
-  provider: pages
-  local_dir: docs
-  target_branch: gh-pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  keep_history: false
-  on:
-    branch: master
-    condition: $EMACS_CI = emacs-26-1
 
 notifications:
   email:
