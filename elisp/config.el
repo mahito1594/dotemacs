@@ -81,6 +81,9 @@
   (with-current-buffer "*scratch*" (emacs-lock-mode 'kill))
   (with-current-buffer "*Messages*" (emacs-lock-mode 'kill))
 
+  ;; *Help* buffer will be automatically selected
+  (setq help-window-select t)
+
   ;; Set Option Key to META
   (when (eq window-system 'mac)
     (setq mac-option-modifier 'meta))
@@ -316,7 +319,7 @@ _a_: open in        _S_: symlink
       :hook ((ivy-mode-hook . amx-mode)))
 
     (leaf ivy-ghq
-      :load-path* "site-lisp/ivy-ghq"
+      :load-path `(,(expand-file-name "site-lisp/ivy-ghq" user-emacs-directory))
       :doc "`ivy-ghq' is not available from MELPA.
 
 We should use el-get/straight.el or some installer. DO IT LATER."
@@ -433,7 +436,8 @@ We should use el-get/straight.el or some installer. DO IT LATER."
     :ensure t
     :commands (lsp lsp-deferred)
     :hook ((lsp-mode . lsp-enable-which-key-integration))
-    :custom ((lsp-auto-configure . t)
+    :custom ((lsp-prefer-capf . t)
+             (lsp-auto-configure . t)
              (lsp-diagnostic-package . :auto)))
 
   (leaf lsp-ivy
@@ -603,13 +607,17 @@ https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-enviro
 Remark: a blank line will be inserted after \"\begin{...}\".  I don't know how
 to inhibit this behavior."
         (list name type 'no-insert))
+
+      (defun my-LaTeX-label-cleanup ()
+        "Set `LaTeX-label-alist' to nil."
+        (setq LaTeX-label-alist nil))
       :hook ((LaTeX-mode-hook . my-LaTeX-mode-hook)
-             (TeX-auto-creanup-hook . my-LaTeX-remove-eqnarray-from-environments))
-      :advice
-      (:filter-args LaTeX-label my--disable-insert-LaTeX-label)
-      :custom ((LaTeX-electric-left-right-brace . t))
-      :config
-      (remove-hook 'LaTeX-section-hook #'LaTeX-section-label))
+             (TeX-auto-cleanup-hook . my-LaTeX-remove-eqnarray-from-environments)
+             (TeX-auto-cleanup-hook . my-LaTeX-label-cleanup))
+      ;; :advice
+      ;; (:filter-args LaTeX-label my--disable-insert-LaTeX-label)
+      :custom ((LaTeX-section-label . nil)
+               (LaTeX-electric-left-right-brace . t)))
 
     (leaf font-latex
       :custom ((font-latex-fontify-script . nil)))
@@ -684,8 +692,8 @@ overwrite the value already set locally."
                              ("example"     ?x "ex:"   "~\\ref{%s}" nil ("example")     nil)
                              ("conjecture"  ?c "conj:" "~\\ref{%s}" nil ("conjecture")  nil)))
      (reftex-use-external-file-finders . t)
-     (reftex-external-finders . '(("tex" . "kpsewhich -format=.tex %f")
-                                  ("bib" . "kpsewhich -format=.bib %f")))
+     (reftex-external-file-finders . '(("tex" . "kpsewhich -format=.tex %f")
+                                       ("bib" . "kpsewhich -format=.bib %f")))
      (reftex-bibliography-commands . '("bibliography"
                                        "nobibliography"
                                        "addbibresource"))))
@@ -766,11 +774,18 @@ overwrite the value already set locally."
               (substring key (string-match "[A-Za-z]+" key) (match-end 0))
               (replace-regexp-in-string ":" "" key)))))
 
+(leaf python
+  :doc "Python mode"
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
+  :hook ((python-mode-hook . lsp))
+  :custom
+  `((python-shell-interpreter . ,(or (executable-find "python3")
+                                     (executable-find "python")))))
+
 (leaf yaml-mode
   :ensure t
-  :config
-  (when (executable-find "yaml-language-server")
-    (add-hook 'yaml-mode-hook #'lsp)))
+  :hook ((yaml-mode-hook . lsp)))
 
 ;;; Appearance
 (leaf *Appearance
