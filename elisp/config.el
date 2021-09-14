@@ -435,10 +435,7 @@ We should use el-get/straight.el or some installer. DO IT LATER."
     (setq lsp-keymap-prefix "s-l")
     :ensure t
     :commands (lsp lsp-deferred)
-    :hook ((lsp-mode . lsp-enable-which-key-integration))
-    :custom ((lsp-prefer-capf . t)
-             (lsp-auto-configure . t)
-             (lsp-diagnostic-package . :auto)))
+    :hook ((lsp-mode . lsp-enable-which-key-integration)))
 
   (leaf lsp-ivy
     :ensure t
