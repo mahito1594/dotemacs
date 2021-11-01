@@ -88,6 +88,23 @@
   (when (eq window-system 'mac)
     (setq mac-option-modifier 'meta))
 
+  ;; By the following line, Emacs can save files in WSL
+  (when (eq system-type 'windows-nt)
+    (defun fp/ignore-wsl-acls (orig-fun &rest args)
+      "This workaround is given in
+
+https://github.com/microsoft/WSL/issues/6004#issuecomment-880576799
+
+Ignore ACLs on WSL. WSL does not provide an ACL, but emacs
+expects there to be one before saving any file. Without this
+advice, files on WSL can not be saved."
+      (if (or (string-match-p "^//wsl\$/" (car args))
+              (string-match-p "^//wsl.localhost/" (car args)))
+          (progn (message "ignoring wsl acls") "")
+        (apply orig-fun args)))
+
+    (advice-add 'file-acl :around 'fp/ignore-wsl-acls))
+
   (leaf exec-path-from-shell
     :doc "Copy PATH if GUI"
     :if (memq window-system '(mac ns x))
