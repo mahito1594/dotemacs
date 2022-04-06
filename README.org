@@ -3,16 +3,7 @@
 #+AUTHOR: Mahito TANNO
 #+DATE:
 
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
-#+HTML_HEAD: <style> code{font-size:90%;}</style>
-#+HTML_HEAD: <style> pre.src{font-size:90%;}</style>
-#+HTML_HEAD: <style> #content{max-width:1800px;}</style>
-#+HTML_HEAD: <style> p{max-width:800px;}</style>
-#+HTML_HEAD: <style> li{max-width:800px;}</style>
-
 #+OPTIONS: H:2
-
-[[https://travis-ci.com/mahito1594/dotemacs][file:https://travis-ci.com/mahito1594/dotemacs.svg?branch=master]]
 
 * Quick start
 #+begin_src sh :tangle no
@@ -29,6 +20,11 @@
 #+end_src
 
 とします．
+
+*以下の記述は過去のものです。*
+改修が終わるまではこのままにしておきます。
+中身が気になる場合は ~elisp/config.el~ を直接参照してください。
+
 初回起動時のパッケージインストールに時間がかかりすぎるという場合は
 version lock file (~straight/versions/default.el~) を削除してから Emacs を起動してください．
 shallow clone でパッケージをダウンロードします．
@@ -2041,13 +2037,3 @@ Macaulay2 を Emacs で使うにはこのファイルをロードすれば良い
   (provide 'my-init)
   ;;; my-init.el ends here
 #+end_src
-
-# Local Variables:
-# org-babel-default-header-args: ((:session . "none")
-#                                 (:results . "replace")
-#                                 (:exports . "code")
-#                                 (:cache . "no")
-#                                 (:noweb . "no")
-#                                 (:hlines . "no")
-#                                 (:tangle . "./elisp/my-init.el"))
-# End:
