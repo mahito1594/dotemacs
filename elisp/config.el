@@ -1,6 +1,6 @@
 ;;; config.el --- My configuration file for Emacs -*- lexical-binding: t -*-
 
-;; Copyright (C) 2020  Mahito Tanno
+;; Copyright (C) 2020--2022  Mahito Tanno
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -253,96 +253,145 @@ _a_: open in        _S_: symlink
       :ensure t
       :hook ((dired-mode-hook . all-the-icons-dired-mode))))
 
-  (leaf *Ivy/Counsel
+  (leaf *MinibufferCompletion
     :config
-    (leaf ivy
+    (leaf vertico
+      :doc "Minibuffer Completion UI"
       :ensure t
-      :bind (("C-c C-r" . ivy-resume)
-             (:ivy-minibuffer-map
-              ("<tab>" . ivy-alt-done)
-              ("C-w" . ivy-yank-word)))
-      :custom ((ivy-use-virtual-buffers . t)
-               (ivy-count-format . "(%d/%d) ")
-               (ivy-wrap . t))
+      :advice
+      (:around vertico--format-candidate
+               (lambda (orig cand prefix suffix index _start)
+                 (setq cand (funcall orig cand prefix suffix index _start))
+                 (concat
+                  (if (= vertico--index index)
+                      (propertize "» " 'face 'vertico-current)
+                    "  ")
+                  cand)))
+      :init
+      (vertico-mode 1)
+      :custom ((vertico-cycle . t)
+               (enable-recursive-minibuffers . t))
       :config
-      (ivy-mode 1))
+      (savehist-mode 1))
 
-    (leaf counsel
+    (leaf orderless
+      :doc "We use `orderless' completion style"
       :ensure t
-      :commands (counsel-mode)
-      :hook ((ivy-mode-hook . counsel-mode))
-      :custom ((counsel-yank-pop-separater . "\n<------------>\n"))
+      :custom ((completion-styles . '(orderless basic))
+               (completion-category-default . nil)
+               (completion-category-overrides . '((file (styles basic partial-completion))))))
+
+    (leaf marginalia
+      :doc "Rich annotations in the minibuffer"
+      :ensure t
+      :bind (("M-A" . marginalia-cycle)
+             (:minibuffer-local-map
+              ("M-A" . marginalia-cycle)))
+      :init
+      (marginalia-mode 1))
+
+    (leaf consult
+      :doc "Useful search/navigation commands"
+      :ensure t
+      :bind (;; C-x bindings
+             ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+             ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+             ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+             ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+             ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+             ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+             ;; Other custom bindings
+             ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+             ;; M-g bindings (goto-map)
+             ("M-g e" . consult-compile-error)
+             ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+             ("M-g g" . consult-goto-line)             ;; orig. goto-line
+             ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+             ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+             ("M-g m" . consult-mark)
+             ("M-g k" . consult-global-mark)
+             ("M-g i" . consult-imenu)
+             ("M-g I" . consult-imenu-multi)
+             ;; M-s bindings (search-map)
+             ("M-s d" . consult-find)
+             ("M-s D" . consult-locate)
+             ("M-s g" . consult-grep)
+             ("M-s G" . consult-git-grep)
+             ("M-s r" . consult-ripgrep)
+             ("M-s l" . consult-line)
+             ("M-s L" . consult-line-multi)
+             ("M-s m" . consult-multi-occur)
+             ("M-s k" . consult-keep-lines)
+             ("M-s u" . consult-focus-lines)
+             ;; Isearch integration
+             ("M-s e" . consult-isearch-history)
+             (:isearch-mode-map
+              ("M-e" . consult-isearch-history)        ;; orig. isearch-edit-string
+              ("M-s e" . consult-isearch-history)      ;; orig. isearch-edit-string
+              ("M-s l" . consult-line)                 ;; needed by consult-line to detect isearch
+              ("M-s L" . consult-line-multi))          ;; needed by consult-line to detect isearch
+             ;; Minibuffer history
+             (:minibuffer-local-map
+              ("M-s" . consult-history)                ;; orig. next-matching-history-element
+              ("M-r" . consult-history))
+             )
+      :hook (completion-list-mode-hook . consult-preview-at-point-mode)
+      :advice
+      (:override completing-read-multiple consult-completing-read-multiple)
+      :init
+      (setq xref-show-xrefs-function #'consult-xref
+            xref-show-definitions-function #'consult-xref)
       :config
-      (setq ivy-initial-inputs-alist nil) ; this is defined in ivy.el but override by counsel.el
-      :blackout t)
+      (consult-customize consult-ripgrep consult-git-grep consult-grep
+                         consult-bookmark consult-recent-file consult-xref
+                         consult--source-bookmark consult--source-recent-file
+                         consult--source-project-recent-file
+                         :preview-key (kbd "M-.")))
 
-    (leaf swiper
-      :ensure t
-      :bind (("C-s" . swiper-isearch)
-             ("C-r" . swiper-isearch)))
+    (leaf affe
+      :doc "Asynchronous fuzzy finder
 
-    (leaf ivy-hydra
+For some unkown reasons, `affe' does not work well on Windows."
+      :unless (eq system-type 'windows-nt)
       :ensure t
-      :bind ((:ivy-minibuffer-map
-              ("C-o" . hydra-ivy/body))))
-
-    (leaf all-the-icons-ivy-rich
-      :if (display-graphic-p)
-      :ensure t
+      :after consult
       :config
-      (all-the-icons-ivy-rich-mode 1)
-      ;; Use the FontAwesome "hand-o-right" icon for ivy-format-function when
-      ;; window system.  These are based on @takaxp's article, see
-      ;;   https://qiita.com/takaxp/items/2fde2c119e419713342b
-      ;; for more details.
-      (defface my--ivy-invisible-arrow
-        `((t :foreground ,(face-attribute 'default :background)))
-        "My face used by Ivy for unchoiced items.")
+      (consult-customize affe-grep :preview-key (kbd "M-."))
+      (defun affe-orderless-regexp-compiler (input _type _ignorecase)
+        (setq input (orderless-pattern-compiler input))
+        (cons input (lambda (str) (orderless--highlight input str))))
+      (setq affe-regexp-compiler #'affe-orderless-regexp-compiler))
 
-      (defun my-ivy-format-function-arrow (cands)
-        "Transform CANDS into a string for minibuffer."
-        (ivy--format-function-generic
-         (lambda (str)
-           (concat (all-the-icons-faicon
-                    "hand-o-right")
-                   " "
-                   (ivy--add-face str 'ivy-current-match)))
-         (lambda (str)
-           (concat (all-the-icons-faicon
-                    "hand-o-right"
-                    :face 'my--ivy-invisible-arrow)
-                   " " str))
-         cands
-         "\n"))
-      (setcdr (assq t ivy-format-functions-alist) #'my-ivy-format-function-arrow)
+    (leaf consult-ghq
+      :doc "GHQ interface using Consult/Affe
 
-      (defun my--update-ivy-invisible-arrow (&rest args)
-        "Update `my--ivy-invisible-arrow' face after change color theme."
-        (set-face-attribute 'my--ivy-invisible-arrow nil
-                            :foreground (face-attribute 'default :background)))
-      (advice-add 'load-theme :after #'my--update-ivy-invisible-arrow))
-
-    (leaf ivy-rich
-      :ensure t
-      :custom
-      ((ivy-rich-path-style . 'abbrev))
-      :config
-      (ivy-rich-mode 1)
-      (unless window-system
-        (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)))
-
-    (leaf amx
-      :ensure t
-      :hook ((ivy-mode-hook . amx-mode)))
-
-    (leaf ivy-ghq
-      :load-path `(,(expand-file-name "site-lisp/ivy-ghq" user-emacs-directory))
-      :doc "`ivy-ghq' is not available from MELPA.
-
-We should use el-get/straight.el or some installer. DO IT LATER."
+`consult-find' / `affe-find' does not work well on Windows.
+So, I override some functions."
       :if (executable-find "ghq")
-      :commands (ivy-ghq-open)
-      :custom ((ivy-ghq-short-list . nil))))
+      :ensure t
+      :preface
+      (when (eq system-type 'windows-nt)
+        (defun my-consult-ghq-open ()
+          "Open local repository under ghq"
+          (interactive)
+          (let* ((repo (consult--read (consult-ghq--list-candidates) :prompt "Repo ")))
+            (find-file repo))))
+      :config
+      (when (eq system-type 'windows-nt)
+        (advice-add 'consult-ghq-find :override #'my-consult-ghq-open)
+        (advice-add 'consult-ghq-grep :override #'my-consult-ghq-open)))
+
+    (leaf embark
+      :doc "Minibuffer actions and context menus"
+      :ensure t
+      :bind (("C-." . embark-act)
+             ("C-;" . embark-dwin))
+      :init
+      (setq prefix-help-command #'embark-prefix-help-command)
+      :config
+      (leaf embark-consult
+        :ensure t
+        :hook ((embark-collect-mode-hook . consult-preview-at-point-mode)))))
 
   (leaf which-key
     :doc "Show keybindings"
@@ -441,6 +490,10 @@ We should use el-get/straight.el or some installer. DO IT LATER."
       :commands (flycheck-disable-checker)
       :custom ((flycheck-disabled-checkers . '(emacs-lisp-checkdoc))))
 
+    (leaf consult-flycheck
+      :ensure t
+      :commands (consult-flycheck))
+
     (leaf flycheck-popup-tip
       :ensure t
       :hook ((flycheck-mode-hook . flycheck-popup-tip-mode)))))
@@ -454,11 +507,10 @@ We should use el-get/straight.el or some installer. DO IT LATER."
     :commands (lsp lsp-deferred)
     :hook ((lsp-mode . lsp-enable-which-key-integration)))
 
-  (leaf lsp-ivy
+  (leaf consult-lsp
     :ensure t
-    :commands (lsp-ivy-workspace-symbol)
     :bind ((:lsp-mode-map
-            ([remap xref-find-apropos] . lsp-ivy-workspace-symbol))))
+            ([remap xref-find-apropos] . consult-lsp-symbols))))
 
   (leaf lsp-ui
     :ensure t
@@ -879,14 +931,11 @@ run this function.  For instance, add to `after-init-hook' in `local-conf.el'."
     (my--font-initialize))
 
   (defun my-change-font-family ()
-    "Set the default font family to FAMILY via ivy."
+    "Set the default font family to FAMILY using consult"
     (interactive)
-    (ivy-read "Font Family: " (font-family-list)
-              :require-match t
-              :action (lambda (family)
-                        (setq my-font-family family)
-                        (my--font-initialize))
-              :caller 'my-change-font-family)))
+    (let* ((font (consult--read (font-family-list))))
+      (setq my-font-family font)
+      (my--font-initialize))))
 
 ;;; Keybindings
 (leaf *Keybindings
