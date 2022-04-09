@@ -122,7 +122,12 @@ advice, files on WSL can not be saved."
     (set-file-name-coding-system 'utf-8-hfs))
 
   (leaf server
-    :hook ((after-init-hook . server-mode))))
+    :preface
+    (defun my--server-start ()
+      (when (and (fboundp 'server-running-p)
+                 (not (server-running-p)))
+        (server-start)))
+    :hook ((after-init-hook . my--server-start))))
 
 (leaf *Utilities
   :config
