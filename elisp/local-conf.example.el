@@ -14,8 +14,7 @@
 (add-hook 'after-init-hook
           #'(lambda ()
               (setq my-font-size 18
-                    my-font-family "Cica"
-                    all-the-icons-scale-factor 0.85)
+                    my-font-family "Cica")
               (my--font-initialize)))
 
 ;; When we are in LaTeX mode, turn on some features:

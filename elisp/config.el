@@ -124,8 +124,8 @@ advice, files on WSL can not be saved."
   (leaf server
     :preface
     (defun my--server-start ()
-      (when (and (fboundp 'server-running-p)
-                 (not (server-running-p)))
+      (unless (and (fboundp 'server-running-p)
+                   (server-running-p))
         (server-start)))
     :hook ((after-init-hook . my--server-start))))
 
@@ -184,13 +184,6 @@ advice, files on WSL can not be saved."
     :ensure t
     :bind (("M-i" . symbol-overlay-put))
     :hook ((prog-mode-hook . symbol-overlay-mode)))
-
-  (leaf all-the-icons
-    :if (window-system)
-    :ensure t
-    :config
-    (unless (member "all-the-icons" (font-family-list))
-      (all-the-icons-install-fonts)))
 
   (leaf *Dired
     :config
@@ -252,11 +245,7 @@ _a_: open in        _S_: symlink
               ("g" revert-buffer)
               ("q" quit-window)
               ("." nil)))
-
-    (leaf all-the-icons-dired
-      :if (window-system)
-      :ensure t
-      :hook ((dired-mode-hook . all-the-icons-dired-mode))))
+    )
 
   (leaf *MinibufferCompletion
     :config
@@ -437,47 +426,7 @@ So, I override some functions."
     (leaf company-quickhelp
       :if (window-system)
       :ensure t
-      :hook ((company-mode-hook . company-quickhelp-mode)))
-
-    (leaf company-box
-      :if (window-system)
-      :ensure t
-      :hook ((company-mode-hook . company-box-mode))
-      :config
-      (defvar my--company-box-icons-all-the-icons
-        `((Unknown       . ,(all-the-icons-faicon     "cog"                      :height 0.9))
-          (Text          . ,(all-the-icons-octicon    "file-text"                :height 0.9))
-          (Method        . ,(all-the-icons-faicon     "cube"                     :height 0.9))
-          (Function      . ,(all-the-icons-faicon     "cube"                     :height 0.9))
-          (Constructor   . ,(all-the-icons-faicon     "cube"                     :height 0.9))
-          (Field         . ,(all-the-icons-faicon     "cog"                      :height 0.9))
-          (Variable      . ,(all-the-icons-faicon     "cog"                      :height 0.9))
-          (Class         . ,(all-the-icons-faicon     "cogs"                     :height 0.9))
-          (Interface     . ,(all-the-icons-material   "share"                    :height 0.9))
-          (Module        . ,(all-the-icons-alltheicon "less"                     :height 0.9))
-          (Property      . ,(all-the-icons-faicon     "wrench"                   :height 0.9))
-          (Unit          . ,(all-the-icons-material   "settings_system_daydream" :height 0.9))
-          (Value         . ,(all-the-icons-material   "format_align_right"       :height 0.9))
-          (Enum          . ,(all-the-icons-material   "content_copy"             :height 0.9))
-          (Keyword       . ,(all-the-icons-material   "filter_center_focus"      :height 0.9))
-          (Snippet       . ,(all-the-icons-material   "content_paste"            :height 0.9))
-          (Color         . ,(all-the-icons-material   "palette"                  :height 0.9))
-          (File          . ,(all-the-icons-faicon     "file"                     :height 0.9))
-          (Reference     . ,(all-the-icons-material   "collections_bookmark"     :height 0.9))
-          (Folder        . ,(all-the-icons-faicon     "folder"                   :height 0.9))
-          (EnumMember    . ,(all-the-icons-material   "format_align_right"       :height 0.9))
-          (Constant      . ,(all-the-icons-faicon     "square-o"                 :height 0.9))
-          (Struct        . ,(all-the-icons-faicon     "cogs"                     :height 0.9))
-          (Event         . ,(all-the-icons-faicon     "bolt"                     :height 0.9))
-          (Operator      . ,(all-the-icons-material   "control_point"            :height 0.9))
-          (TypeParameter . ,(all-the-icons-faicon     "cogs"                     :height 0.9))
-          (Template      . ,(all-the-icons-material   "format_align_center"      :height 0.9))
-          ))
-      :custom ((company-box-show-single-candidate . t)
-               (company-box-max-candidates . 50)
-               (company-box-backends-colors . nil)
-               (company-box-icons-alist . 'my--company-box-icons-all-the-icons))
-      :blackout t)))
+      :hook ((company-mode-hook . company-quickhelp-mode)))))
 
 (leaf *SyntaxChecking
   :config
