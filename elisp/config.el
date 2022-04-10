@@ -455,6 +455,11 @@ So, I override some functions."
       :ensure t
       :hook ((flycheck-mode-hook . flycheck-popup-tip-mode)))))
 
+(leaf editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
 (leaf *LanguageServer
   :config
   (leaf lsp-mode
@@ -839,17 +844,12 @@ overwrite the value already set locally."
     :config
     (load-theme 'kaolin-galaxy t))
 
-  (leaf doom-modeline
-    :doc "A rich modeline."
+  (leaf mood-line
     :ensure t
-    :hook ((after-init-hook . doom-modeline-mode))
-    :custom ((doom-modeline-buffer-file-name-style . 'truncate-upto-project)
-             (doom-modeline-icon . t)
-             (doom-modeline-major-mode-color-icon . t)
-             (doom-modeline-mu4e . nil)
-             (doom-modeline-irc . nil)
-             (column-number-mode . t)
-             (find-file-visit-truename . t))))
+    :custom ((mood-line-show-eol-style . t)
+             (mood-line-show-encoding-information .t))
+    :config
+    (mood-line-mode 1)))
 
 ;;; Fonts
 (leaf *Fonts
