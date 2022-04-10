@@ -271,7 +271,7 @@ _a_: open in        _S_: symlink
     (leaf orderless
       :doc "We use `orderless' completion style"
       :ensure t
-      :custom ((completion-styles . '(orderless partial-completion basic))
+      :custom ((completion-styles . '(orderless basic))
                (completion-category-default . nil)
                (completion-category-overrides . '((file (styles basic partial-completion))))))
 
@@ -340,7 +340,12 @@ _a_: open in        _S_: symlink
                          consult-bookmark consult-recent-file consult-xref
                          consult--source-bookmark consult--source-recent-file
                          consult--source-project-recent-file
-                         :preview-key (kbd "M-.")))
+                         :preview-key (kbd "M-."))
+      (consult-customize consult-theme
+                         :preview-key
+                         (list (kbd "M-.")
+                               :debounce 0.5 (kbd "<up>") (kbd "<down>")
+                               :debounce 1 'any)))
 
     (leaf affe
       :doc "Asynchronous fuzzy finder
@@ -407,39 +412,24 @@ So, I override some functions."
     :hook ((after-init-hook . yas-global-mode))
     :blackout t)
 
-  (leaf *Corfu
+  (leaf *Company
     :config
-    (leaf corfu
+    (leaf company
       :ensure t
-      :init
-      (corfu-global-mode 1)
-      :custom ((corfu-cycle . t)
-               (corfu-auto . t)
-               (corfu-separator . ?\s)))
+      :bind ((:company-active-map
+              ("<backtab>" . company-select-previous)
+              ("<tab>" . company-complete-common-or-cycle)))
+      :hook ((after-init-hook . global-company-mode))
+      :custom ((company-idle-delay . 0)
+               (company-require-match . 'never)
+               (company-format-margin-function . 'company-text-icons-margin)
+               (company-text-icons-add-background . t))
+      :blackout t)
 
-    (leaf corfu-doc
+    (leaf company-quickhelp
+      :if (window-system)
       :ensure t
-      :hook ((corfu-mode-hook . corfu-doc-mode))
-      :bind ((:corfu-map
-              ("M-p" . corfu-doc-scroll-down)
-              ("M-n" . corfu-doc-scroll-up)
-              ("M-d" . corfu-doc-toggle))))
-
-    (leaf cape
-      :ensure t
-      :init
-      (add-to-list 'completion-at-point-functions #'cape-file)
-      (add-to-list 'completion-at-point-functions #'cape-tex)
-      (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-      (add-to-list 'completion-at-point-functions #'cape-keyword))
-
-    (leaf kind-icon
-      :ensure t
-      :after (corfu)
-      :commands (kind-icon-margin-formatter)
-      :custom ((kind-icon-default-face . 'corfu-default))
-      :config
-      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))))
+      :hook ((company-mode-hook . company-quickhelp-mode)))))
 
 (leaf *SyntaxChecking
   :config
@@ -470,14 +460,9 @@ So, I override some functions."
   (leaf lsp-mode
     :preface
     (setq lsp-keymap-prefix "s-l")
-    (defun my--lsp-mode-setup-completion ()
-      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-            '(orderless)))              ; configure orderless
     :ensure t
     :commands (lsp lsp-deferred)
-    :hook ((lsp-mode . lsp-enable-which-key-integration)
-           (lsp-completion-mode-hook . my--lsp-mode-setup-completion))
-    :custom ((lsp-completion-provider . :none)))
+    :hook ((lsp-mode . lsp-enable-which-key-integration)))
 
   (leaf consult-lsp
     :ensure t
@@ -629,11 +614,15 @@ https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-enviro
         (setq-local TeX-electric-math
                     (cons "\\(" "\\)"))
         ;; Run TexLab --- language server for LaTeX --- if available and *not*
-        ;; in japanese-(La)TeX-mode.  Otherwise, use company-math with corfu.
+        ;; in japanese-(La)TeX-mode.  Otherwise, use company-math package.
         (if (and (executable-find "texlab")
                  (or (not (boundp 'japanese-TeX-mode))
                      (not japanese-TeX-mode)))
-            (lsp)))
+            (lsp)
+          (setq-local company-backends
+                      (append
+                       '(company-math-symbols-latex company-latex-commands)
+                       company-backends))))
 
       (defun my--disable-insert-LaTeX-label (name &optional type no-insert)
         "Do not insert label by AUCTeX.  We add labels manually.
@@ -708,9 +697,8 @@ overwrite the value already set locally."
 
   (leaf company-math
     :ensure t
-    :config
-    (cape-company-to-capf #'company-math-symbols-latex)
-    (cape-company-to-capf #'company-math-symbols-unicode))
+    :after (company)
+    :require t)
 
   (leaf reftex
     :hook ((LaTeX-mode-hook . reftex-mode))
