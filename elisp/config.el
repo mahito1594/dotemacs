@@ -847,7 +847,7 @@ overwrite the value already set locally."
   (leaf mood-line
     :ensure t
     :custom ((mood-line-show-eol-style . t)
-             (mood-line-show-encoding-information .t))
+             (mood-line-show-encoding-information . t))
     :config
     (mood-line-mode 1)))
 
