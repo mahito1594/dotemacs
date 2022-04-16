@@ -532,6 +532,7 @@ To generate TOC, put a `:TOC:' tag at the first headline."
 
 (leaf *TeX/LaTeX
   :doc "TeX/LaTeX settings"
+  :when (executable-find "tex")
   :config
   (defvar my-locate-texmfhome
     (substring (shell-command-to-string "kpsewhich -var-val TEXMFHOME")
