@@ -317,14 +317,17 @@ _a_: open in        _S_: symlink
              ("M-s m" . consult-multi-occur)
              ("M-s k" . consult-keep-lines)
              ("M-s u" . consult-focus-lines)
-             ;; Isearch integration
-             ("M-s e" . consult-isearch-history)
-             (:isearch-mode-map
-              ("M-e" . consult-isearch-history)        ;; orig. isearch-edit-string
-              ("M-s e" . consult-isearch-history)      ;; orig. isearch-edit-string
-              ("M-s l" . consult-line)                 ;; needed by consult-line to detect isearch
-              ("M-s L" . consult-line-multi))          ;; needed by consult-line to detect isearch
-             ;; Minibuffer history
+             ;; Override default i-search by consult-line
+             ("C-s" . consult-line)
+             ("C-r" . consult-line)
+             ;; ;; Isearch integration
+             ;; ("M-s e" . consult-isearch-history)
+             ;; (:isearch-mode-map
+             ;;  ("M-e" . consult-isearch-history)        ;; orig. isearch-edit-string
+             ;;  ("M-s e" . consult-isearch-history)      ;; orig. isearch-edit-string
+             ;;  ("M-s l" . consult-line)                 ;; needed by consult-line to detect isearch
+             ;;  ("M-s L" . consult-line-multi))          ;; needed by consult-line to detect isearch
+             ;; ;; Minibuffer history
              (:minibuffer-local-map
               ("M-s" . consult-history)                ;; orig. next-matching-history-element
               ("M-r" . consult-history))
@@ -422,7 +425,6 @@ So, I override some functions."
       :hook ((after-init-hook . global-company-mode))
       :custom ((company-idle-delay . 0)
                (company-require-match . 'never)
-               (company-format-margin-function . 'company-text-icons-margin)
                (company-text-icons-add-background . t))
       :blackout t)
 
