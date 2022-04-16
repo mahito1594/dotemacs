@@ -837,13 +837,6 @@ overwrite the value already set locally."
   (size-indication-mode 1)
   (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
-  (leaf kaolin-themes
-    :doc "My favorite theme, integrated with doom-modeline."
-    :ensure t
-    :require t
-    :config
-    (load-theme 'kaolin-galaxy t))
-
   (leaf mood-line
     :ensure t
     :custom ((mood-line-show-eol-style . t)
