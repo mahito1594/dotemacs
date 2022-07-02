@@ -17,6 +17,16 @@
                     my-font-family "Cica")
               (my--font-initialize)))
 
+;; Use Eclipse JDT LS ver. 0.57.0 with Java < 11
+(leaf *eclipse.jdt.ls
+  :ensure nil
+  :after (lsp-java)
+  :config
+  (setq lsp-java-jdt-download-url
+        "https://download.eclipse.org/jdtls/milestones/0.57.0/jdt-language-server-0.57.0-202006172108.tar.gz")
+  (setq lsp-java-server-install-dir
+        (locate-user-emacs-file ".cache/lsp/eclipse.jdt.ls-0.57.0/")))
+
 ;; Load your favarite theme
 (leaf dracula-theme
   :ensure t

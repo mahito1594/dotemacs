@@ -13,9 +13,12 @@ straight/
 # others
 amx-items
 .lsp*
+.dap-breakpoints
 opam-user-setup.el
 irony/
 image-dired/
+eclipse.jdt.ls/
+workspace/
 
 # Created by https://www.gitignore.io/api/emacs
 # Edit at https://www.gitignore.io/?templates=emacs

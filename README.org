@@ -324,6 +324,19 @@ index buffer で ~K a~ を押下することで直接 keywords を追加でき�
 * Programming Languages
 各プログラミング言語用メジャーモードについて，特筆すべき事項があればここに追記します．
 
+** JavaScript
+Language Server には typescript-language-server を利用する．
+=M-x lsp-install-server= =M-x ts-ls= でインストールするか，
+npm でインストールする．
+
+** Java
+[[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT LS]] を利用して Java の編集を行う．
+インストールは lsp-mode が勝手に行ってくれる．
+
+ただし最新の LS を動かすためには Java 11 以降が必要なため，
+適宜 =lsp-java-jdt-download-url= や =lsp-java-server-install-dir= を指定してやる必要がある。
+~elisp/local-conf.example.el~ を参照のこと．
+
 * Font
 フォントの設定は ~local-conf.el~ で次の変数
 
