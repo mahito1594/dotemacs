@@ -68,11 +68,10 @@ You can also install it by MELPA. See the official manual
 if necessary.
 "
   :if (version<= "28" emacs-version)
-  :ensure nil
-  :config
-  (load-theme 'modus-operandi)          ; light theme
+  :ensure nil                           ; Use built-in one
+  :hook (after-init-hook . (lambda ()
+                             (load-theme 'modus-operandi t)))
   :custom
-  (modus-themes-inhibit-reload . nil)
   (modus-themes-bold-constructs . nil)
   (modus-themes-italic-constructs . t)
   (modus-themes-syntax . '(green-strings alt-syntax))
