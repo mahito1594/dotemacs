@@ -497,6 +497,7 @@ So, I override some functions."
 See
   https://emacs-lsp.github.io/lsp-mode/page/lsp-typescript/
 if necessary."
+  :if (executable-find "npm")
   :ensure nil
   :hook ((java-mode-hook . lsp)))
 
@@ -506,7 +507,7 @@ if necessary."
 If you're using Java < 11, you must download jdt-language-server of version 0.57.0."
   :if (executable-find "java")
   :ensure t
-  :hook ((java-mode-hook . lsp))
+  :hook ((java-mode-hook . lsp)))
 
 ;;; Documents
 (leaf *Org-mode
