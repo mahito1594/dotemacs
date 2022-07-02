@@ -1,4 +1,4 @@
-;;; local-conf.example.el --- An example for local configuration
+;;; local-conf.el --- An example for local configuration
 
 ;;; Commentary:
 
@@ -14,9 +14,15 @@
 (add-hook 'after-init-hook
           #'(lambda ()
               (setq my-font-size 18
-                    my-font-family "Cica"
-                    all-the-icons-scale-factor 0.85)
+                    my-font-family "Cica")
               (my--font-initialize)))
+
+;; Load your favarite theme
+(leaf dracula-theme
+  :ensure t
+  :require t
+  :config
+  (load-theme 'dracula t))
 
 ;; When we are in LaTeX mode, turn on some features:
 (add-hook 'LaTeX-mode-hook
@@ -37,5 +43,5 @@
   (interactive)
   (insert (format-time-string "%Y-%m-%d")))
 
-(provide 'local-conf.example)
-;;; local-conf.example.el ends here
+(provide 'local-conf)
+;;; local-conf.el ends here
