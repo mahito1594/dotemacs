@@ -484,6 +484,31 @@ So, I override some functions."
             ([remap xref-find-references] . lsp-ui-peek-find-refrences)))
     :blackout t))
 
+;;; Programing language
+(leaf web-mode
+  :ensure t
+  :mode ("\\.phtml\\'" "\\.tpl\\.php" "\\.[agj]sp\\'"
+         "\\.as[cp]x\\'" "\\.erb\\'" "\\.mustache\\'"
+         "\\.djhtml\\'" "\\.xml\\'" "\\.html?\\'"))
+
+(leaf js-mode
+  :doc "Use typescript-language-server.
+
+See
+  https://emacs-lsp.github.io/lsp-mode/page/lsp-typescript/
+if necessary."
+  :if (executable-find "npm")
+  :ensure nil
+  :hook ((java-mode-hook . lsp)))
+
+(leaf lsp-java
+  :doc "Edit Java using Language Server: eclipse.jdt.ls.
+
+If you're using Java < 11, you must download jdt-language-server of version 0.57.0."
+  :if (executable-find "java")
+  :ensure t
+  :hook ((java-mode-hook . lsp)))
+
 ;;; Documents
 (leaf *Org-mode
   :doc "Orgmode settings"
