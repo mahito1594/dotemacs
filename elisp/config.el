@@ -499,7 +499,7 @@ See
 if necessary."
   :if (executable-find "npm")
   :ensure nil
-  :hook ((java-mode-hook . lsp)))
+  :hook ((js-mode-hook . lsp)))
 
 (leaf lsp-java
   :doc "Edit Java using Language Server: eclipse.jdt.ls.
