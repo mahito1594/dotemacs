@@ -14,6 +14,13 @@
 ~elisp/local-conf.el~ は Git 管理されていません。
 マシンごとの設定はこちらに記述します。
 
+* External Commands
+以下の外部コマンドを利用することがあります。
+
+- [[https://tree-sitter.github.io/tree-sitter/][tree-sitter]]
+- [[https://github.com/x-motemen/ghq][ghq]]
+
+
 * Memorandum
 ** Restart
 =M-x restart-emacs= で Emacs を再起動できるようにします．
@@ -399,6 +406,3 @@ global-map のキーバインドを次のように変更します．
 
 * License
 本設定ファイルは [[https://www.gnu.org/licenses/gpl.html][GNU General Public License]] (バージョン 3 または以降の任意のバージョン) で公開しています．
-
-また [[https://mahito1594.github.io/dotemacs/][GitHub Page]] の表示に [[https://github.com/fniessen/org-html-themes][ReadTheOrg]] を利用しています．
-~ReadTheOrg~ は GNU General Public License (バージョン 3 または以降の任意のバージョン) で公開されています．
