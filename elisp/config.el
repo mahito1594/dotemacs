@@ -483,7 +483,12 @@ So, I override some functions."
     (setq lsp-keymap-prefix "s-l")
     :ensure t
     :commands (lsp lsp-deferred)
-    :hook ((lsp-mode . lsp-enable-which-key-integration)))
+    :hook ((lsp-mode . lsp-enable-which-key-integration))
+    :init
+    ;; Performance tuning
+    ;; Check your performance by calling `lsp-doctor'.
+    ;; You should increase `max-specpdl-size' in local-conf.el if necessary.
+    (setq read-process-output-max (* 1024 1024)))
 
   (leaf consult-lsp
     :ensure t
