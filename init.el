@@ -26,14 +26,6 @@
 value in \"local-conf.el\".")
 (setq gc-cons-threshold (* 16 1000 1000)) ; increase the value when start-up
 
-;; reset `gc-cons-threshold' after start up
-(run-with-idle-timer 5 nil
-                     (lambda ()
-                       (setq gc-cons-threshold my-gc-cons-threshold)
-                       (setq garbage-collection-messages t)
-                       (message "The value of gc-cons-threshold is set to %d"
-                                my-gc-cons-threshold)))
-
 ;;; Debugging
 (setq debug-on-error t)
 (setq init-file-debug t)

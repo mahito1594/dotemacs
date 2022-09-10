@@ -134,6 +134,12 @@ advice, files on WSL can not be saved."
   (setq-default indent-tabs-mode nil)   ; Use SPACE instead of TAB
   (add-hook 'after-init-hook #'transient-mark-mode) ; Highlight current region
 
+  (leaf gcmh
+    :ensure t
+    :hook (after-init-hook . (lambda ()
+                               (setq gc-cons-threshold my-gc-cons-threshold)
+                               (gcmh-mode 1))))
+
   (leaf *Parenthesis
     :config
     (leaf elec-pair
