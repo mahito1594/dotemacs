@@ -134,6 +134,12 @@ advice, files on WSL can not be saved."
   (setq-default indent-tabs-mode nil)   ; Use SPACE instead of TAB
   (add-hook 'after-init-hook #'transient-mark-mode) ; Highlight current region
 
+  (leaf gcmh
+    :ensure t
+    :hook (after-init-hook . (lambda ()
+                               (setq gc-cons-threshold my-gc-cons-threshold)
+                               (gcmh-mode 1))))
+
   (leaf *Parenthesis
     :config
     (leaf elec-pair
@@ -462,6 +468,20 @@ So, I override some functions."
   :config
   (editorconfig-mode 1))
 
+(leaf tree-sitter
+  :when (executable-find "tree-sitter")
+  :ensure (t tree-sitter-langs)
+  :require tree-sitter-langs
+  :config
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+  ;; For TSX...
+  ;; Here typsecript-tsx-mode is defined in typescript-mode leaf block.
+  (tree-sitter-require 'tsx)
+  (add-to-list 'tree-sitter-major-mode-language-alist
+               '(typescript-tsx-mode . tsx)))
+
 (leaf *LanguageServer
   :config
   (leaf lsp-mode
@@ -469,7 +489,12 @@ So, I override some functions."
     (setq lsp-keymap-prefix "s-l")
     :ensure t
     :commands (lsp lsp-deferred)
-    :hook ((lsp-mode . lsp-enable-which-key-integration)))
+    :hook ((lsp-mode . lsp-enable-which-key-integration))
+    :init
+    ;; Performance tuning
+    ;; Check your performance by calling `lsp-doctor'.
+    ;; You should increase `max-specpdl-size' in local-conf.el if necessary.
+    (setq read-process-output-max (* 1024 1024)))
 
   (leaf consult-lsp
     :ensure t
@@ -500,6 +525,19 @@ if necessary."
   :if (executable-find "npm")
   :ensure nil
   :hook ((js-mode-hook . lsp)))
+
+(leaf typescript-mode
+  :doc "Edit TypeScript using typescript-mode with LSP"
+  :ensure t
+  :mode ("\\.ts\\'")
+  :hook ((typescript-mode-hook . lsp))
+  :init
+  (define-derived-mode typescript-tsx-mode typescript-mode "TSX"
+    "Major mode for TSX.
+
+This is a workaround due to
+https://github.com/emacs-tree-sitter/tree-sitter-langs/issues/23#issuecomment-778692779")
+  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-tsx-mode)))
 
 (leaf lsp-java
   :doc "Edit Java using Language Server: eclipse.jdt.ls.
