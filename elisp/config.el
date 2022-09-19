@@ -508,7 +508,9 @@ So, I override some functions."
     ;; Performance tuning
     ;; Check your performance by calling `lsp-doctor'.
     ;; You should increase `max-specpdl-size' in local-conf.el if necessary.
-    (setq read-process-output-max (* 1024 1024)))
+    (setq read-process-output-max (* 1024 1024))
+    :custom
+    ((lsp-log-io . nil)))
 
   (leaf consult-lsp
     :ensure t
@@ -516,6 +518,7 @@ So, I override some functions."
             ([remap xref-find-apropos] . consult-lsp-symbols))))
 
   (leaf lsp-ui
+    :unless (eq system-type 'windows-nt)
     :ensure t
     :commands (lsp-ui-mode)
     :bind ((:lsp-ui-mode-map
