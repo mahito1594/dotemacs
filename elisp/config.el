@@ -468,6 +468,16 @@ So, I override some functions."
   :config
   (editorconfig-mode 1))
 
+(leaf apheleia
+  :ensure t
+  :config
+  (apheleia-global-mode +1)
+  :defer-config
+  (add-to-list 'apheleia-mode-alist
+               '(typescript-tsx-mode . prettier-typescript))
+  (add-to-list 'apheleia-mode-alist
+               '(js-json-mode . prettier-json)))
+
 (leaf tree-sitter
   :when (executable-find "tree-sitter")
   :ensure (t tree-sitter-langs)
@@ -480,7 +490,11 @@ So, I override some functions."
   ;; Here typsecript-tsx-mode is defined in typescript-mode leaf block.
   (tree-sitter-require 'tsx)
   (add-to-list 'tree-sitter-major-mode-language-alist
-               '(typescript-tsx-mode . tsx)))
+               '(typescript-tsx-mode . tsx))
+
+  ;; For JSON, we use js-mode with tree-sitter
+  (add-to-list 'tree-sitter-major-mode-language-alist
+               '(js-json-mode . json)))
 
 (leaf *LanguageServer
   :config
@@ -524,7 +538,13 @@ See
 if necessary."
   :if (executable-find "npm")
   :ensure nil
-  :hook ((js-mode-hook . lsp)))
+  :hook ((js-mode-hook . lsp))
+  :init
+  (define-derived-mode js-json-mode js-mode "JSON"
+    "Major mode for JSON
+
+This is for syntax highlight with tree-sitter")
+  (add-to-list 'auto-mode-alist '("\\.json\\'" . js-json-mode)))
 
 (leaf typescript-mode
   :doc "Edit TypeScript using typescript-mode with LSP"
@@ -537,7 +557,7 @@ if necessary."
 
 This is a workaround due to
 https://github.com/emacs-tree-sitter/tree-sitter-langs/issues/23#issuecomment-778692779")
-  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-tsx-mode)))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode)))
 
 (leaf lsp-java
   :doc "Edit Java using Language Server: eclipse.jdt.ls.
