@@ -498,33 +498,28 @@ So, I override some functions."
 
 (leaf *LanguageServer
   :config
-  (leaf lsp-mode
-    :preface
-    (setq lsp-keymap-prefix "s-l")
+  (leaf eglot
     :ensure t
-    :commands (lsp lsp-deferred)
-    :hook ((lsp-mode . lsp-enable-which-key-integration))
-    :init
-    ;; Performance tuning
-    ;; Check your performance by calling `lsp-doctor'.
-    ;; You should increase `max-specpdl-size' in local-conf.el if necessary.
-    (setq read-process-output-max (* 1024 1024))
-    :custom
-    ((lsp-log-io . nil)))
+    :bind ((:eglot-mode-map
+            ("C-c r" . elgot-rename)
+            ("C-c o" . elgot-code-action-organize-imports)
+            ("C-c h" . eldoc)))
+    :hook ((js-mode-hook . eglot-ensure)
+           (typescript-mode-hook . eglot-ensure)
+           (python-mode-hook . eglot-ensure)
+           (yaml-mode-hook . eglot-ensure))
+    :config
+    (delete (assoc '(tex-mode context-mode texinfo-mode bibtex-mode)
+                   eglot-server-programs)
+            eglot-server-programs)
+    (add-to-list 'eglot-server-programs
+                 `((latex-mode tex-mode context-mode texinfo-mode bibtex-mode)
+                   . ,(eglot-alternatives
+                       '("texlab" "digestif")))))
 
-  (leaf consult-lsp
-    :ensure t
-    :bind ((:lsp-mode-map
-            ([remap xref-find-apropos] . consult-lsp-symbols))))
-
-  (leaf lsp-ui
-    :unless (eq system-type 'windows-nt)
-    :ensure t
-    :commands (lsp-ui-mode)
-    :bind ((:lsp-ui-mode-map
-            ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-            ([remap xref-find-references] . lsp-ui-peek-find-refrences)))
-    :blackout t))
+  (leaf consult-eglot
+    :ensure t)
+  )
 
 ;;; Programing language
 (leaf web-mode
@@ -534,14 +529,9 @@ So, I override some functions."
          "\\.djhtml\\'" "\\.xml\\'" "\\.html?\\'"))
 
 (leaf js-mode
-  :doc "Use typescript-language-server.
-
-See
-  https://emacs-lsp.github.io/lsp-mode/page/lsp-typescript/
-if necessary."
+  :doc "Use typescript-language-server"
   :if (executable-find "npm")
   :ensure nil
-  :hook ((js-mode-hook . lsp))
   :init
   (define-derived-mode js-json-mode js-mode "JSON"
     "Major mode for JSON
@@ -553,7 +543,6 @@ This is for syntax highlight with tree-sitter")
   :doc "Edit TypeScript using typescript-mode with LSP"
   :ensure t
   :mode ("\\.ts\\'")
-  :hook ((typescript-mode-hook . lsp))
   :init
   (define-derived-mode typescript-tsx-mode typescript-mode "TSX"
     "Major mode for TSX.
@@ -561,14 +550,6 @@ This is for syntax highlight with tree-sitter")
 This is a workaround due to
 https://github.com/emacs-tree-sitter/tree-sitter-langs/issues/23#issuecomment-778692779")
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode)))
-
-(leaf lsp-java
-  :doc "Edit Java using Language Server: eclipse.jdt.ls.
-
-If you're using Java < 11, you must download jdt-language-server of version 0.57.0."
-  :if (executable-find "java")
-  :ensure t
-  :hook ((java-mode-hook . lsp)))
 
 ;;; Documents
 (leaf *Org-mode
@@ -637,10 +618,7 @@ System), see TeX Wiki.")
         "My personal hook for TeX mode."
         (outline-minor-mode 1)
         (setq-local TeX-electric-math
-                    (cons "$" "$"))
-        ;; Run TexLab --- a language server for LaTeX --- if available
-        (when (executable-find "texlab")
-          (lsp)))
+                    (cons "$" "$")))
       :hook ((plain-TeX-mode-hook . my-plain-TeX-mode-hook))
       :init
       (setq TeX-format-list
@@ -706,17 +684,7 @@ https://tex.stackexchange.com/questions/320524/how-to-deactivate-eqnarray-enviro
         (outline-minor-mode 1)
         (electric-pair-local-mode -1)
         (setq-local TeX-electric-math
-                    (cons "\\(" "\\)"))
-        ;; Run TexLab --- language server for LaTeX --- if available and *not*
-        ;; in japanese-(La)TeX-mode.  Otherwise, use company-math package.
-        (if (and (executable-find "texlab")
-                 (or (not (boundp 'japanese-TeX-mode))
-                     (not japanese-TeX-mode)))
-            (lsp)
-          (setq-local company-backends
-                      (append
-                       '(company-math-symbols-latex company-latex-commands)
-                       company-backends))))
+                    (cons "\\(" "\\)")))
 
       (defun my--disable-insert-LaTeX-label (name &optional type no-insert)
         "Do not insert label by AUCTeX.  We add labels manually.
@@ -905,14 +873,12 @@ overwrite the value already set locally."
   :doc "Python mode"
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
-  :hook ((python-mode-hook . lsp))
   :custom
   `((python-shell-interpreter . ,(or (executable-find "python3")
                                      (executable-find "python")))))
 
 (leaf yaml-mode
-  :ensure t
-  :hook ((yaml-mode-hook . lsp)))
+  :ensure t)
 
 ;;; Appearance
 (leaf *Appearance
